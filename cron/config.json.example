@@ -1,0 +1,8 @@
+{
+"ldap": {
+	"ldaphost": "myldap.host.co.uk",
+	"ldapport": "389",
+	"binduser": "cn=Service Account",
+	"bindpass": "you might not need it"
+	}
+}

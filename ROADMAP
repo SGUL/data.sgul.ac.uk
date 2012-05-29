@@ -1,0 +1,14 @@
+==v 0.5==
+* FOAF: Generalise LDAP field, allow users to specify their own
+* CRIS: List publications, authors
+* SPARQL engine: detect, kill, restart
+* HTTP: Deploy via WSGI
+* API: 
+* BOOTSTRAP: deploy generates (static) website from template
+
+==v 1.0==
+* BOOTSTRAP: website generated dynamically? Investigate whether it's worth it or not.
+
+==v 2.0==
+* Different data sources can link into the system
+* Facility to create mashups of linked data
