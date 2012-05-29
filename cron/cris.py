@@ -2,15 +2,8 @@ import lxml
 from lxml import etree
 from StringIO import StringIO
 
-#<api:pagination results-count="1059" items-per-page="25">
-#    <api:page position="this" number="1" href="http://cris.sgul.ac.uk:8090/publications-api/objects?categories=users"/>
-#    <api:page position="first" number="1" href="http://cris.sgul.ac.uk:8090/publications-api/objects?categories=users"/>
-#    <api:page position="next" number="2" href="http://cris.sgul.ac.uk:8090/publications-api/objects?categories=users&amp;page=2"/>
-#    <api:page position="last" number="43" href="http://cris.sgul.ac.uk:8090/publications-api/objects?categories=users&amp;page=43"/>
-#</api:pagination>
 
 
-#<api:object category="user" id="314" proprietary-id="E114886" authenticating-authority="ORG" username="cowen" last-modified-when="2012-05-24T13:25:48.26+01:00" is-deleted="false" href="http://cris.sgul.ac.uk:8090/publications-api/users/314" created-when="2010-02-14T11:10:57.37+00:00" type-id="1">
 
 def parseXML(xmlFile):
     tree = etree.parse(xmlFile)
@@ -32,4 +25,4 @@ def parseXML(xmlFile):
         parseXML(next)
 
 parseXML("http://cris.sgul.ac.uk:8090/publications-api/objects?categories=users")
-
+# TODO make this URL into the config.json
