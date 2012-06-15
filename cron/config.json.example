@@ -1,12 +1,15 @@
 {
 "ldap": {
-	"ldaphost": "myldap.host.co.uk",
-	"ldapport": "389",
+	"host": "myldap.host.co.uk",
+	"port": "389",
 	"binduser": "cn=Service Account",
 	"bindpass": "you might not need it"
 	},
 "cris": {
-        "crisurl": "http://abcd",
-	"crisport": "8090"
-        }
+        "url": "http://abcd",
+	"port": "8090"
+        },
+"jobs": {
+	"url": ""
+	}
 }
