@@ -1,4 +1,4 @@
-import lxml
+import lxml, json
 from lxml import etree
 from StringIO import StringIO
 
@@ -24,5 +24,9 @@ def parseXML(xmlFile):
     if next <> last:
         parseXML(next)
 
-parseXML("http://cris.sgul.ac.uk:8090/publications-api/objects?categories=users")
+#print json.load("config.json")
+settings_text = open("config.json", "r").read()
+settings = json.loads(settings_text)
+print settings
+#parseXML("http://cris.sgul.ac.uk:8090/publications-api/objects?categories=users")
 # TODO make this URL into the config.json

@@ -4,5 +4,9 @@
 	"ldapport": "389",
 	"binduser": "cn=Service Account",
 	"bindpass": "you might not need it"
-	}
+	},
+"cris": {
+        "crisurl": "http://abcd",
+	"crisport": "8090"
+        }
 }

@@ -17,8 +17,8 @@ print $json;
 my $JSONPARSER = new JSON;
 my $json_text = $JSONPARSER->allow_nonref->utf8->relaxed->escape_slash->loose->allow_singlequote->allow_barekey->decode($json);
 
-my $ldap_host = $json_text->{ldap}->{ldaphost};
-my $ldap_port = $json_text->{ldap}->{ldapport};
+my $ldap_host = $json_text->{ldap}->{host};
+my $ldap_port = $json_text->{ldap}->{port};
 my $bind_user = $json_text->{ldap}->{binduser};
 my $bind_pass = $json_text->{ldap}->{bindpass};
 my $search_base = $json_text->{ldap}->{searchbase};
