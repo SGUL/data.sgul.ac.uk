@@ -18,15 +18,16 @@ def parseXML(xmlFile):
         href = user.get("href")
         print prop_id, ",", id, ",", username, ",", href
 
-    # get next/last - also available: first, this
+    # get next/last     
     next = e('//api:page[@position="next"]')[0].get("href")
     last = e('//api:page[@position="last"]')[0].get("href")
     if next <> last:
         parseXML(next)
 
-#print json.load("config.json")
+#read settings, load url, parse resulting text
 settings_text = open("config.json", "r").read()
 settings = json.loads(settings_text)
-print settings
-#parseXML("http://cris.sgul.ac.uk:8090/publications-api/objects?categories=users")
-# TODO make this URL into the config.json
+cris_url = settings["cris"]["url"]
+cris_port = settings["cris"]["port"]
+
+parseXML(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
