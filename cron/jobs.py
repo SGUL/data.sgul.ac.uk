@@ -7,7 +7,28 @@ from BeautifulSoup import BeautifulSoup
 
 def downloadJobDetails(url):
     jobs_detail_url = settings["jobs"]["url"]  + "/" + url
-    return jobs_detail_url
+    job = (urllib2.urlopen(jobs_url)).read()
+    soup = BeautifulSoup(job)
+    maincontent_element = soup.findAll(attrs={'id': 'maincontent'})[0]
+
+    reference = ""
+    closing = ""
+    interview = ""
+    salary = ""
+    description = ""
+
+    msonormal_elements = soup.findAll(attrs={'class': 'staffprofilequote'})
+    i=0
+    for desc_elem in msonormal_elements:
+        i = i + 1
+        description = description + str(desc_elem.contents)
+
+    doc_file_url = ""
+   
+    return description
+
+
+
 
 
 #read settings, load url, parse resulting text
@@ -39,3 +60,4 @@ for elem in soup_div.findAll():
         # Now (type,topic,href,title) is a description of the job
 	# ready to download further information
         jobs_data = downloadJobDetails(href)
+        print jobs_data
