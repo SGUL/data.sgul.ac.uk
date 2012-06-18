@@ -7,24 +7,38 @@ from BeautifulSoup import BeautifulSoup
 
 def downloadJobDetails(url):
     jobs_detail_url = settings["jobs"]["url"]  + "/" + url
-    job = (urllib2.urlopen(jobs_url)).read()
+    job = (urllib2.urlopen(jobs_detail_url)).read()
     soup = BeautifulSoup(job)
-    maincontent_element = soup.findAll(attrs={'id': 'maincontent'})[0]
+    maincontent_element = soup.findAll(attrs={'id': 'leftpanel'})[0]
 
+    title = ""
+    unit = ""
     reference = ""
     closing = ""
     interview = ""
     salary = ""
     description = ""
-
-    msonormal_elements = soup.findAll(attrs={'class': 'staffprofilequote'})
-    i=0
-    for desc_elem in msonormal_elements:
-        i = i + 1
-        description = description + str(desc_elem.contents)
-
     doc_file_url = ""
-   
+
+    soup_2 = BeautifulSoup(str(maincontent_element))
+    msonormal_elements = soup_2.findAll('strong')
+    for desc_elem in msonormal_elements:
+        contents = str(desc_elem.contents)
+        sib = desc_elem.nextSibling
+        if 'Reference' in contents:
+	    reference = str(sib)
+        elif 'Closing Date' in contents:
+            closing = str(sib)
+        elif 'Interview Date' in contents:
+            interview = str(sib)
+        elif 'Salary' in contents:
+            salary = str(sib)
+        elif 'font style' in contents:
+            title = "" #str(sib.children[0])
+        else:
+            unit = str(sib)
+            
+    print "Reference: " + reference +", Title: " + title + ", Unit: "+ unit + ", Closing: " + closing + ", Interview: " + interview + ", Salary: " + salary
     return description
 
 
