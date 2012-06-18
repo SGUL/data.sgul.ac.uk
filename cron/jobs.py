@@ -34,12 +34,13 @@ def downloadJobDetails(url):
         elif 'Salary' in contents:
             salary = str(sib)
         elif 'font style' in contents:
-            title = "" #str(sib.children[0])
+            soup_contents = BeautifulSoup(str(contents))
+            title = str(soup_contents.text)
         else:
-            unit = str(sib)
+            unit = str(contents)
             
     print "Reference: " + reference +", Title: " + title + ", Unit: "+ unit + ", Closing: " + closing + ", Interview: " + interview + ", Salary: " + salary
-    return description
+    #return description
 
 
 
