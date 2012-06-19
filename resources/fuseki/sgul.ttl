@@ -1,0 +1,50 @@
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tdb:     <http://jena.hpl.hp.com/2008/tdb#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix :        <#> .
+
+[] a fuseki:Server ;
+  fuseki:services (
+    [ a fuseki:Service ;
+      fuseki:name "public" ;
+      fuseki:serviceQuery "query" ;
+      fuseki:serviceUpdate "update" ;
+      fuseki:serviceReadWriteGraphStore "data" ;
+      fuseki:serviceReadGraphStore "get" ;
+      fuseki:dataset <#publicDataset> 
+    ] 
+    [ a fuseki:Service ;
+      fuseki:name "courses" ;
+      fuseki:serviceQuery "query" ;
+      fuseki:serviceUpdate "update" ;
+      fuseki:serviceReadWriteGraphStore "data" ;
+      fuseki:serviceReadGraphStore "get" ;
+      fuseki:dataset <#coursesDataset> 
+    ] 
+    [ a fuseki:Service ;
+      fuseki:name "equipment" ;
+      fuseki:serviceQuery "query" ;
+      fuseki:serviceUpdate "update" ;
+      fuseki:serviceReadWriteGraphStore "data" ;
+      fuseki:serviceReadGraphStore "get" ;
+      fuseki:dataset <#equipmentDataset> 
+    ] 
+  ) .
+
+<#publicDataset> a tdb:DatasetTDB ;
+  tdb:location "/srv/humfrey/dataox/tdb/public/" ;
+  ja:context [ ja:cxtName "arq:queryTimeout" ; ja:cxtValue "20000" ] ;
+  tdb:unionDefaultGraph true .
+
+<#coursesDataset> a tdb:DatasetTDB ;
+  tdb:location "/srv/humfrey/dataox/tdb/courses/" ;
+  ja:context [ ja:cxtName "arq:queryTimeout" ; ja:cxtValue "20000" ] ;
+  tdb:unionDefaultGraph true .
+
+<#equipmentDataset> a tdb:DatasetTDB ;
+  tdb:location "/srv/humfrey/dataox/tdb/equipment/" ;
+  ja:context [ ja:cxtName "arq:queryTimeout" ; ja:cxtValue "20000" ] ;
+  tdb:unionDefaultGraph true .
+

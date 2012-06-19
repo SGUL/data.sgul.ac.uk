@@ -86,6 +86,7 @@ for elem in soup_div.findAll():
 	# ready to download further information
         jobs_data = downloadJobDetails(href)
        
+
         print "Title: " + title
         print "Area: " + topic
         print "Unit: " + type
