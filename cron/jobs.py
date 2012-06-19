@@ -20,6 +20,9 @@ def downloadJobDetails(url):
     description = ""
     doc_file_url = ""
 
+    job_dict = dict()
+    
+
     soup_2 = BeautifulSoup(str(maincontent_element))
     msonormal_elements = soup_2.findAll('strong')
     for desc_elem in msonormal_elements:
@@ -33,14 +36,21 @@ def downloadJobDetails(url):
             interview = str(sib)
         elif 'Salary' in contents:
             salary = str(sib)
-        elif 'font style' in contents:
-            soup_contents = BeautifulSoup(str(contents))
-            title = str(soup_contents.text)
-        else:
-            unit = str(contents)
+        #TODO this needs cleaning from unicode, but it's not really needed
+        #elif 'font style' in contents:
+        #    soup_contents = BeautifulSoup(str(contents))
+        #    title = str(soup_contents.text)
+        #    job_dict['Title'] = title
+        #else:
+        #    unit = str(contents)
+        #    job_dict['Unit'] = unit
+    description = soup.findAll(attrs={'name': 'j748'})
+    job_dict['Reference'] = reference
+    job_dict['Closing'] = closing
+    job_dict['Interview'] = interview
+    job_dict['Salary'] = salary
             
-    print "Reference: " + reference +", Title: " + title + ", Unit: "+ unit + ", Closing: " + closing + ", Interview: " + interview + ", Salary: " + salary
-    #return description
+    return job_dict
 
 
 
@@ -75,4 +85,13 @@ for elem in soup_div.findAll():
         # Now (type,topic,href,title) is a description of the job
 	# ready to download further information
         jobs_data = downloadJobDetails(href)
-        print jobs_data
+       
+        print "Title: " + title
+        print "Area: " + topic
+        print "Unit: " + type
+        print "Ref.: " + jobs_data['Reference']
+        print "Closing: " + jobs_data['Closing']
+        print "Interview: " + jobs_data['Interview']
+        print "Salary: " + jobs_data['Salary']
+        print "Href: " + settings["jobs"]["url"]  + "/" + href
+        print " "
