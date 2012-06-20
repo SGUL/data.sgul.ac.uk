@@ -35,34 +35,8 @@
   <body>
 
 	<?php include 'navbar.php';?>
-    <div class="container-fluid">
-      <div class="row-fluid">
 	<?php include 'menu.php';?>
-        <div class="span9">
-          <div class="hero-unit">
-            <h1>SGUL Open Data</h1>
-            <p>St George's University of London's Administrative, Research, and Statistical Open Data.</p>
-            <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
 
-          </div>
-          <div class="row-fluid">
-            <div class="span4">
-              <h2>Vacancies</h2>
-              <p><a href="http://jobs.sgul.ac.uk">Original</a> | <a href="jobs.csv">CSV</a> | <a href="">SPARQL</a></p>
-              <p>License: <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">OGL</a></p>
-            </div><!--/span-->
-            <div class="span4">
-              <h2>Publications</h2>
-              Coming soon.
-            </div>
-            <div class="span4">
-              <h2>XCRI Data</h2>
-              Coming soon.
-            </div><!--/span-->
-                      </div><!--/row-->
-
-        </div><!--/span-->
-      </div><!--/row-->
       <hr>
 
       <footer>
