@@ -13,7 +13,6 @@ my $json;
   open my $fh, "<", "config.json";
   $json = <$fh>;
 } 
-print $json;
 my $JSONPARSER = new JSON;
 my $json_text = $JSONPARSER->allow_nonref->utf8->relaxed->escape_slash->loose->allow_singlequote->allow_barekey->decode($json);
 
@@ -22,7 +21,8 @@ my $ldap_port = $json_text->{ldap}->{port};
 my $bind_user = $json_text->{ldap}->{binduser};
 my $bind_pass = $json_text->{ldap}->{bindpass};
 my $search_base = $json_text->{ldap}->{searchbase};
- 
+
+
 # connect to LDAP host
 my $conn = new Mozilla::LDAP::Conn($ldap_host, $ldap_port, $bind_user, $bind_pass,"") || die "Can't connect to $ldap_host.\n";
 
@@ -39,7 +39,6 @@ print "  xmlns:geo=\"htp://www.w3.org/2003/01/geo/wgs84_pos#\">";
 # read the ldap entries and generate the foaf extract
 my $entry = $conn->search($search_base, "subtree", "(uid=*)");
 while ($entry) {
-
 	# download data
         my $mail=$entry->{"mail"}[0];
 	my $cn=uri_escape($entry->{"cn"}[0]);
