@@ -37,11 +37,9 @@
 	<?php include 'navbar.php';?>
 	<?php include 'menu.php';?>
 
+	<h2>About</h2>
       <hr>
-
-      <footer>
-        <p>Website &copy; St George's University of London 2012 | <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/">CC-BY-SA 2.0</a> </p>
-      </footer>
+	<?php include 'footer.php';?>
 
     </div><!--/.fluid-container-->
 

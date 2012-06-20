@@ -48,7 +48,7 @@
           <div class="row-fluid">
             <div class="span4">
               <h2>Vacancies</h2>
-              <p><a href="http://jobs.sgul.ac.uk">Original</a> | <a href="output/jobs.csv">CSV</a> | <a href="sparql.php">SPARQL</a></p>
+              <p><a href="http://jobs.sgul.ac.uk">Original</a> | <a href="output/jobs.csv">CSV</a> | <a href="output/jobs.json">JSON</a> | <a href="output/jobs.rdf">RDF-XML</a> | <a href="sparql.php">SPARQL</a></p>
               <p>License: <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">OGL</a></p>
             </div><!--/span-->
             <div class="span4">
@@ -65,9 +65,7 @@
       </div><!--/row-->
       <hr>
 
-      <footer>
-        <p>Website &copy; St George's University of London 2012 | <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/">CC-BY-SA 2.0</a> </p>
-      </footer>
+	<?php include 'footer.php';?>
 
     </div><!--/.fluid-container-->
 
