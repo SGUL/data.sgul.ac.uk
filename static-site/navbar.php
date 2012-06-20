@@ -11,9 +11,11 @@
           <a class="brand" href="#">SGUL Open Data</a> 
           <div class="nav-collapse"> 
             <ul class="nav"> 
-              <li class="active"><a href="#">Home</a></li> 
-              <li><a href="#about">About</a></li> 
-              <li><a href="#contact">Contact</a></li> 
+              <li><a href="http://data.sgul.ac.uk">Home</a></li> 
+              <li><a href="about.php">About</a></li> 
+              <li><a href="contact.php">Contact</a></li> 
+              <li><a href="sparql.php">SPARQL</a></li> 
+              <li><a href="contact.php">Contact</a></li> 
             </ul> 
             <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>--> 
           </div><!--/.nav-collapse --> 

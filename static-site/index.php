@@ -42,13 +42,13 @@
           <div class="hero-unit">
             <h1>SGUL Open Data</h1>
             <p>St George's University of London's Administrative, Research, and Statistical Open Data.</p>
-            <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+            <p><a class="btn btn-primary btn-large" href="about.php">Learn more &raquo;</a></p>
 
           </div>
           <div class="row-fluid">
             <div class="span4">
               <h2>Vacancies</h2>
-              <p><a href="http://jobs.sgul.ac.uk">Original</a> | <a href="jobs.csv">CSV</a> | <a href="">SPARQL</a></p>
+              <p><a href="http://jobs.sgul.ac.uk">Original</a> | <a href="output/jobs.csv">CSV</a> | <a href="sparql.php">SPARQL</a></p>
               <p>License: <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">OGL</a></p>
             </div><!--/span-->
             <div class="span4">

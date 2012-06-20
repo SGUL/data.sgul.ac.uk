@@ -71,7 +71,12 @@ soup_div = BeautifulSoup(str(printHide_element))
 type = ""
 topic = ""
 
-# output RDF
+# CSV
+f = open('jobs.csv', 'w')
+csv_str = 'Title,Employer,ClosingDate,InterviewDate,Area,URL\n'
+f.write(csv_str)
+
+# RDF
 print '<?xml version="1.0"?>'
 print ' '
 print '<vacancy:RDF'
@@ -94,17 +99,11 @@ for elem in soup_div.findAll():
         jobs_data = downloadJobDetails(href)
        
 
-        #print "Title: " + title
-        #print "Area: " + topic
-        #print "Unit: " + type
-        #print "Ref.: " + jobs_data['Reference']
-        #print "Closing: " + jobs_data['Closing']
-        #print "Interview: " + jobs_data['Interview']
-        #print "Salary: " + jobs_data['Salary']
-        #print "Href: " + settings["jobs"]["url"]  + "/" + href
-        #print " "
+	# CSV
+	csv_str = title+","+"St. George's, University of London"+","+jobs_data['Closing']+","+jobs_data['Interview']+","+topic+","+settings["jobs"]["url"]  + "/"+href+"\n"
+	f.write(csv_str)
 
-	#Production of the RDF
+	# RDF
         print '  <rdfs:label>' + title + '</rdfs:label>'
 	print '  <vacancy:employer>St. George\'s, University of London</vacancy:employer>'
         print '  <vacancy:applicationOpeningDate>01/01/1970</vacancy:applicationOpeningDate>'
@@ -113,4 +112,6 @@ for elem in soup_div.findAll():
         print '  <vacancy:organizationPart>' + topic + '</vacancy:organizationPart>'
         print '  <vacancy:availableOnline>' + href + '</vacancy:availableOnline>'
         print '  <vacancy:open>True</vacancy:open>'
-        
+
+# Manage file descriptors
+f.close        
