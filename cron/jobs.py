@@ -7,6 +7,7 @@ from BeautifulSoup import BeautifulSoup
 import csv
 import shutil
 
+
 def downloadJobDetails(url):
     jobs_detail_url = settings["jobs"]["url"]  + "/" + url
     job = (urllib2.urlopen(jobs_detail_url)).read()
@@ -75,7 +76,7 @@ topic = ""
 
 # CSV
 f = open('jobs.csv', 'w')
-csv_str = 'Title,Employer,ClosingDate,InterviewDate,Area,URL\n'
+csv_str = 'Title,Employer,ClosingDate,InterviewDate,Area,URL,Salary\n'
 f.write(csv_str)
 
 # RDF
@@ -124,25 +125,34 @@ for elem in soup_div.findAll():
        
 
 	# CSV
-	csv_str = title+","+"St. George's University of London"+","+jobs_data['Closing']+","+jobs_data['Interview']+","+topic+","+settings["jobs"]["url"]  + "/"+href+"\n"
+	# TODO fix unicode
+	csv_str = title+","+"St. George's University of London"+","+jobs_data['Closing']+","+jobs_data['Interview']+","+topic+","+settings["jobs"]["url"]  + "/"+href+","+(jobs_data['Salary']).encode('utf-8')+"\n"
 	f.write(csv_str)
 
 	# RDF
-        rdf_str = rdf_str +  '  <rdfs:label>' + title + '</rdfs:label>\n'
-	rdf_str = rdf_str +  '  <vacancy:employer>St. George\'s University of London</vacancy:employer>\n'
-        rdf_str = rdf_str +  '  <vacancy:applicationOpeningDate>01/01/1970</vacancy:applicationOpeningDate>\n'
-        rdf_str = rdf_str +  '  <vacancy:applicationClosingDate>' + jobs_data['Closing'] + '</vacancy:applicationClosingDate>\n'
-        rdf_str = rdf_str +  '  <vacancy:applicationInterviewNotificationByDate>' + jobs_data['Interview'] + 'vacancy:applicationInterviewNotificationByDate>\n'
-        rdf_str = rdf_str +  '  <vacancy:organizationPart>' + topic + '</vacancy:organizationPart>\n'
-        rdf_str = rdf_str +  '  <vacancy:availableOnline>' + href + '</vacancy:availableOnline>\n'
-        rdf_str = rdf_str +  '  <vacancy:open>True</vacancy:open>\n'
+        rdf_str = rdf_str + ' <foaf:Document rdf:about="http://jobs.sgul.ac.uk">\n\
+                                <foaf:primaryTopic>\n\
+                                  <vacancy:Vacancy rdf:about="'+settings["jobs"]["url"]  + "/"+ href+'">\n\
+                                    <rdfs:label>' + title + '</rdfs:label>\n\
+                                    <vacancy:employer>St. George\'s University of London</vacancy:employer>\n\
+                                    <vacancy:organizationalUnit rdf:resource="' + topic + '"/>\n\
+                                    <vacancy:availableOnline>' + settings["jobs"]["url"]  + "/" +  href + '</vacancy:availableOnline>\n\
+                                    <rdfs:comment>' + " " + '</rdfs:comment>\n\
+                                    <vacancy:boh>'+ jobs_data['Salary']  +'</vacancy:boh>\n\
+                                  </vacancy:Vacancy>\n\
+                                </foaf:primaryTopic>\n\
+                              </foaf:Document>\n'
 
+#<vacancy:applicationInterviewNotificationByDate>' + jobs_data["Closing"] + '</vacancy:applicationInterviewNotificationByDate>\n\
+#<vacancy:applicationClosingDate>' + jobs_data["Closing"] +' </vacancy:applicationClosingDate>\n\
+                                   #<vacancy:salary>' + jobs_data['Salary'] + '</vacancy:salary>\n\
+#P
 # Manage file descriptors
 f.close        
 
 # CSV to JSON
 f = open('jobs.csv', 'r')
-reader = csv.DictReader(f, fieldnames = ("title","employer","closing_date","interview_date","area","url") )
+reader = csv.DictReader(f, fieldnames = ("title","employer","closing_date","interview_date","area","url","salary") )
 out = json.dumps( [ row for row in reader ] )
 fj = open('jobs.json', 'w')
 fj.write(out)
@@ -150,8 +160,9 @@ fj.close()
 f.close()
 
 # RDF
+rdf_str = rdf_str + '</rdf:RDF>'
 fr = open('jobs.rdf', 'w')
-fr.write(rdf_str)
+fr.write(str(rdf_str))
 fr.close()
 
 # Move files to output directory
