@@ -79,11 +79,33 @@ csv_str = 'Title,Employer,ClosingDate,InterviewDate,Area,URL\n'
 f.write(csv_str)
 
 # RDF
-rdf_str = '<?xml version="1.0"?>\n'
-rdf_str = rdf_str +  ' \n'
-rdf_str = rdf_str +  '<vacancy:RDF\n'
-rdf_str = rdf_str +  '<rdfs:RDF<http://www.w3.org/2000/01/rdf-schema#> \n'
-rdf_str = rdf_str +  '  xmlns:vacancy http://purl.org/openorg/vacancy/\n'
+rdf_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
+           <rdf:RDF\n\
+              xmlns:foaf='http://xmlns.com/foaf/0.1/'\n\
+              xmlns:oo='http://purl.org/openorg/'\n\
+              xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'\n\
+              xmlns:dc='http://purl.org/dc/elements/1.1/'\n\
+              xmlns:vacancy='http://purl.org/openorg/vacancy/'\n\
+              xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n\
+              xmlns:dcterms='http://purl.org/dc/terms/'\n\
+              xmlns:skos='http://www.w3.org/2004/02/skos/core#'\n\
+           >\n\
+              <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#comment\">\n\
+                <rdfs:label>comment</rdfs:label>\n\
+              </rdf:Description>\n\
+              <rdf:Description rdf:about=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\">\n\
+                <rdfs:label>type</rdfs:label>\n\
+              </rdf:Description>\n\
+              <rdf:Description rdf:about=\"http://xmlns.com/foaf/0.1/page\">\n\
+                <rdfs:label>page</rdfs:label>\n\
+             </rdf:Description>\n\
+             <rdf:Description rdf:about=\"http://xmlns.com/foaf/0.1/homepage\">\n\
+                <rdfs:label>homepage</rdfs:label>\n\
+             </rdf:Description>\n\
+             <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#label\">\n\
+                <rdfs:label>label</rdfs:label>\n\
+             </rdf:Description>\n"
+
 
 # navigate in each element of the page
 for elem in soup_div.findAll():
