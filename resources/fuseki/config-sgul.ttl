@@ -40,7 +40,7 @@
     ja:defaultGraph 
       [ rdfs:label "foaf.ttl" ;
         a ja:MemoryModel ;
-        ja:content [ja:externalContent <file:../../../data.sgul.ac.uk/cron/foaf.rdf> ] ;
+        ja:content [ja:externalContent <file:/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/cron/foaf.rdf> ] ;
       ] ;
     .
 
@@ -59,6 +59,6 @@
     ja:defaultGraph 
       [ rdfs:label "foaf.ttl" ;
         a ja:MemoryModel ;
-        ja:content [ja:externalContent <file:../../../data.sgul.ac.uk/cron/foaf.rdf> ] ;
+        ja:content [ja:externalContent <file:/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/cron/foaf.rdf> ] ;
       ] ;
     .
