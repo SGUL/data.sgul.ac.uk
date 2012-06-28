@@ -125,9 +125,9 @@ for elem in soup_div.findAll():
        
 
 	# CSV
-	# TODO fix unicode
-	csv_str = title+","+"St. George's University of London"+","+jobs_data['Closing']+","+jobs_data['Interview']+","+topic+","+settings["jobs"]["url"]  + "/"+href+","+(jobs_data['Salary']).encode('utf-8')+"\n"
-	f.write(csv_str)
+	csv_str = title+","+"St. George's University of London"+","+jobs_data['Closing']+","+jobs_data['Interview']+","+topic+","+settings["jobs"]["url"]  + "/"+href+","
+        csv_str = csv_str + (jobs_data['Salary']).decode('utf-8') + "\n"
+	f.write(csv_str.encode('utf-8'))
 
 	# RDF
         rdf_str = rdf_str + ' <foaf:Document rdf:about="http://jobs.sgul.ac.uk">\n\
@@ -137,16 +137,15 @@ for elem in soup_div.findAll():
                                     <vacancy:employer>St. George\'s University of London</vacancy:employer>\n\
                                     <vacancy:organizationalUnit rdf:resource="' + topic + '"/>\n\
                                     <vacancy:availableOnline>' + settings["jobs"]["url"]  + "/" +  href + '</vacancy:availableOnline>\n\
+                                    <vacancy:applicationInterviewNotificationByDate>' + jobs_data["Closing"] + '</vacancy:applicationInterviewNotificationByDate>\n\
+                                    <vacancy:applicationClosingDate>' + jobs_data["Closing"] +' </vacancy:applicationClosingDate>\n\
                                     <rdfs:comment>' + " " + '</rdfs:comment>\n\
-                                    <vacancy:boh>'+ jobs_data['Salary']  +'</vacancy:boh>\n\
+                                    <vacancy:salary>'+ (jobs_data['Salary']).decode('utf-8')  +'</vacancy:salary>\n\
                                   </vacancy:Vacancy>\n\
                                 </foaf:primaryTopic>\n\
                               </foaf:Document>\n'
 
-#<vacancy:applicationInterviewNotificationByDate>' + jobs_data["Closing"] + '</vacancy:applicationInterviewNotificationByDate>\n\
-#<vacancy:applicationClosingDate>' + jobs_data["Closing"] +' </vacancy:applicationClosingDate>\n\
-                                   #<vacancy:salary>' + jobs_data['Salary'] + '</vacancy:salary>\n\
-#P
+
 # Manage file descriptors
 f.close        
 
@@ -162,7 +161,7 @@ f.close()
 # RDF
 rdf_str = rdf_str + '</rdf:RDF>'
 fr = open('jobs.rdf', 'w')
-fr.write(str(rdf_str))
+fr.write(rdf_str.encode('utf-8'))
 fr.close()
 
 # Move files to output directory

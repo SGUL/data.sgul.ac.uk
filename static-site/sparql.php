@@ -44,8 +44,16 @@
 	        	<p>
 	        	  <textarea name="query" cols="100" rows="20">
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX oo: <http://purl.org/openorg/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#?>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX vacancy: <http://purl.org/openorg/vacancy/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
 SELECT ?name ?weblog ?sha1
-FROM <http://www.ldodds.com/ldodds-knows.rdf>
+FROM <http://data.sgul.ac.uk/output/jobs.rdf>
 WHERE
 {
 	?x foaf:name ?name.

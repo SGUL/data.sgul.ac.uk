@@ -25,6 +25,7 @@
    fuseki:services (
      <#serviceFoaf1>
      <#serviceFoaf2>
+     <#serviceVac>
    ) .
 
 ## Same one
@@ -48,17 +49,34 @@
 ## Read-only access to a small books database.
 
 <#serviceFoaf2> rdf:type fuseki:Service ;
-    fuseki:name                     "Publications" ;
+    fuseki:name                     "Vacancies" ;
     fuseki:serviceQuery             "query" ;
     fuseki:serviceReadGraphStore    "get" ;
-    fuseki:dataset                   <#foaf2> ;
+    fuseki:dataset                   <#vacancies> ;
     .
     
-<#foaf2>    rdf:type ja:RDFDataset ;
-    rdfs:label "Phonebook2" ;
+<#vacancies>    rdf:type ja:RDFDataset ;
+    rdfs:label "Vacancies" ;
     ja:defaultGraph 
-      [ rdfs:label "foaf.ttl" ;
+      [ rdfs:label "vacancies.ttl" ;
         a ja:MemoryModel ;
-        ja:content [ja:externalContent <file:/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/cron/foaf.rdf> ] ;
+        ja:content [ja:externalContent <file:/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/static-site/output/jobs.rdf> ] ;
       ] ;
+    tdb:unionDefaultGraph true .
+
+<#serviceVac> rdf:type fuseki:Service ;
+    fuseki:name                     "Vacancies2" ;
+    fuseki:serviceQuery             "query" ;
+    fuseki:serviceReadGraphStore    "get" ;
+    fuseki:dataset                   <#vacancies2> ;
     .
+    
+<#vacancies2>    rdf:type ja:RDFDataset ;
+    rdfs:label "Vacancies2" ;
+    ja:defaultGraph 
+      [ 
+        a ja:MemoryModel ;
+        ja:context [ja:externalContent <file:/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/static-site/output/jobs.rdf> ] ;
+      ] ;
+    tdb:unionDefaultGraph true .
+        
