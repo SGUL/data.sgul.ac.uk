@@ -23,8 +23,6 @@
    # ja:loadClass "your.code.Class" ;
 
    fuseki:services (
-     <#serviceFoaf1>
-     <#serviceFoaf2>
      <#serviceVac>
    ) .
 
