@@ -8,7 +8,7 @@
 [] a fuseki:Server ;
   fuseki:services (
     [ a fuseki:Service ;
-      fuseki:name "public" ;
+      fuseki:name "vacancy" ;
       fuseki:serviceQuery "query" ;
       fuseki:serviceUpdate "update" ;
       fuseki:serviceReadWriteGraphStore "data" ;
@@ -18,7 +18,7 @@
   ) .
 
 <#publicDataset> a tdb:DatasetTDB ;
-  tdb:location "/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/static-site/output/dataset/" ;
+  tdb:location "/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/static-site/output/dataset" ;
   ja:context [ ja:cxtName "arq:queryTimeout" ; ja:cxtValue "20000" ] ;
   tdb:unionDefaultGraph true .
 

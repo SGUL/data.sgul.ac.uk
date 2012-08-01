@@ -48,16 +48,16 @@
           <div class="row-fluid">
             <div class="span4">
               <h2>Vacancies</h2>
-              <p><a href="http://jobs.sgul.ac.uk">Original</a> | <a href="output/jobs.csv">CSV</a> | <a href="output/jobs.json">JSON</a> | <a href="output/jobs.rdf">RDF-XML</a> | <a href="sparql.php">SPARQL</a></p>
+              <p><a href="http://jobs.sgul.ac.uk">Original</a> | <a href="output/jobs.csv">CSV</a> | <a href="output/jobs.json">JSON</a> | <a href="output/jobs.rdf">RDF-XML</a> | <a href="">SPARQL [Coming soon]</a></p>
               <p>License: <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">OGL</a></p>
             </div><!--/span-->
             <div class="span4">
               <h2>Publications</h2>
-              Coming soon.
+              Expected release: August.
             </div>
             <div class="span4">
               <h2>XCRI Data</h2>
-              Coming soon.
+              Expected release: September.
             </div><!--/span-->
                       </div><!--/row-->
 
