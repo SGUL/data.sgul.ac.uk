@@ -23,10 +23,11 @@ def parseUser(xmlFile):
         lastname = e('//api:last-name')[0].text
         firstname = e('//api:first-name')[0].text
         email = e('//api:email-address')[0].text
-        print prop_id, ",", id
-        #, ",", username, ",", href, ",", type, ",", current, ",", title, ",", lastname, ",", firstname, ",", email
+        print prop_id, ",", id, ",", username, ",", href, ",", type, ",", current, ",", title, ",", lastname, ",", firstname, ",", email
 
-
+def parseUserFeed(xmlFile):
+    pass
+    # TODO do something when Symplectic confirms this is available   
 
 
 def parseList(xmlFile):
