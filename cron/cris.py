@@ -37,21 +37,25 @@ def parseUserFeedList(xmlFile):
     e = etree.XPathEvaluator(tree)
     e.register_namespace('api', 'http://www.symplectic.co.uk/publications/api')
     # get all users in this page
-    users = e('//api:user-feed-entry/api:last-name')
+    users = e('//api:user-feed-entry')
     for user in users:
-        print user.text
-    #for user in users:
-    #    prop_id = user.get("proprietary-id")
-    #    id = user.get("id")
-    #    username = user.get("username")
-    #    href = user.get("href")
-    #    parseUser(href)
+        enew = etree.XPathEvaluator(user)
+        enew.register_namespace('api', 'http://www.symplectic.co.uk/publications/api')
+        last = enew('api:last-name')
+        for l in last:
+            print l.text
+            # TODO Wrong: it's got all the users
+        #user.e('//api:last-name')
+        #prop_id = user.get("proprietary-id")
+        #id = user.get("id")
+        #username = user.get("username")
+        #href = user.get("href")
 
     # get next/last     
     next = e('//api:page[@position="next"]')[0].get("href")
     last = e('//api:page[@position="last"]')[0].get("href")
     #if next <> last:
-    #    parseUserFeedList(next)
+        #parseUserFeedList(next)
     
 
 def parseUserList(xmlFile):
@@ -83,5 +87,5 @@ settings = json.loads(settings_text)
 cris_url = settings["cris"]["url"]
 cris_port = settings["cris"]["port"]
 
-parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
-#parseUserFeedList(cris_url + ":" + cris_port +"/publications-api/user-feeds/STAFF")
+#parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
+parseUserFeedList(cris_url + ":" + cris_port +"/publications-api/user-feeds/STAFF")
