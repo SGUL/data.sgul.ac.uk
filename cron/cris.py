@@ -1,6 +1,8 @@
 import lxml, json
+import urllib2
 from lxml import etree
 from StringIO import StringIO
+from xml.dom.minidom import parse, parseString
 
 
 def parseUser(xmlFile):
@@ -123,7 +125,22 @@ def do_inCites_authors(list):
     print prop_id + "," + lastname + "," + firstname + "," + email + '"St. George\'s, University of London"' + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_1 + "," + arrive_date[0:4] + "," + leave_date[0:4]
 
 def parsePublicationList(xmlFile):
-    pass
+    tree = etree.parse(xmlFile)
+
+    file = urllib2.urlopen(xmlFile)
+    data = file.read()
+    file.close()
+    dom = parseString(data)
+
+    entries = dom.getElementsByTagName('entry')
+
+    for entry in entries:
+        print "My: "+ str(entry)
+    # get next/last     
+    next = dom.getElementsByTagName('api:page')[2].getAttribute('href')
+    last = dom.getElementsByTagName('api:page')[3].getAttribute('href')
+    if next <> last:
+        parsePublicationList(next)
 
 #read settings, load url, parse resulting text
 settings_text = open("config.json", "r").read()
@@ -131,4 +148,5 @@ settings = json.loads(settings_text)
 cris_url = settings["cris"]["url"]
 cris_port = settings["cris"]["port"]
 
-parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
+#parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
+parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications")
