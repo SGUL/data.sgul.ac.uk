@@ -13,7 +13,7 @@ def parseUser(xmlFile):
     users = e('//api:object[@category="user"]')
     for user in users:
         prop_id = user.get("proprietary-id")
-        id = user.get("id")
+        symp_id = user.get("id")
         username = user.get("username")
 
         href = user.get("href")
@@ -32,7 +32,7 @@ def parseUser(xmlFile):
         if prop_id <> None:
             hr_feed_url = (cris_url + ":" + cris_port +"/publications-api/user-feed/users/"+prop_id)
             result = parseUserFeed(hr_feed_url)
-            finalres = [prop_id, lastname, firstname, email, result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0)]
+            finalres = [symp_id, prop_id, lastname, firstname, email, result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0)]
             do_inCites_authors(finalres)
 
 
@@ -106,8 +106,8 @@ def parseUserList(xmlFile):
 
 # prints author export for in_cites
 def do_inCites_authors(list):
-    #[prop_id, lastname, firstname, email,primarygroup, isacademic, arrive_date, leave_date, dateofbirth, ou_1, ou_2, jobtitle, ft, perm_ft_text]
-    # not the smartest code ever...
+    #[symp_id, prop_id, lastname, firstname, email,primarygroup, isacademic, arrive_date, leave_date, dateofbirth, ou_1, ou_2, jobtitle, ft, perm_ft_text]
+    symp_id = list.pop(0)
     prop_id = list.pop(0)
     lastname = list.pop(0)
     firstname = list.pop(0)
@@ -122,7 +122,36 @@ def do_inCites_authors(list):
     jobtitle = list.pop(0)
     ft = list.pop(0)
     perm_ft_text = list.pop(0)
-    print prop_id + "," + lastname + "," + firstname + "," + email + '"St. George\'s, University of London"' + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_1 + "," + arrive_date[0:4] + "," + leave_date[0:4]
+    
+    print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_1 + "," + arrive_date[0:4] + "," + leave_date[0:4]
+    print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_2 + "," + arrive_date[0:4] + "," + leave_date[0:4]
+
+def parsePublicationUrl(xmlFile):
+    tree = etree.parse(xmlFile)
+
+    file = urllib2.urlopen(xmlFile)
+    data = file.read()
+    file.close()
+    dom = parseString(data)
+
+    entries = dom.getElementsByTagName('entry')
+
+    #there's only one entry TODO
+    for entry in entries:
+        authors = (entry.getElementsByTagName('api:person'))
+	authorstring = ""
+        for author in authors:
+            author_lastname = author.getElementsByTagName('api:last-name')[0].childNodes[0].data
+            author_initials = author.getElementsByTagName('api:initials')[0].childNodes[0].data
+            authorstring = authorstring + author_lastname + ", " + author_initials + ","
+        
+	
+        # parsePublicationUrl and parsePublicationRelationships
+
+    return [authorstring]
+
+def parsePublicationRelationships(xmlFile):
+    return []
 
 def parsePublicationList(xmlFile):
     tree = etree.parse(xmlFile)
@@ -135,7 +164,23 @@ def parsePublicationList(xmlFile):
     entries = dom.getElementsByTagName('entry')
 
     for entry in entries:
-        print "My: "+ str(entry)
+        pub_id = (entry.getElementsByTagName('id'))[0].childNodes[0].data 
+        title = (entry.getElementsByTagName('title'))[0].childNodes[0].data 
+        links = (entry.getElementsByTagName('link'))
+	for link in links:
+            rel = link.getAttribute('rel')
+            if rel == 'alternate':
+	        pub_url = link.getAttribute('href')
+            elif rel == 'related' and link.getAttribute('title') == 'Relationships':
+                pub_rel_url = link.getAttribute('href')
+
+        
+	
+        pub_info = parsePublicationUrl(pub_url)
+        pub_rel_info = parsePublicationUrl(pub_rel_url)
+        # parsePublicationUrl and parsePublicationRelationships
+        print title,pub_url,pub_rel_url,str(pub_info)
+
     # get next/last     
     next = dom.getElementsByTagName('api:page')[2].getAttribute('href')
     last = dom.getElementsByTagName('api:page')[3].getAttribute('href')
