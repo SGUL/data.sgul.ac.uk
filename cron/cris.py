@@ -123,8 +123,9 @@ def do_inCites_authors(list):
     ft = list.pop(0)
     perm_ft_text = list.pop(0)
     
-    print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_1 + "," + arrive_date[0:4] + "," + leave_date[0:4]
-    print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_2 + "," + arrive_date[0:4] + "," + leave_date[0:4]
+    if leave_date == '':
+        print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_1 + "," + arrive_date[0:4] + "," + leave_date[0:4]
+        print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_2 + "," + arrive_date[0:4] + "," + leave_date[0:4]
 
 def parsePublicationUrl(xmlFile):
     tree = etree.parse(xmlFile)
@@ -136,19 +137,19 @@ def parsePublicationUrl(xmlFile):
 
     entries = dom.getElementsByTagName('entry')
 
-    #there's only one entry TODO
+    authors_list = []
+    all_authors_string = ""
     for entry in entries:
         authors = (entry.getElementsByTagName('api:person'))
-	authorstring = ""
         for author in authors:
             author_lastname = author.getElementsByTagName('api:last-name')[0].childNodes[0].data
             author_initials = author.getElementsByTagName('api:initials')[0].childNodes[0].data
-            authorstring = authorstring + author_lastname + ", " + author_initials + ","
-        
-	
-        # parsePublicationUrl and parsePublicationRelationships
+            authorstring = author_lastname + ", " + author_initials 
+            authors_list.append(authorstring)
+            all_authors_string = all_authors_string + ";" + authorstring
 
-    return [authorstring]
+    #return set(authors_list)
+    return all_authors_string[1:]
 
 def parsePublicationRelationships(xmlFile):
     return []
@@ -175,11 +176,23 @@ def parsePublicationList(xmlFile):
                 pub_rel_url = link.getAttribute('href')
 
         
-	
-        pub_info = parsePublicationUrl(pub_url)
-        pub_rel_info = parsePublicationUrl(pub_rel_url)
+        # TODO to get the author employee ID you need...
+        # 1 pub rel
+        pub_info = parsePublicationUrl(pub_url).encode('ascii','xmlcharrefreplace')
+        # 2 get author inside the document
+        # 3 get last part of url (or download url,...)
+
+
+        # TODO Get Journal name
+        # TODO Get starting page
+        # TODO Get publication year
+
+
+        pub_rel_info = parsePublicationRelationships(pub_rel_url)
         # parsePublicationUrl and parsePublicationRelationships
-        print title,pub_url,pub_rel_url,str(pub_info)
+        # TODO make sure that first author goes on its own
+        print title + "," + pub_info
+ 	# TODO all of this in a list, not for printing here
 
     # get next/last     
     next = dom.getElementsByTagName('api:page')[2].getAttribute('href')
