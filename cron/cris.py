@@ -141,18 +141,46 @@ def parsePublicationUrl(xmlFile):
     all_authors_string = ""
     for entry in entries:
         authors = (entry.getElementsByTagName('api:person'))
-        for author in authors:
-            author_lastname = author.getElementsByTagName('api:last-name')[0].childNodes[0].data
-            author_initials = author.getElementsByTagName('api:initials')[0].childNodes[0].data
-            authorstring = author_lastname + ", " + author_initials 
-            authors_list.append(authorstring)
-            all_authors_string = all_authors_string + ";" + authorstring
+        #for author in authors:
+            #author_lastname = author.getElementsByTagName('api:last-name')[0].childNodes[0].data
+            #author_initials = author.getElementsByTagName('api:initials')[0].childNodes[0].data
+            #authorstring = author_lastname + ", " + author_initials 
+            #authors_list.append(authorstring)
+            #all_authors_string = all_authors_string + ";" + authorstring
 
     #return set(authors_list)
-    return all_authors_string[1:]
+    #return all_authors_string[1:]
 
 def parsePublicationRelationships(xmlFile):
-    return []
+    tree = etree.parse(xmlFile)
+
+    file = urllib2.urlopen(xmlFile)
+    data = file.read()
+    file.close()
+    dom = parseString(data)
+
+    entries = dom.getElementsByTagName('entry')
+    
+
+    authors = []
+    # one entry per author, get name and employee id
+    for entry in entries:
+         authorname = ((entry.getElementsByTagName('title')[0].childNodes[0].data).split(": "))[1]
+         authorlink = ((entry.getElementsByTagName('link'))[2].getAttribute('href')).split("/")
+         authorid = authorlink[len(authorlink)-1]
+         this_author = [authorname, authorid]
+         authors.append(this_author)
+    #    for author in authors:
+    #        author_lastname = author.getElementsByTagName('api:last-name')[0].childNodes[0].data
+    #        author_initials = author.getElementsByTagName('api:initials')[0].childNodes[0].data
+    #        authorstring = author_lastname + ", " + author_initials
+    #        authors_list.append(authorstring)
+    #        all_authors_string = all_authors_string + ";" + authorstring
+  
+
+
+
+    return authors
 
 def parsePublicationList(xmlFile):
     tree = etree.parse(xmlFile)
@@ -176,10 +204,12 @@ def parsePublicationList(xmlFile):
                 pub_rel_url = link.getAttribute('href')
 
         
-        # TODO to get the author employee ID you need...
         # 1 pub rel
-        pub_info = parsePublicationUrl(pub_url).encode('ascii','xmlcharrefreplace')
+        # TODO pub_info = parsePublicationUrl(pub_url).encode('ascii','xmlcharrefreplace')
+        pub_rel_info = parsePublicationRelationships(pub_rel_url)
         # 2 get author inside the document
+        
+
         # 3 get last part of url (or download url,...)
 
 
@@ -188,10 +218,9 @@ def parsePublicationList(xmlFile):
         # TODO Get publication year
 
 
-        pub_rel_info = parsePublicationRelationships(pub_rel_url)
         # parsePublicationUrl and parsePublicationRelationships
         # TODO make sure that first author goes on its own
-        print title + "," + pub_info
+        print title + "," + str(pub_rel_info)
  	# TODO all of this in a list, not for printing here
 
     # get next/last     
