@@ -33,6 +33,7 @@ def parseUser(xmlFile):
             hr_feed_url = (cris_url + ":" + cris_port +"/publications-api/user-feed/users/"+prop_id)
             result = parseUserFeed(hr_feed_url)
             finalres = [symp_id, prop_id, lastname, firstname, email, result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0)]
+            # TODO move this to the caller - make it a function over the set, rather than over the single entry
             do_inCites_authors(finalres)
 
 
@@ -205,23 +206,14 @@ def parsePublicationList(xmlFile):
 
         
         # 1 pub rel
-        # TODO pub_info = parsePublicationUrl(pub_url).encode('ascii','xmlcharrefreplace')
-        pub_rel_info = parsePublicationRelationships(pub_rel_url)
-        # 2 get author inside the document
+        # TODO pub_info = parsePublicationUrl(pub_url).encode('ascii','xmlcharrefreplace') - this gets title, source, volume, ...
         
-
-        # 3 get last part of url (or download url,...)
-
-
-        # TODO Get Journal name
-        # TODO Get starting page
-        # TODO Get publication year
+        pub_rel_info = parsePublicationRelationships(pub_rel_url)
 
 
-        # parsePublicationUrl and parsePublicationRelationships
         # TODO make sure that first author goes on its own
         print title + "," + str(pub_rel_info)
- 	# TODO all of this in a list, not for printing here
+ 	# TODO all of this in a list, not for printing here, then doInCitesPublications
 
     # get next/last     
     next = dom.getElementsByTagName('api:page')[2].getAttribute('href')
