@@ -1,5 +1,6 @@
 import lxml, json
 import urllib2
+import libxml2
 from lxml import etree
 from StringIO import StringIO
 from xml.dom.minidom import parse, parseString
@@ -134,48 +135,21 @@ def do_inCites_authors(list):
 # Publications management
 def parsePublicationList(xmlFile):
     tree = etree.parse(xmlFile)
-    e = etree.XPathEvaluator(tree, namespaces={'def':'http://www.w3.org/2005/Atom'})
-    #e.register_namespace('def','http://www.w3.org/2005/Atom')
-    e.register_namespace('api', 'http://www.symplectic.co.uk/publications/api')
 
-
-   # file = urllib2.urlopen(xmlFile)
-   # data = file.read()
-   # file.close()
-   # dom = parseString(data)
-
-    #entries = dom.getElementsByTagName('entry')
-
-    #for entry in entries:
-     #   pub_id = (entry.getElementsByTagName('id'))[0].childNodes[0].data
-     #   title = (entry.getElementsByTagName('title'))[0].childNodes[0].data
-     #   links = (entry.getElementsByTagName('link'))
-    #   for link in links:
-    #        rel = link.getAttribute('rel')
-    #        if rel == 'alternate':
-    #            pub_url = link.getAttribute('href')
-    #        elif rel == 'related' and link.getAttribute('title') == 'Relationships':
-    #            pub_rel_url = link.getAttribute('href')
-
-    #    print pub_url
-    #publicationData = parsePublicationUrl(pub_url) #).encode('ascii','xmlcharrefreplace')
-
-    entries = e('//def:entry')
+    root = tree.getroot()
+    entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
     for entry in entries:
-        #print (entry.findall('*'))[0].text
-        mypath = tree.getpath(entry) + "/category"
-	print mypath
-	category = e(mypath)
-        #print category
-        
-    #cate = e('//def:entry[1]/def:category[1]')[0].get('scheme')
-    #print '/def:feed/def:entry[1]/def:category[1]'
+        title = entry.xpath('def:title',namespaces={'def':'http://www.w3.org/2005/Atom',})
 
-    # get next/last     
-    next = e('//api:page[@position="next"]')[0].get('href')
-    last = e('//api:page[@position="last"]')[0].get('href')
+    next = root.xpath('//api:page[@position="next"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
+    last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
+    print next
+    #e('//api:page[@position="next"]')[0].get('href')
+    #last = e('//api:page[@position="last"]')[0].get('href')
     #if next <> last:
     #    parsePublicationList(next)
+
+
 
 def parsePublicationUrl(xmlFile):
 
