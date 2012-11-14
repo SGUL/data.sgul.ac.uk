@@ -139,66 +139,105 @@ def parsePublicationList(xmlFile):
     root = tree.getroot()
     entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
     for entry in entries:
-        title = entry.xpath('def:title',namespaces={'def':'http://www.w3.org/2005/Atom',})
+        title = entry.xpath('def:title',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].text
+        pub_uri = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
+        pub_rel_uri = entry.xpath('def:link[@rel="related"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
+        pub_data = parsePublication(pub_uri)
+        pub_rel = parsePublicationRel(pub_rel_uri)
 
     next = root.xpath('//api:page[@position="next"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
     last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
-    print next
-    #e('//api:page[@position="next"]')[0].get('href')
-    #last = e('//api:page[@position="last"]')[0].get('href')
-    #if next <> last:
-    #    parsePublicationList(next)
+    if next <> last:
+        parsePublicationList(next)
 
 
+# this parses the main publication url
+# e.g. http://my.symplectic.instance:8090/publications-api/publications/78823
+def parsePublication(xmlFile):
+    tree = etree.parse(xmlFile)
+    root = tree.getroot()
+    entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
+    for entry in entries:
+        link = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
+        records = entry.xpath('api:object/api:records',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
+        # there can be multiple records for each publication (web of science, pub med, etc...)
+        for record in records:
+            sourcename = record.get('source-name')
+            sourceid = record.get('source-id')
+            sourcedisplayname = record.get('source-display-name')
+            idatsource = record.get('id-at-source')
+            # gathering available fields
+            try: 
+                abstract = record.xpath('api:native/api:field[@name="abstract"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+            except Exception, err:
+                abstract = ""
+            
+            authors = record.xpath('api:native/api:field[@name="authors"]/api:people/api:person',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
+	    authorslist = []
+            for author in authors:
+                try:
+                    lastname = author.xpath('api:last-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                except Exception, err:
+                    lastname = ""
+                
+                try:
+                    initials = author.xpath('api:initials',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                except Exception, err:
+                    initials = ""
+                if initials is None:
+                    initials = "" #TODO 
 
-def parsePublicationUrl(xmlFile):
+                formattedname = lastname + ", " + initials
+                authorslist.append(formattedname)
 
-    file = urllib2.urlopen(xmlFile)
-    data = file.read()
-    file.close()
-    dom = parseString(data)
+            try:
+                doi = record.xpath('api:native/api:field[@name="doi"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+            except Exception, err:
+                doi = ""                
+            try:
+                issn = record.xpath('api:native/api:field[@name="issn"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+            except Exception, err:
+                issn = ""                
+            try:
+                issue = record.xpath('api:native/api:field[@name="issue"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+            except Exception, err:
+                issue = ""                
+            try:
+                journal = record.xpath('api:native/api:field[@name="journal"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+            except Exception, err:
+                journal = ""                
+
+            
+            try:
+                keywords = record.xpath('api:native/api:field[@name="keywords"]/api:keywords/api:keyword',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
+	        keywordslist = []
+                for keyword in keywords:
+                    k_text = keyword.text
+                    keywordslist.append(k_text)
+            except Exception, err:
+                keywordslist = []
 
 
-    return []
+            try:
+                language = record.xpath('api:native/api:field[@name="doi"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+            except Exception, err:
+                language = ""                
 
 
-def parsePublicationUrlXslt(xmlFile):
-    xml_input = etree.parse(xmlFile)
-    xslt_root = etree.parse("symplectic-to-vivo.datamap.xsl")
-    transform = etree.XSLT(xslt_root)
-    rdf_xml = transform(xml_input)
-    
-    dom = parseString(str(rdf_xml))
+            
+    out = []
 
-    employeeID = ""
-    lastName = ""
-    firstName = ""
-    middleName = ""
-    otherauthors = ""
-    reftype = ""
-    title = getValue(dom,'core:Title')
-    sourcetitle = ""
-    volume = getValue(dom,'bibo:volume')
-    number = ""
-    startingpage = getValue(dom,'bibo:pageStart')
-    ISSN = getValue(dom,'bibo:ISSN')
-    dateday = ""
-    datemonth = ""
-    dateyear = ""
-    electronicresourcenum = getValue(dom,'bibo:doi')
-    accessionnum = ""
-    puburl = ""
+    return out
 
-    list = [employeeID,lastName,firstName,middleName,otherauthors,reftype,title,sourcetitle,volume,number,startingpage,ISSN,dateday,datemonth,dateyear,electronicresourcenum,accessionnum,puburl]
-    do_inCites_publications(list)
- 
-    return ""
+def parsePublicationRel(xmlFile):
+    tree = etree.parse(xmlFile)
+    root = tree.getroot()
+    entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
+    out = []
 
-def getValue(dom,name):
-    try:
-        return dom.getElementsByTagName(name)[0].childNodes[0].nodeValue
-    except:
-        return ""
+    return out
+
+
 
 
 def do_inCites_publications(list):
