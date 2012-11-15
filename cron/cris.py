@@ -134,21 +134,37 @@ def do_inCites_authors(list):
 
 # Publications management
 def parsePublicationList(xmlFile):
+    mynext = xmlFile
     tree = etree.parse(xmlFile)
+    root = tree.getroot()
+    last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
 
+    all_pubs = []
+
+    while mynext <> last:
+        pub_data_list, pub_rel_list, mynext = parsePublicationListPage(mynext) 
+        all_pubs = all_pubs + pub_data_list
+
+# takes a publication list page as input
+# returns data about all publications in that page and next page
+def parsePublicationListPage(xmlFile):
+    tree = etree.parse(xmlFile)
     root = tree.getroot()
     entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
+ 
+    next = root.xpath('//api:page[@position="next"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
+    last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
+    pub_data_list = []
+    pub_rel_list = []
     for entry in entries:
         title = entry.xpath('def:title',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].text
         pub_uri = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
         pub_rel_uri = entry.xpath('def:link[@rel="related"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
         pub_data = parsePublication(pub_uri)
         pub_rel = parsePublicationRel(pub_rel_uri)
-
-    next = root.xpath('//api:page[@position="next"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
-    last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
-    if next <> last:
-        parsePublicationList(next)
+        pub_data_list.append(pub_data)
+        pub_rel_list.append(pub_rel)
+    return pub_data_list, pub_rel_list, next
 
 
 # this parses the main publication url
@@ -157,55 +173,87 @@ def parsePublication(xmlFile):
     tree = etree.parse(xmlFile)
     root = tree.getroot()
     entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
+    out = dict()
     for entry in entries:
         link = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
+        out['link'] = link
         records = entry.xpath('api:object/api:records',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
         # there can be multiple records for each publication (web of science, pub med, etc...)
+        recordslist = []
         for record in records:
+            recorddict = dict()
             sourcename = record.get('source-name')
+            recorddict['source-name'] = sourcename
             sourceid = record.get('source-id')
+            recorddict['source-id'] = sourceid
             sourcedisplayname = record.get('source-display-name')
+            recorddict['source-display-name'] = sourcedisplayname
             idatsource = record.get('id-at-source')
+            recorddict['id-at-source'] = idatsource
             # gathering available fields
             try: 
                 abstract = record.xpath('api:native/api:field[@name="abstract"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+		if abstract is None:
+                    abstract = ""
             except Exception, err:
                 abstract = ""
             
+            recorddict['abstract'] = abstract
+
             authors = record.xpath('api:native/api:field[@name="authors"]/api:people/api:person',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
-	    authorslist = []
+            authorslist = []
             for author in authors:
                 try:
                     lastname = author.xpath('api:last-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                    if lastname is None:
+                        lastname = ""
                 except Exception, err:
                     lastname = ""
                 
                 try:
                     initials = author.xpath('api:initials',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                    if initials is None:
+                        initials = ""
                 except Exception, err:
                     initials = ""
-                if initials is None:
-                    initials = "" #TODO 
 
                 formattedname = lastname + ", " + initials
                 authorslist.append(formattedname)
 
+            recorddict['authors'] = authorslist
+
             try:
                 doi = record.xpath('api:native/api:field[@name="doi"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if doi is None:
+                    doi = ""
             except Exception, err:
-                doi = ""                
+                doi = ""       
+            recorddict['doi'] = doi 
+         
             try:
                 issn = record.xpath('api:native/api:field[@name="issn"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if issn is None:
+                    issn = ""
             except Exception, err:
-                issn = ""                
+                issn = ""          
+            recorddict['issn'] = issn
+      
             try:
                 issue = record.xpath('api:native/api:field[@name="issue"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if issue is None:
+                    issue = ""
             except Exception, err:
-                issue = ""                
+                issue = ""           
+            recorddict['issue'] = issue
+     
             try:
-                journal = record.xpath('api:native/api:field[@name="journal"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                journal = record.xpath('api:native/api:field[@name="journal"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text 
+                if journal is None:
+                    journal = ""
             except Exception, err:
-                journal = ""                
+                journal = ""           
+            recorddict['journal'] = journal
+              
 
             
             try:
@@ -216,16 +264,107 @@ def parsePublication(xmlFile):
                     keywordslist.append(k_text)
             except Exception, err:
                 keywordslist = []
+            recorddict['keywords'] = keywordslist
+
+            try:
+                language = record.xpath('api:native/api:field[@name="language"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if language is None:
+                    language = ""
+            except Exception, err:
+                language = ""                
+            recorddict['language'] = language
+
+            try:
+                location = record.xpath('api:native/api:field[@name="location"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if location is None:
+                    location = ""
+            except Exception, err:
+                location = ""                
+            recorddict['location'] = location
+
+            try:
+                title = record.xpath('api:native/api:field[@name="title"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if title is None:
+                    title = ""
+            except Exception, err:
+                title = ""
+            recorddict['title'] = title
+
+            try:
+                volume = record.xpath('api:native/api:field[@name="volume"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if volume is None:
+                    volume = ""
+            except Exception, err:
+                volume = ""
+            recorddict['volume'] = volume
+
+            try:
+                pii = record.xpath('api:native/api:field[@name="pii"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if pii is None:
+                    pii = ""
+            except Exception, err:
+                pii = ""
+            recorddict['pii'] = pii
+
+            try:
+                beginpage = record.xpath('api:native/api:field[@name="pagination"]/api:pagination/api:begin-page',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if beginpage is None:
+                    beginpage = ""
+            except Exception, err:
+                beginpage = ""
+            recorddict['beginpage'] = beginpage
+
+            try:
+                endpage = record.xpath('api:native/api:field[@name="pagination"]/api:pagination/api:end-page',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if endpage is None:
+                    endpage = ""
+            except Exception, err:
+                endpage = ""
+            recorddict['endpage'] = endpage
 
 
             try:
-                language = record.xpath('api:native/api:field[@name="doi"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                subtypes = record.xpath('api:native/api:field[@name="types"]/api:items/api:item',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
+	        imtemslist = []
+                for item in subtypes:
+                    i_text = item.text
+                    itemslist.append(i_text)
             except Exception, err:
-                language = ""                
+                itemslist = []
 
+#            recorddict['subtypes'] = itemslist TODO
 
-            
-    out = []
+            try:
+                addresses = record.xpath('api:native/api:field[@name="addresses"]/api:addresses/api:address',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
+                addresslist = []
+                for address in addresses:
+                    lineslist = []
+                    lines = address.xpath('api:line',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
+                    for line in lines:
+                        l_text = line.text
+                        lineslist.append(l_text)
+                    addresslist.append(lineslist)
+
+            except Exception, err:
+                addresslist = []
+
+            recorddict['addresses'] = addresslist
+
+            try:
+                date = record.xpath('api:native/api:field[@name="publication-date"]/api:date/api:*',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
+                datelist = dict()
+                for item in date:
+                    i_tag = item.tag
+                    i_text = item.text
+                    datelist[i_tag] = i_text
+            except Exception, err:
+                datelist = []
+            recorddict['date'] = datelist
+
+                
+            recordslist.append(recorddict)
+
+    out['records'] = recordslist
 
     return out
 
@@ -240,30 +379,37 @@ def parsePublicationRel(xmlFile):
 
 
 
-def do_inCites_publications(list):
+def do_inCites_publications():
     #[employeeID,lastName,firstName,middleName,other-authors,ref-type,title,source-title,volume,number,starting-page,ISSN,date-day,date-month,date-year,electronic-resource-num,accession-num,pub-url]
-
-    employeeID = list.pop(0)
-    lastName = list.pop(0)
-    firstName = list.pop(0)
-    middleName = list.pop(0)
-    otherauthors = list.pop(0)
-    reftype = list.pop(0)
-    title = list.pop(0)
-    sourcetitle = list.pop(0)
-    volume = list.pop(0)
-    number =  list.pop(0)
-    startingpage = list.pop(0)
-    ISSN =  list.pop(0)
-    dateday = list.pop(0)
-    datemonth = list.pop(0)
-    dateyear = list.pop(0)
-    electronicresourcenum = list.pop(0)
-    accessionnum = list.pop(0)
-    puburl = list.pop(0)
+    pubdictlist = parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications")
+  
+    for pubdict in pubdictlist:
+        title = pubdict['list']
+        print title
 
     
-    print employeeID + "," + lastName + "," + firstName + "," + middleName + "," + otherauthors + "," + reftype + "," + title + "," + sourcetitle + "," + volume + "," + startingpage + "," + ISSN + "," + dateday + "," + datemonth + "," + dateyear + "," + electronicresourcenum
+
+#    employeeID = 'TODO'
+#    lastName = pubdict
+#    firstName = 
+#    middleName = 
+#    otherauthors = 
+#    reftype = 
+#    title = 
+#    sourcetitle = 
+#    volume = 
+#    number = 
+#    startingpage = 
+#    ISSN = 
+#    dateday = 
+#    datemonth = 
+#    dateyear = 
+#    electronicresourcenum = 
+#    accessionnum = 
+#    puburl = 
+
+    
+#    print employeeID + "," + lastName + "," + firstName + "," + middleName + "," + otherauthors + "," + reftype + "," + title + "," + sourcetitle + "," + volume + "," + startingpage + "," + ISSN + "," + dateday + "," + datemonth + "," + dateyear + "," + electronicresourcenum
 
 #read settings, load url, parse resulting text
 settings_text = open("config.json", "r").read()
@@ -272,4 +418,4 @@ cris_url = settings["cris"]["url"]
 cris_port = settings["cris"]["port"]
 
 #parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
-parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications")
+do_inCites_publications()
