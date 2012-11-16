@@ -1,4 +1,4 @@
-import lxml, json
+import lxml
 import urllib2
 import libxml2
 from lxml import etree
@@ -132,18 +132,6 @@ def do_inCites_authors(list):
 
 
 
-# Publications management
-def parsePublicationList(xmlFile):
-    mynext = xmlFile
-    tree = etree.parse(xmlFile)
-    root = tree.getroot()
-    last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
-
-    all_pubs = []
-
-    while mynext <> last:
-        pub_data_list, pub_rel_list, mynext = parsePublicationListPage(mynext) 
-        all_pubs = all_pubs + pub_data_list
 
 # takes a publication list page as input
 # returns data about all publications in that page and next page
@@ -154,17 +142,23 @@ def parsePublicationListPage(xmlFile):
  
     next = root.xpath('//api:page[@position="next"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
     last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
-    pub_data_list = []
-    pub_rel_list = []
+
+
+    pub_return = []
+
     for entry in entries:
         title = entry.xpath('def:title',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].text
         pub_uri = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
         pub_rel_uri = entry.xpath('def:link[@rel="related"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
         pub_data = parsePublication(pub_uri)
         pub_rel = parsePublicationRel(pub_rel_uri)
-        pub_data_list.append(pub_data)
-        pub_rel_list.append(pub_rel)
-    return pub_data_list, pub_rel_list, next
+
+        this_pub = dict()
+        this_pub['pub'] = pub_data
+        this_pub['rel'] = pub_rel
+        pub_return.append(this_pub)
+
+    return pub_return, next
 
 
 # this parses the main publication url
@@ -178,6 +172,12 @@ def parsePublication(xmlFile):
         link = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
         out['link'] = link
         records = entry.xpath('api:object/api:records',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
+
+
+        relationships = entry.xpath('api:object/api:relationships',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
+        out['relationships'] = relationships.get('href')
+
+
         # there can be multiple records for each publication (web of science, pub med, etc...)
         recordslist = []
         for record in records:
@@ -282,6 +282,7 @@ def parsePublication(xmlFile):
                 location = ""                
             recorddict['location'] = location
 
+
             try:
                 title = record.xpath('api:native/api:field[@name="title"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
                 if title is None:
@@ -312,7 +313,7 @@ def parsePublication(xmlFile):
                     beginpage = ""
             except Exception, err:
                 beginpage = ""
-            recorddict['beginpage'] = beginpage
+            recorddict['begin-page'] = beginpage
 
             try:
                 endpage = record.xpath('api:native/api:field[@name="pagination"]/api:pagination/api:end-page',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
@@ -320,19 +321,18 @@ def parsePublication(xmlFile):
                     endpage = ""
             except Exception, err:
                 endpage = ""
-            recorddict['endpage'] = endpage
-
+            recorddict['end-page'] = endpage
 
             try:
                 subtypes = record.xpath('api:native/api:field[@name="types"]/api:items/api:item',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
-	        imtemslist = []
+	        itemslist = []
                 for item in subtypes:
                     i_text = item.text
                     itemslist.append(i_text)
             except Exception, err:
                 itemslist = []
 
-#            recorddict['subtypes'] = itemslist TODO
+            recorddict['subtypes'] = itemslist
 
             try:
                 addresses = record.xpath('api:native/api:field[@name="addresses"]/api:addresses/api:address',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
@@ -372,50 +372,61 @@ def parsePublicationRel(xmlFile):
     tree = etree.parse(xmlFile)
     root = tree.getroot()
     entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
-    out = []
+    out = dict()
+
+    
+    # TODO will need completion, now just getting the essential for inCites
+    authorslist = []
+    for entry in entries:
+        user = entry.xpath('api:relationship/api:related/api:object[@category="user"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
+        author = dict()
+        author['id'] = user.get('id')
+        author['proprietary-id'] = user.get('proprietary-id')
+        author['username'] = user.get('username')
+        author['href'] = user.get('href')
+        authorslist.append(author)
+
+    out['users'] = authorslist
 
     return out
 
+# example: http://cris.sgul.ac.uk:8090/publications-api/users/96
+def parseUser(xmlFile):
+    tree = etree.parse(xmlFile)
+    root = tree.getroot()
+    entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
+    out = dict()
 
+    # TODO will need completion, now just getting the essential for incites
+    title = root.xpath('//def:title',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].text
 
+    entry = entries[0]
 
-def do_inCites_publications():
-    #[employeeID,lastName,firstName,middleName,other-authors,ref-type,title,source-title,volume,number,starting-page,ISSN,date-day,date-month,date-year,electronic-resource-num,accession-num,pub-url]
-    pubdictlist = parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications")
+    try:
+        out['is-current-staff'] = entry.xpath('api:object/api:is-current-staff',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+    except Exception, err:
+        out['is-current-staff'] = "N/A"
+
+    try:
+        out['title'] = entry.xpath('api:object/api:title',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+    except Exception, err:
+        out['title'] = ""
+    try:
+        out['initials'] = entry.xpath('api:object/api:initials',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+    except Exception, err:
+        out['initials'] = ""
+    try:
+        out['last-name'] = entry.xpath('api:object/api:last-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+    except Exception, err:
+        out['last-name'] = ""
+    try:
+        out['first-name'] = entry.xpath('api:object/api:first-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+    except Exception, err:
+        out['first-name'] = ""
+    try:
+        out['email-address'] = entry.xpath('api:object/api:email-address',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+    except Exception, err:
+        out['email-address'] = ""
   
-    for pubdict in pubdictlist:
-        title = pubdict['list']
-        print title
 
-    
-
-#    employeeID = 'TODO'
-#    lastName = pubdict
-#    firstName = 
-#    middleName = 
-#    otherauthors = 
-#    reftype = 
-#    title = 
-#    sourcetitle = 
-#    volume = 
-#    number = 
-#    startingpage = 
-#    ISSN = 
-#    dateday = 
-#    datemonth = 
-#    dateyear = 
-#    electronicresourcenum = 
-#    accessionnum = 
-#    puburl = 
-
-    
-#    print employeeID + "," + lastName + "," + firstName + "," + middleName + "," + otherauthors + "," + reftype + "," + title + "," + sourcetitle + "," + volume + "," + startingpage + "," + ISSN + "," + dateday + "," + datemonth + "," + dateyear + "," + electronicresourcenum
-
-#read settings, load url, parse resulting text
-settings_text = open("config.json", "r").read()
-settings = json.loads(settings_text)
-cris_url = settings["cris"]["url"]
-cris_port = settings["cris"]["port"]
-
-#parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
-do_inCites_publications()
+    return out
