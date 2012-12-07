@@ -26,7 +26,6 @@ def do_inCites_publications(list):
     #[employeeID,lastName,firstName,other-authors,title,source-title,starting-page]
     for pub in list:
         item = pub['pub']
-       
 
         # procedure to get the authors
         rel = pub['rel']
@@ -58,6 +57,7 @@ def do_inCites_publications(list):
         # end of procedure to get the authors
 
         records = item['records']
+        puburl = item['puburl']
         # select best available record (manual, pubmed, wos, woslite)
         recordindex = 100
         winningrecord = dict()
@@ -79,8 +79,10 @@ def do_inCites_publications(list):
             year = ""
 
 
-        print employeeID+","+lastName+","+firstName+",,"+otherAuthors+",,"+winningrecord['title'].encode('utf-8')+","+winningrecord['journal'].encode('utf-8')+","+winningrecord['volume']+","+winningrecord['issue']+","+winningrecord['begin-page']+","+winningrecord['issn']+",,,"+year+","+winningrecord['doi'].encode('utf-8')+",,,"
+        #print employeeID+","+lastName+","+firstName+",,"+otherAuthors+",,"+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['volume']+","+winningrecord['issue']+","+winningrecord['begin-page']+","+winningrecord['issn']+",,,"+year+","+winningrecord['doi'].encode('utf-8')+",,,"
 
+#        print "\""+employeeID+"\""+","+"\""+lastName+"\""+","+"\""+firstName+"\""+",,"+"\""+otherAuthors+"\""+",,"+"\""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\""+","+"\""+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+"\""+winningrecord['volume']+"\""+","+"\""+winningrecord['issue']+"\""+","+"\""+winningrecord['begin-page']+"\""+","+"\""+winningrecord['issn']+"\""+",,,"+"\""+year+"\""+","+"\""+winningrecord['doi'].encode('utf-8')+"\""+",,,"
+        print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+","+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['begin-page']+","+year
 
 #parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
 parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications")

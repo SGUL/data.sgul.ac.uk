@@ -173,7 +173,6 @@ def parsePublication(xmlFile):
         out['link'] = link
         records = entry.xpath('api:object/api:records',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
 
-
         relationships = entry.xpath('api:object/api:relationships',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
         out['relationships'] = relationships.get('href')
 
@@ -365,6 +364,7 @@ def parsePublication(xmlFile):
             recordslist.append(recorddict)
 
     out['records'] = recordslist
+    out['puburl'] = xmlFile
 
     return out
 
@@ -386,6 +386,7 @@ def parsePublicationRel(xmlFile):
         author['href'] = user.get('href')
         authorslist.append(author)
 
+    out['pubrel'] = xmlFile
     out['users'] = authorslist
 
     return out
