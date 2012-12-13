@@ -12,7 +12,7 @@ use strict;
 my $json;
 {
   local $/; 
-  open my $fh, "<", "../config.json";
+  open my $fh, "<", "/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/cron/config.json";
   $json = <$fh>;
 } 
 my $JSONPARSER = new JSON;
@@ -122,4 +122,3 @@ END
         $entry = $conn->nextEntry();
 }
 
-exit 1;
