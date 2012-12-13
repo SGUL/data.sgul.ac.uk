@@ -1,9 +1,11 @@
 #!/usr/bin/perl
 use Mozilla::LDAP::Conn;                # Main "OO" layer for LDAP
 use Mozilla::LDAP::Utils;               # LULU, utilities.
-use URI::Escape;
 use WWW::Mechanize;
 use JSON -support_by_pp;
+use HTML::Entities;
+use URI::Escape;
+use CGI qw/:standard/;
 use strict;
 
 # read config file
@@ -41,12 +43,17 @@ while ($entry) {
 	my $sn=uri_escape($entry->{"sn"}[0]);
 	my $givenname=uri_escape($entry->{"givenname"}[0]);
 	my $initials=uri_escape($entry->{"initials"}[0]);
-    	my $title=$entry->{"title"}[0];
+   	my $title=$entry->{"title"}[0];
 	my $researchinterests=$entry->{"researchinterests"}[0];
 
 	#Photo, profile, research interests
 	my $photo = $entry->{"jpegphoto"}[0];
-	my $profile = uri_escape($entry->{"researcherprofile"}[0]);
+	my $profile = $entry->{"researcherprofile"}[0];
+
+
+
+
+	$profile = decode_entities(decode_entities($profile));
 
 	my $jpegFile = "$PATHFULL/$username.jpg";
 	open(TMP, "+>$jpegFile");
@@ -99,7 +106,7 @@ while ($entry) {
       <vitro-public:mainImage rdf:resource="http://vivo.sgul.ac.uk:8080/vivo15test/individual/$username-image"/>
       <ufVivo:harvestedBy>Symplectic-Harvester</ufVivo:harvestedBy>
       <vivo:overview>
-	$profile
+	<![CDATA[$profile]]>
       </vivo:overview>
    </rdf:Description>
 </rdf:RDF>
