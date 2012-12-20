@@ -8,6 +8,17 @@ settings = json.loads(settings_text)
 cris_url = settings["cris"]["url"]
 cris_port = settings["cris"]["port"]
 
+def parseUserList(xmlFile,url):
+    mynext = xmlFile
+    tree = etree.parse(xmlFile)
+    root = tree.getroot()
+    last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
+
+
+    while mynext <> last:
+        user_return, mynext = cris.parseUserListPage(mynext,url)
+        do_inCites_users(user_return)
+
 # Publications management 
 def parsePublicationList(xmlFile): 
     mynext = xmlFile 
@@ -20,6 +31,9 @@ def parsePublicationList(xmlFile):
         pub_return, mynext = cris.parsePublicationListPage(mynext)
         do_inCites_publications(pub_return)
 
+def do_inCites_users(list):
+    for user in list:
+        print user
 
 
 def do_inCites_publications(list):
@@ -84,6 +98,6 @@ def do_inCites_publications(list):
 #        print "\""+employeeID+"\""+","+"\""+lastName+"\""+","+"\""+firstName+"\""+",,"+"\""+otherAuthors+"\""+",,"+"\""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\""+","+"\""+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+"\""+winningrecord['volume']+"\""+","+"\""+winningrecord['issue']+"\""+","+"\""+winningrecord['begin-page']+"\""+","+"\""+winningrecord['issn']+"\""+",,,"+"\""+year+"\""+","+"\""+winningrecord['doi'].encode('utf-8')+"\""+",,,"
         print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+","+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['begin-page']+","+year
 
-#parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users")
-parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications")
+parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users",cris_url + ":" + cris_port)
+#parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications")
 

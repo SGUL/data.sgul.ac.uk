@@ -5,57 +5,48 @@ from lxml import etree
 from StringIO import StringIO
 from xml.dom.minidom import parse, parseString
 
-def parseUserList(xmlFile):
+# takes a user list page as input
+# returns data about all publications in that page and next page
+def parseUserListPage(xmlFile,url):
+    tree = etree.parse(xmlFile) 
+    root = tree.getroot()
+    entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
+
+    next = root.xpath('//api:page[@position="next"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
+    last = root.xpath('//api:page[@position="last"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('href')
+
+    user_return = []
+
+    for entry in entries:
+        user_uri = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
+        this_user = dict()
+        this_user['uri'] = user_uri
+        user_data = parseUser(user_uri,url)
+	feed_uri = url+ "/publications-api/user-feed/users/" + user_data['prop-id']
+	user_feed_data = parseUserFeed(feed_uri)
+        user_return.append(this_user)
+	# TODO add everything into this_user drom user_data and user_feed_data
+        #user_return.append(user_data)
+
+    return user_return, next
+
+# parses http://cris.sgul.ac.uk:8090/publications-api/users/1001
+def parseUser(xmlFile,url):
     tree = etree.parse(xmlFile)
-    e = etree.XPathEvaluator(tree)
-    e.register_namespace('api', 'http://www.symplectic.co.uk/publications/api')
-    # get all users in this page
-    users = e('//api:object[@category="user"]')
-    for user in users:
-        prop_id = user.get("proprietary-id")
-        id = user.get("id")
-        username = user.get("username")
-        href = user.get("href")
-        parseUser(href)
+    root = tree.getroot()
+    entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
+    out = dict()
+    for entry in entries:
+        link = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
+        lastname = entry.xpath('api:object/api:last-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+ 	prop_id = entry.xpath('api:object[@category="user"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('proprietary-id')
+        link = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
+        relationships = entry.xpath('api:object/api:relationships',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
+	out['prop-id'] = prop_id
+        out['last-name'] = lastname
+    return out
 
-    # get next/last     
-    next = e('//api:page[@position="next"]')[0].get("href")
-    last = e('//api:page[@position="last"]')[0].get("href")
-    if next <> last:
-        parseUserList(next)
-
-def parseUser(xmlFile):
-    tree = etree.parse(xmlFile)
-    e = etree.XPathEvaluator(tree)
-    e.register_namespace('api', 'http://www.symplectic.co.uk/publications/api')
-    # get all users in this page
-    users = e('//api:object[@category="user"]')
-    for user in users:
-        prop_id = user.get("proprietary-id")
-        symp_id = user.get("id")
-        username = user.get("username")
-
-        href = user.get("href")
-        type = user.get("type-id")
-        current = e('//api:is-current-staff')[0].text
-       
-        try:
-            title = e('//api:title')[0].text
-        except Exception, err:
-            title = ""
-
-        lastname = e('//api:last-name')[0].text
-        firstname = e('//api:first-name')[0].text
-        email = e('//api:email-address')[0].text
-        result = []
-        if prop_id <> None:
-            hr_feed_url = (cris_url + ":" + cris_port +"/publications-api/user-feed/users/"+prop_id)
-            result = parseUserFeed(hr_feed_url)
-            finalres = [symp_id, prop_id, lastname, firstname, email, result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0), result.pop(0)]
-            # TODO move this to the caller - make it a function over the set, rather than over the single entry
-            do_inCites_authors(finalres)
-
-
+# parses http://cris.sgul.ac.uk:8090/publications-api/user-feed/users/E107130
 def parseUserFeed(xmlFile):
     returnlist = []
     tree = etree.parse(xmlFile)
@@ -105,35 +96,7 @@ def parseUserFeed(xmlFile):
     returnlist = [primarygroup, isacademic, arrive_date, leave_date, dateofbirth, ou_1, ou_2, jobtitle, ft, perm_ft_text]
     return returnlist
 
-# prints author export for in_cites
-def do_inCites_authors(list):
-    #[symp_id, prop_id, lastname, firstname, email,primarygroup, isacademic, arrive_date, leave_date, dateofbirth, ou_1, ou_2, jobtitle, ft, perm_ft_text]
-    symp_id = list.pop(0)
-    prop_id = list.pop(0)
-    lastname = list.pop(0)
-    firstname = list.pop(0)
-    email = list.pop(0)
-    primarygroup = list.pop(0)
-    isacademic = list.pop(0)
-    arrive_date = list.pop(0)
-    leave_date = list.pop(0)
-    dateofbirth = list.pop(0)
-    ou_1 = list.pop(0)
-    ou_2 = list.pop(0)
-    jobtitle = list.pop(0)
-    ft = list.pop(0)
-    perm_ft_text = list.pop(0)
-    
-    if leave_date == '':
-        print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_1 + "," + arrive_date[0:4] + "," + leave_date[0:4]
-        print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_2 + "," + arrive_date[0:4] + "," + leave_date[0:4]
-
-
-
-
-
-
-# takes a publication list page as input
+#a publication list page as input
 # returns data about all publications in that page and next page
 def parsePublicationListPage(xmlFile):
     tree = etree.parse(xmlFile)
@@ -391,43 +354,4 @@ def parsePublicationRel(xmlFile):
 
     return out
 
-# example: http://cris.sgul.ac.uk:8090/publications-api/users/96
-def parseUser(xmlFile):
-    tree = etree.parse(xmlFile)
-    root = tree.getroot()
-    entries = root.xpath('//def:entry',namespaces={'def':'http://www.w3.org/2005/Atom',})
-    out = dict()
 
-    # TODO will need completion, now just getting the essential for incites
-    title = root.xpath('//def:title',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].text
-
-    entry = entries[0]
-
-    try:
-        out['is-current-staff'] = entry.xpath('api:object/api:is-current-staff',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
-    except Exception, err:
-        out['is-current-staff'] = "N/A"
-
-    try:
-        out['title'] = entry.xpath('api:object/api:title',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
-    except Exception, err:
-        out['title'] = ""
-    try:
-        out['initials'] = entry.xpath('api:object/api:initials',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
-    except Exception, err:
-        out['initials'] = ""
-    try:
-        out['last-name'] = entry.xpath('api:object/api:last-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
-    except Exception, err:
-        out['last-name'] = ""
-    try:
-        out['first-name'] = entry.xpath('api:object/api:first-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
-    except Exception, err:
-        out['first-name'] = ""
-    try:
-        out['email-address'] = entry.xpath('api:object/api:email-address',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
-    except Exception, err:
-        out['email-address'] = ""
-  
-
-    return out
