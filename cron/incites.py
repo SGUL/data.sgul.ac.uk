@@ -21,7 +21,7 @@ def parseUserList(xmlFile,url):
         do_inCites_users(user_return)
 
 # Publications management 
-def parsePublicationList(xmlFile): 
+def parsePublicationList(xmlFile,url): 
     mynext = xmlFile 
     tree = etree.parse(xmlFile) 
     root = tree.getroot()
@@ -30,7 +30,7 @@ def parsePublicationList(xmlFile):
 
     while mynext <> last:
         pub_return, mynext = cris.parsePublicationListPage(mynext)
-        do_inCites_publications(pub_return)
+        do_inCites_publications(pub_return,url)
 
 # takes a list of users, prints incites extract
 def do_inCites_users(list):
@@ -57,7 +57,7 @@ def do_inCites_users(list):
 
 
 # takes a list of publications, prints incites extract
-def do_inCites_publications(list):
+def do_inCites_publications(list,url):
     #[employeeID,lastName,firstName,other-authors,title,source-title,starting-page]
     for pub in list:
         item = pub['pub']
@@ -65,6 +65,7 @@ def do_inCites_publications(list):
         # procedure to get the authors
         rel = pub['rel']
         users = rel['users']
+	type = item['type']
         authors = []
 
 
@@ -78,7 +79,7 @@ def do_inCites_publications(list):
             proprietaryId = author['proprietary-id']
             username = author['username']
             href = author['href']
-            authorinfo = cris.parseUser(href)
+            authorinfo = cris.parseUser(href,url)
             if i == 0:
                 employeeID = author['id']
                 lastName = authorinfo['last-name']
@@ -117,8 +118,9 @@ def do_inCites_publications(list):
         #print employeeID+","+lastName+","+firstName+",,"+otherAuthors+",,"+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['volume']+","+winningrecord['issue']+","+winningrecord['begin-page']+","+winningrecord['issn']+",,,"+year+","+winningrecord['doi'].encode('utf-8')+",,,"
 
 #        print "\""+employeeID+"\""+","+"\""+lastName+"\""+","+"\""+firstName+"\""+",,"+"\""+otherAuthors+"\""+",,"+"\""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\""+","+"\""+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+"\""+winningrecord['volume']+"\""+","+"\""+winningrecord['issue']+"\""+","+"\""+winningrecord['begin-page']+"\""+","+"\""+winningrecord['issn']+"\""+",,,"+"\""+year+"\""+","+"\""+winningrecord['doi'].encode('utf-8')+"\""+",,,"
-        print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+","+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['begin-page']+","+year
+        #print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+","+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['begin-page']+","+year
+        print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+",\""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\",\""+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+"\","+winningrecord['begin-page']+","+year+","+type
 
-parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users",cris_url + ":" + cris_port)
-#parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications")
+#parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users",cris_url + ":" + cris_port)
+parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications", cris_url + ":" + cris_port)
 
