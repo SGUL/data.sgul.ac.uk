@@ -22,11 +22,13 @@ def parseUserListPage(xmlFile,url):
         this_user = dict()
         this_user['uri'] = user_uri
         user_data = parseUser(user_uri,url)
-	feed_uri = url+ "/publications-api/user-feed/users/" + user_data['prop-id']
-	user_feed_data = parseUserFeed(feed_uri)
+	user_feed_data = dict()
+	if user_data['prop-id'] is not None:
+  	    feed_uri = url+ "/publications-api/user-feed/users/" + user_data['prop-id']
+	    user_feed_data = parseUserFeed(feed_uri)
+	this_user['user-data'] = user_data
+	this_user['user-feed-data'] = user_feed_data
         user_return.append(this_user)
-	# TODO add everything into this_user drom user_data and user_feed_data
-        #user_return.append(user_data)
 
     return user_return, next
 
@@ -39,11 +41,18 @@ def parseUser(xmlFile,url):
     for entry in entries:
         link = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
         lastname = entry.xpath('api:object/api:last-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
- 	prop_id = entry.xpath('api:object[@category="user"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('proprietary-id')
+        firstname = entry.xpath('api:object/api:last-name',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+        email = entry.xpath('api:object/api:email-address',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+ 	user = entry.xpath('api:object[@category="user"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
+	prop_id = user.get('proprietary-id')
+ 	symp_id = user.get('id')
         link = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
         relationships = entry.xpath('api:object/api:relationships',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
 	out['prop-id'] = prop_id
-        out['last-name'] = lastname
+        out['symp-id'] = symp_id
+	out['last-name'] = lastname
+	out['first-name'] = firstname
+	out['email-address'] = email
     return out
 
 # parses http://cris.sgul.ac.uk:8090/publications-api/user-feed/users/E107130
@@ -52,49 +61,58 @@ def parseUserFeed(xmlFile):
     tree = etree.parse(xmlFile)
     e = etree.XPathEvaluator(tree)
     e.register_namespace('api', 'http://www.symplectic.co.uk/publications/api')
-    # get all users in this page
+    out = dict()
     try:
         primarygroup = e('//api:primary-group-descriptor')[0].text
     except Exception, err:
         primarygroup = ""
+    out['primarygroup'] = primarygroup
     try:
         isacademic = e('//api:is-academic')[0].text
     except Exception, err:
         isacademic = ""
+    out['isacademic'] = isacademic
     try:
         arrive_date = e('//api:arrive-date')[0].text
     except Exception, err:
         arrive_date = ""
+    out['arrive-date'] = arrive_date
     try:
         leave_date = e('//api:leave-date')[0].text
     except Exception, err:
         leave_date = ""
+    out['leave-date'] = leave_date
     try:
         dateofbirth = e('//api:generic-field-03')[0].text
     except Exception, err:
         dateofbirth = ""
+    out['dateofbirth'] = dateofbirth
     try:
         ou_1 = e('//api:generic-field-04')[0].text
     except Exception, err:
         ou_1 = ""
+    out['ou-1'] = ou_1
     try:
         ou_2 = e('//api:generic-field-05')[0].text
     except Exception, err:
         ou_2 = ""
+    out['ou-2'] = ou_2
     try:
         jobtitle = e('//api:generic-field-06')[0].text
     except Exception, err:
         jobtitle = ""
+    out['jobtitle'] = jobtitle
     try:
         ft = e('//api:generic-field-07')[0].text
     except Exception, err:
         ft = ""
+    out['ft'] = ft
     try:
         perm_ft_text = e('//api:generic-field-15')[0].text
     except Exception, err:
         perm_ft_text = ""
-    returnlist = [primarygroup, isacademic, arrive_date, leave_date, dateofbirth, ou_1, ou_2, jobtitle, ft, perm_ft_text]
-    return returnlist
+    out['perm_ft_text'] = perm_ft_text
+    return out
 
 #a publication list page as input
 # returns data about all publications in that page and next page

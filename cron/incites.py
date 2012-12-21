@@ -8,6 +8,7 @@ settings = json.loads(settings_text)
 cris_url = settings["cris"]["url"]
 cris_port = settings["cris"]["port"]
 
+# Users management
 def parseUserList(xmlFile,url):
     mynext = xmlFile
     tree = etree.parse(xmlFile)
@@ -31,11 +32,31 @@ def parsePublicationList(xmlFile):
         pub_return, mynext = cris.parsePublicationListPage(mynext)
         do_inCites_publications(pub_return)
 
+# takes a list of users, prints incites extract
 def do_inCites_users(list):
     for user in list:
-        print user
+        symp_id = user['user-data']['symp-id']
+        prop_id = user['user-data']['prop-id']
+        lastname = user['user-data']['last-name']
+        firstname = user['user-data']['first-name']
+        email = user['user-data']['email-address']
+	try:
+            primarygroup = user['user-feed-data']['primarygroup']
+            arrive_date = user['user-feed-data']['arrive-date']
+            leave_date = user['user-feed-data']['leave-date']
+            ou_1 = user['user-feed-data']['ou-1']
+            ou_2 = user['user-feed-data']['ou-2']
+    
+    
+            if leave_date == '':
+                print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_1 + "," + arrive_date[0:4] + "," + leave_date[0:4]
+                print symp_id + "," + lastname + "," + firstname + "," + email + ',"St. George\'s, University of London",' + primarygroup + "," + "Cranmer Terrace" + "," + "London" + "," + "United Kingdom" + "," + "SW17 0RE" + "," + ou_2 + "," + arrive_date[0:4] + "," + leave_date[0:4]
+        except Exception, err:
+            print "User " + symp_id + " does not have feed data"
 
 
+
+# takes a list of publications, prints incites extract
 def do_inCites_publications(list):
     #[employeeID,lastName,firstName,other-authors,title,source-title,starting-page]
     for pub in list:
