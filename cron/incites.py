@@ -119,7 +119,11 @@ def do_inCites_publications(list,url):
 
 #        print "\""+employeeID+"\""+","+"\""+lastName+"\""+","+"\""+firstName+"\""+",,"+"\""+otherAuthors+"\""+",,"+"\""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\""+","+"\""+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+"\""+winningrecord['volume']+"\""+","+"\""+winningrecord['issue']+"\""+","+"\""+winningrecord['begin-page']+"\""+","+"\""+winningrecord['issn']+"\""+",,,"+"\""+year+"\""+","+"\""+winningrecord['doi'].encode('utf-8')+"\""+",,,"
         #print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+","+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+","+winningrecord['begin-page']+","+year
-        print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+",\""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\",\""+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+"\","+winningrecord['begin-page']+","+year+","+type
+        if (winningrecord['parent_title'].encode('utf-8').replace('\n', '').replace('\r', '') is ""):
+            print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+",\""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\",\""+winningrecord['journal'].encode('utf-8').replace('\n', '').replace('\r', '')+"\","+winningrecord['begin-page']+","+year+","+type
+        else:
+            print str(len(records))+","+winningrecord['source-id']+","+puburl+","+employeeID+","+lastName+","+firstName+",\""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\",\""+winningrecord['parent_title'].encode('utf-8').replace('\n', '').replace('\r', '')+"\","+winningrecord['begin-page']+","+year+","+type
+
 
 #parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users",cris_url + ":" + cris_port)
 parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications", cris_url + ":" + cris_port)

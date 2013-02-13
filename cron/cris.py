@@ -265,6 +265,14 @@ def parsePublication(xmlFile):
 
 
             try:
+                parent_title = record.xpath('api:native/api:field[@name="parent-title"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
+                if parent_title is None:
+                    parent_title = ""
+            except Exception, err:
+                parent_title = ""
+            recorddict['parent_title'] = parent_title
+
+            try:
                 title = record.xpath('api:native/api:field[@name="title"]/api:text',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].text
                 if title is None:
                     title = ""

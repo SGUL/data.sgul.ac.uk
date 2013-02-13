@@ -24,9 +24,16 @@ my $bind_user = $json_text->{ldap}->{binduser};
 my $bind_pass = $json_text->{ldap}->{bindpass};
 my $search_base = $json_text->{ldap}->{searchbase};
 
+# PRODUCTION
 my $PATHFULL="/usr/local/vivo15test/data";
-my $PATHTHUMB="/usr/local/vivo15test/data/thumbnails";
-my $PATHVIVORECORDS="/root/vivo-15-test-ieb/symplectic-harvester/example-scripts/full-harvest-examples/example-symplectic/data/translated-records";
+my $PATHTHUMB="/usr/local/vivo15test/data";
+#my $PATHVIVORECORDS="/root/vivo-15-test-ieb/symplectic-harvester/example-scripts/full-harvest-examples/example-symplectic/data/translated-records";
+my $PATHVIVORECORDS="/root/vivo-15-test-symplectic/harvester/example-scripts/example-elements/data/translated-records";
+
+# TEST
+#my $PATHFULL="/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/cron/vivo/extract";
+#my $PATHTHUMB="/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/cron/vivo/extract";
+#my $PATHVIVORECORDS="/root/data.sgul.ac.uk-deploy/data.sgul.ac.uk/cron/vivo/extract";
 
 # connect to LDAP host
 my $conn = new Mozilla::LDAP::Conn($ldap_host, $ldap_port, $bind_user, $bind_pass,"") || die "Can't connect to $ldap_host.\n";
@@ -69,6 +76,9 @@ while ($entry) {
         print TMP $photo;
         close(TMP);
 
+
+	my $baseUrl = "http://vivo.sgul.ac.uk:8080/vivo15symtest";
+	my $aboutBaseUrl= "http://vivo.symplectic.co.uk/individual";
 	# generatee rdf
 	my $rdfoutput = <<END;
 <?xml version="1.0" encoding="UTF-8"?>
@@ -91,29 +101,63 @@ while ($entry) {
          xmlns:swvocab="http://www.w3.org/2003/06/sw-vocab-status/ns#"
          xmlns:core="http://vivoweb.org/ontology/core#"
          xmlns:dc="http://purl.org/dc/elements/1.1/">
-   <rdf:Description rdf:about="http://vivo.sgul.ac.uk:8080/vivo15test/individual/$username">
+   <rdf:Description rdf:about="$aboutBaseUrl/$username">
       <ufVivo:harvestedBy>Symplectic-Harvester</ufVivo:harvestedBy>
       <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
-      <rdfs:label>$sn, $givenname</rdfs:label>
-      <core:preferredTitle>$title</core:preferredTitle>
-      <core:primaryEmail>$mail</core:primaryEmail>
-      <foaf:lastName>$sn</foaf:lastName>
-      <foaf:firstName>$givenname</foaf:firstName>
-      <score:initials>$initials</score:initials>
       <rdf:type rdf:resource="http://vivoweb.org/harvester/excludeEntity"/>
       <rdf:type rdf:resource="http://vitro.mannlib.cornell.edu/ns/vitro/0.7#Flag1Value1Thing"/>
       <rdf:type rdf:resource="http://www.symplectic.co.uk/vivo/User"/>
-      <vitro-public:mainImage rdf:resource="http://vivo.sgul.ac.uk:8080/vivo15test/individual/$username-image"/>
-      <ufVivo:harvestedBy>Symplectic-Harvester</ufVivo:harvestedBy>
       <vivo:overview>
 	<![CDATA[$profile]]>
       </vivo:overview>
    </rdf:Description>
+
+
+   <rdf:Description rdf:about="$aboutBaseUrl/$username">
+      <vitro-public:mainImage rdf:resource="$baseUrl/$username-image" />
+   </rdf:Description>
+
+   <rdf:Description rdf:about="$aboutBaseUrl/$username" >
+      <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing" />
+      <rdf:type rdf:resource="http://vitro.mannlib.cornell.edu/ns/vitro/public#File" />
+      <vitro-public:downloadLocation rdf:resource="$baseUrl/$username-imageDownload" />
+      <vitro-public:thumbnailImage rdf:resource="$baseUrl/$username-imageThumbnail" />
+      <vitro-public:filename>$username.jpg</vitro-public:filename>
+      <vitro-public:mimeType>image/jpeg</vitro-public:mimeType>
+   </rdf:Description>
+
+   <rdf:Description rdf:about="$aboutBaseUrl/$username-imageDownload" >
+      <rdf:type rdf:resource="http://vitro.mannlib.cornell.edu/ns/vitro/public#FileByteStream" />
+      <vitro-public:directDownloadUrl>$baseUrl/harvestedImages/$username.jpg</vitro-public:directDownloadUrl>
+   </rdf:Description>
+
+   <rdf:Description rdf:about="$aboutBaseUrl/$username-imageThumbnail" >
+      <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing" />
+      <rdf:type rdf:resource="http://vitro.mannlib.cornell.edu/ns/vitro/public#File" />
+      <vitro-public:downloadLocation rdf:resource="$aboutBaseUrl/$username-imageThumbnailDownload" />
+      <vitro-public:filename>$username.thumbnail.jpg</vitro-public:filename>
+      <vitro-public:mimeType>image/jpeg</vitro-public:mimeType>
+   </rdf:Description>
+
+   <rdf:Description rdf:about="$aboutBaseUrl/$username-imageThumbnailDownload" >
+      <rdf:type rdf:resource="http://vitro.mannlib.cornell.edu/ns/vitro/public#FileByteStream" />
+      <vitro-public:directDownloadUrl>$baseUrl/harvestedImages/$username.thumbnail.jpg</vitro-public:directDownloadUrl>
+   </rdf:Description>
+
 </rdf:RDF>
 END
 
+# REMOVED
+#	<rdfs:label>$sn, $givenname</rdfs:label>
+#      <core:preferredTitle>$title</core:preferredTitle>
+#      <core:primaryEmail>$mail</core:primaryEmail>
+#      <foaf:lastName>$sn</foaf:lastName>
+#      <foaf:firstName>$givenname</foaf:firstName>
+#      <score:initials>$initials</score:initials>
+
+
 	# write rdf file
-	my $vivoFile = "$PATHVIVORECORDS/user$username";
+	my $vivoFile = "$PATHVIVORECORDS/user/phone$username";
 	open(TMP, "+>$vivoFile");
 	print TMP "$rdfoutput";
 	close(TMP);
