@@ -25,13 +25,13 @@ my $bind_user = $json_text->{ldap}->{binduser};
 my $bind_pass = $json_text->{ldap}->{bindpass};
 my $search_base = $json_text->{ldap}->{searchbase};
 
-my $baseUrl = "http://cusetup-054.sgul.ac.uk:8080/vivo15_43";
+my $baseUrl = "http://vivo.sgul.ac.uk:8080/vivo15_43_test";
 my $aboutBaseUrl= "http://vivo.symplectic.co.uk/individual";
 
 
-my $PATHFULL="/usr/local/vivo15_43/data";
-my $PATHTHUMB="/usr/local/vivo15_43/data";
-my $PATHVIVORECORDS="/root/vivo/harvester/example-scripts/example-elements/data/translated-records";
+my $PATHFULL="/usr/local/vivo15_43_test/data";
+my $PATHTHUMB="/usr/local/vivo15_43_test/data";
+my $PATHVIVORECORDS="/root/vivo_test/harvester/example-scripts/example-elements/data/translated-records";
 
 # connect to LDAP host
 my $conn = new Mozilla::LDAP::Conn($ldap_host, $ldap_port, $bind_user, $bind_pass,"") || die "Can't connect to $ldap_host.\n";

@@ -9,9 +9,7 @@
               <li class="nav-header">Data</li> 
               <li><a href="sparql.php">SPARQL Endpoint</a></li> 
               <li class="nav-header">Legal</li> 
-              <li><a href="terms.php">Terms and Conditions</a></li> 
               <li><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">OGL</a></li> 
-              <li><a href="credits.php">Credits</a></li> 
             </ul> 
           </div><!--/.well --> 
         </div><!--/span-->
