@@ -7,6 +7,7 @@ from BeautifulSoup import BeautifulSoup
 import csv
 import shutil
 
+import codecs
 
 def downloadJobDetails(url):
     jobs_detail_url = settings["jobs"]["url"]  + "/" + url
@@ -32,14 +33,13 @@ def downloadJobDetails(url):
         contents = str(desc_elem.contents)
         sib = desc_elem.nextSibling
         if 'Reference' in contents:
-	    reference = str(sib)
+	    reference = str(sib).rstrip().lstrip()
         elif 'Closing Date' in contents:
-            closing = str(sib)
+            closing = str(sib).rstrip().lstrip()
         elif 'Interview Date' in contents:
-            interview = str(sib)
+            interview = str(sib).rstrip().lstrip()
         elif 'Salary' in contents:
-            salary = str(sib)
-        #TODO this needs cleaning from unicode, but it's not really needed
+            salary = str(sib).rstrip().lstrip()
         #elif 'font style' in contents:
         #    soup_contents = BeautifulSoup(str(contents))
         #    title = str(soup_contents.text)
@@ -47,14 +47,13 @@ def downloadJobDetails(url):
         #else:
         #    unit = str(contents)
         #    job_dict['Unit'] = unit
-    description = soup.findAll(attrs={'name': 'j748'})
-    job_dict['Reference'] = reference
-    job_dict['Closing'] = closing
-    job_dict['Interview'] = interview
-    job_dict['Salary'] = salary
+    #description = soup.findAll(attrs={'name': 'j748'})
+    job_dict['reference'] = reference
+    job_dict['closing_date'] = closing
+    job_dict['interview_date'] = interview
+    job_dict['salary'] = salary
             
     return job_dict
-
 
 
 
@@ -74,13 +73,49 @@ soup_div = BeautifulSoup(str(printHide_element))
 type = ""
 topic = ""
 
+# navigate in each element of the page
+all_jobs = []
+for elem in soup_div.findAll():
+    tagname = elem.name
+
+    if tagname == "h2":
+        type = elem.contents[0]
+    elif tagname == "strong":
+        topic = elem.contents[0]
+    elif tagname == "li":
+        href = elem.a['href']
+        title = elem.a['title']
+        # Now (type,topic,href,title) is a description of the job
+	# ready to download further information
+        jobs_data = downloadJobDetails(href)
+	jobs_data["url"] = settings["jobs"]["url"]  + "/" + href
+	jobs_data["title"] = title
+	jobs_data["type"] = type
+	jobs_data["topic"] = topic
+	all_jobs.append(jobs_data)
+       
+
+# JSON
+json_output = json.dumps(all_jobs, encoding="utf8", indent=4, sort_keys=True, ensure_ascii=False)
+
 # CSV
-f = open('jobs.csv', 'w')
-csv_str = 'Title,Employer,ClosingDate,InterviewDate,Area,URL,Salary\n'
-f.write(csv_str)
+i=0
+csv_output = "Index,Url,Title,Type,Topic,Reference,Interview Date,Closing Date,Salary\n"
+for job in all_jobs:
+    url = job['url']
+    title = job['title']
+    type = job['type']
+    topic = job['topic']
+    salary = job['salary'].decode('utf8')
+    reference = job['reference']
+    interview = job['interview_date']
+    closing = job['closing_date']
+    csv_output = csv_output + str(i)+","+url+","+title+","+type+","+topic+","+reference+","+interview+","+closing+","+ salary +"\n"
+    i = i + 1
+
 
 # RDF
-rdf_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
+rdf_init_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
            <rdf:RDF\n\
               xmlns:foaf='http://xmlns.com/foaf/0.1/'\n\
               xmlns:oo='http://purl.org/openorg/'\n\
@@ -107,64 +142,62 @@ rdf_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
                 <rdfs:label>label</rdfs:label>\n\
              </rdf:Description>\n"
 
-
-# navigate in each element of the page
-for elem in soup_div.findAll():
-    tagname = elem.name
-
-    if tagname == "h2":
-        type = elem.contents[0]
-    elif tagname == "strong":
-        topic = elem.contents[0]
-    elif tagname == "li":
-        href = elem.a['href']
-        title = elem.a['title']
-        # Now (type,topic,href,title) is a description of the job
-	# ready to download further information
-        jobs_data = downloadJobDetails(href)
-       
-
-	# CSV
-	csv_str = title+","+"St. George's University of London"+","+jobs_data['Closing']+","+jobs_data['Interview']+","+topic+","+settings["jobs"]["url"]  + "/"+href+","
-        csv_str = csv_str + (jobs_data['Salary']).decode('utf-8') + "\n"
-	f.write(csv_str.encode('utf-8'))
-
-	# RDF
-        rdf_str = rdf_str + ' <foaf:Document rdf:about="http://jobs.sgul.ac.uk">\n\
-                                <foaf:primaryTopic>\n\
-                                  <vacancy:Vacancy rdf:about="'+settings["jobs"]["url"]  + "/"+ href+'">\n\
+i = 0
+for job in all_jobs:
+    url = job['url']
+    title = job['title']
+    type = job['type']
+    topic = job['topic']
+    salary = job['salary']
+    reference = job['reference']
+    interview = job['interview_date']
+    closing = job['closing_date']
+    rdf_content_str =  ' <foaf:Document rdf:about="http://jobs.sgul.ac.uk">\n\
+                              <foaf:primaryTopic>\n\
+                                  <vacancy:Vacancy rdf:about="' + url + '">\n\
                                     <rdfs:label>' + title + '</rdfs:label>\n\
                                     <vacancy:employer>St. George\'s University of London</vacancy:employer>\n\
                                     <vacancy:organizationalUnit rdf:resource="' + topic + '"/>\n\
-                                    <vacancy:availableOnline>' + settings["jobs"]["url"]  + "/" +  href + '</vacancy:availableOnline>\n\
-                                    <vacancy:applicationInterviewNotificationByDate>' + jobs_data["Closing"] + '</vacancy:applicationInterviewNotificationByDate>\n\
-                                    <vacancy:applicationClosingDate>' + jobs_data["Closing"] +' </vacancy:applicationClosingDate>\n\
+                                    <vacancy:availableOnline>' + url +  '</vacancy:availableOnline>\n\
+                                    <vacancy:applicationInterviewNotificationByDate>' + interview + '</vacancy:applicationInterviewNotificationByDate>\n\
+                                    <vacancy:applicationClosingDate>' + closing +' </vacancy:applicationClosingDate>\n\
                                     <rdfs:comment>' + " " + '</rdfs:comment>\n\
-                                    <vacancy:salary>'+ (jobs_data['Salary']).decode('utf-8')  +'</vacancy:salary>\n\
+                                    <vacancy:salary>'+ salary.decode("utf8")  +'</vacancy:salary>\n\
                                   </vacancy:Vacancy>\n\
                                 </foaf:primaryTopic>\n\
                               </foaf:Document>\n'
 
+    rdf_output = rdf_init_str + rdf_content_str + '</rdf:RDF>'
+    filename = "jobs_" + str(i) + ".rdf"
+    i = i + 1
+    with codecs.open(filename, 'w', 'utf-8-sig') as f:
+        f.write(rdf_output)
+        f.close()
 
-# Manage file descriptors
-f.close        
 
-# CSV to JSON
-f = open('jobs.csv', 'r')
-reader = csv.DictReader(f, fieldnames = ("title","employer","closing_date","interview_date","area","url","salary") )
-out = json.dumps( [ row for row in reader ] )
-fj = open('jobs.json', 'w')
-fj.write(out)
-fj.close()
-f.close()
+
+# File Write
+with codecs.open('jobs.csv', 'w', 'utf-8-sig') as f:
+    f.write(csv_output)
+    f.close()
+
+with codecs.open('jobs.json', 'w', 'utf-8-sig') as f:
+    f.write(json_output)
+    f.close()
+
+#reader = csv.DictReader(f, fieldnames = ("title","employer","closing_date","interview_date","area","url","salary") )
+#out = json.dumps( [ row for row in reader ] )
+#fj = open('jobs.json', 'w')
+#fj.write(out)
+#fj.close()
+#f.close()
 
 # RDF
-rdf_str = rdf_str + '</rdf:RDF>'
-fr = open('jobs.rdf', 'w')
-fr.write(rdf_str.encode('utf-8'))
-fr.close()
+#fr = open('jobs.rdf', 'w')
+#fr.write(rdf_str.encode('utf-8'))
+#fr.close()
 
 # Move files to output directory
-shutil.move('jobs.csv','../static-site/output/jobs.csv')
-shutil.move('jobs.json','../static-site/output/jobs.json')
-shutil.move('jobs.rdf','../static-site/output/jobs.rdf')
+#shutil.move('jobs.csv','../static-site/output/jobs.csv')
+#shutil.move('jobs.json','../static-site/output/jobs.json')
+#shutil.move('jobs.rdf','../static-site/output/jobs.rdf')

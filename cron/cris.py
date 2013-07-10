@@ -157,7 +157,18 @@ def parsePublication(xmlFile):
         relationships = entry.xpath('api:object/api:relationships',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
 	out['type'] = type
         out['relationships'] = relationships.get('href')
+	
 
+	# TODO this way I only get the first - I guess it's good enough but you could do an aggregation of all the working copies
+	repo = "NONE"
+	try:
+		repositoryitem = entry.xpath('api:object/api:repository-items/api:repository-item',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
+		repo = repositoryitem.xpath('api:public-url',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})
+		repo = repo[0].text
+		# TODO go to repo and get item. There are multiple links. Probably the unique one is in
+		# <meta name="DC.identifier" content="http://openaccess.sgul.ac.uk/101167/7/licence.txt" />
+	except Exception, err:
+		pass
 
         # there can be multiple records for each publication (web of science, pub med, etc...)
         recordslist = []
@@ -355,6 +366,7 @@ def parsePublication(xmlFile):
 
     out['records'] = recordslist
     out['puburl'] = xmlFile
+    out['repo'] = repo
 
     return out
 
