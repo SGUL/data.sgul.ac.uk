@@ -116,31 +116,30 @@ for job in all_jobs:
 
 # RDF
 rdf_init_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
-           <rdf:RDF\n\
-              xmlns:foaf='http://xmlns.com/foaf/0.1/'\n\
-              xmlns:oo='http://purl.org/openorg/'\n\
-              xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'\n\
-              xmlns:dc='http://purl.org/dc/elements/1.1/'\n\
-              xmlns:vacancy='http://purl.org/openorg/vacancy/'\n\
-              xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n\
-              xmlns:dcterms='http://purl.org/dc/terms/'\n\
-              xmlns:skos='http://www.w3.org/2004/02/skos/core#'\n\
-           >\n\
-              <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#comment\">\n\
-                <rdfs:label>comment</rdfs:label>\n\
-              </rdf:Description>\n\
-              <rdf:Description rdf:about=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\">\n\
-                <rdfs:label>type</rdfs:label>\n\
-              </rdf:Description>\n\
-              <rdf:Description rdf:about=\"http://xmlns.com/foaf/0.1/page\">\n\
-                <rdfs:label>page</rdfs:label>\n\
-             </rdf:Description>\n\
-             <rdf:Description rdf:about=\"http://xmlns.com/foaf/0.1/homepage\">\n\
-                <rdfs:label>homepage</rdfs:label>\n\
-             </rdf:Description>\n\
-             <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#label\">\n\
-                <rdfs:label>label</rdfs:label>\n\
-             </rdf:Description>\n"
+<rdf:RDF\n\
+  xmlns:foaf='http://xmlns.com/foaf/0.1/'\n\
+  xmlns:oo='http://purl.org/openorg/'\n\
+  xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'\n\
+  xmlns:dc='http://purl.org/dc/elements/1.1/'\n\
+  xmlns:vacancy='http://purl.org/openorg/vacancy/'\n\
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n\
+  xmlns:dcterms='http://purl.org/dc/terms/'\n\
+  xmlns:skos='http://www.w3.org/2004/02/skos/core#'>\n\
+    <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#comment\">\n\
+        <rdfs:label>comment</rdfs:label>\n\
+    </rdf:Description>\n\
+    <rdf:Description rdf:about=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\">\n\
+        <rdfs:label>type</rdfs:label>\n\
+    </rdf:Description>\n\
+    <rdf:Description rdf:about=\"http://xmlns.com/foaf/0.1/page\">\n\
+        <rdfs:label>page</rdfs:label>\n\
+    </rdf:Description>\n\
+    <rdf:Description rdf:about=\"http://xmlns.com/foaf/0.1/homepage\">\n\
+        <rdfs:label>homepage</rdfs:label>\n\
+    </rdf:Description>\n\
+    <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#label\">\n\
+        <rdfs:label>label</rdfs:label>\n\
+    </rdf:Description>\n"
 
 i = 0
 for job in all_jobs:
@@ -152,20 +151,20 @@ for job in all_jobs:
     reference = job['reference']
     interview = job['interview_date']
     closing = job['closing_date']
-    rdf_content_str =  ' <foaf:Document rdf:about="http://jobs.sgul.ac.uk">\n\
-                              <foaf:primaryTopic>\n\
-                                  <vacancy:Vacancy rdf:about="' + url + '">\n\
-                                    <rdfs:label>' + title + '</rdfs:label>\n\
-                                    <vacancy:employer>St. George\'s University of London</vacancy:employer>\n\
-                                    <vacancy:organizationalUnit rdf:resource="' + topic + '"/>\n\
-                                    <vacancy:availableOnline>' + url +  '</vacancy:availableOnline>\n\
-                                    <vacancy:applicationInterviewNotificationByDate>' + interview + '</vacancy:applicationInterviewNotificationByDate>\n\
-                                    <vacancy:applicationClosingDate>' + closing +' </vacancy:applicationClosingDate>\n\
-                                    <rdfs:comment>' + " " + '</rdfs:comment>\n\
-                                    <vacancy:salary>'+ salary.decode("utf8")  +'</vacancy:salary>\n\
-                                  </vacancy:Vacancy>\n\
-                                </foaf:primaryTopic>\n\
-                              </foaf:Document>\n'
+    rdf_content_str =  '<foaf:Document rdf:about="http://jobs.sgul.ac.uk">\n\
+        <foaf:primaryTopic>\n\
+            <vacancy:Vacancy rdf:about="' + url + '">\n\
+                <rdfs:label>' + title + '</rdfs:label>\n\
+                <vacancy:employer>St. George\'s University of London</vacancy:employer>\n\
+                <vacancy:organizationalUnit rdf:resource="' + topic + '"/>\n\
+                <vacancy:availableOnline>' + url +  '</vacancy:availableOnline>\n\
+                <vacancy:applicationInterviewNotificationByDate>' + interview + '</vacancy:applicationInterviewNotificationByDate>\n\
+                <vacancy:applicationClosingDate>' + closing +' </vacancy:applicationClosingDate>\n\
+                <rdfs:comment>' + " " + '</rdfs:comment>\n\
+                <vacancy:salary>'+ salary.decode("utf8")  +'</vacancy:salary>\n\
+            </vacancy:Vacancy>\n\
+        </foaf:primaryTopic>\n\
+    </foaf:Document>\n'
 
     rdf_output = rdf_init_str + rdf_content_str + '</rdf:RDF>'
     filename = "jobs_" + str(i) + ".rdf"
@@ -173,6 +172,8 @@ for job in all_jobs:
     with codecs.open(filename, 'w', 'utf-8-sig') as f:
         f.write(rdf_output)
         f.close()
+        shutil.copy(filename,'output/'+filename)
+        shutil.move(filename,'../static-site/output/'+filename)
 
 
 
@@ -180,24 +181,13 @@ for job in all_jobs:
 with codecs.open('jobs.csv', 'w', 'utf-8-sig') as f:
     f.write(csv_output)
     f.close()
+    shutil.copy('jobs.csv','output/jobs.csv')
+    shutil.move('jobs.csv','../static-site/output/jobs.csv')
 
 with codecs.open('jobs.json', 'w', 'utf-8-sig') as f:
     f.write(json_output)
     f.close()
+    shutil.copy('jobs.json','output/jobs.json')
+    shutil.move('jobs.json','../static-site/output/jobs.json')
 
-#reader = csv.DictReader(f, fieldnames = ("title","employer","closing_date","interview_date","area","url","salary") )
-#out = json.dumps( [ row for row in reader ] )
-#fj = open('jobs.json', 'w')
-#fj.write(out)
-#fj.close()
-#f.close()
 
-# RDF
-#fr = open('jobs.rdf', 'w')
-#fr.write(rdf_str.encode('utf-8'))
-#fr.close()
-
-# Move files to output directory
-#shutil.move('jobs.csv','../static-site/output/jobs.csv')
-#shutil.move('jobs.json','../static-site/output/jobs.json')
-#shutil.move('jobs.rdf','../static-site/output/jobs.rdf')

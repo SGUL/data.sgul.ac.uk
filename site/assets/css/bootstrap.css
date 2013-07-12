@@ -618,7 +618,7 @@ textarea,
 select,
 .uneditable-input {
   display: inline-block;
-  width: 210px;
+  width: 510px;
   height: 18px;
   padding: 4px;
   margin-bottom: 9px;
@@ -2858,6 +2858,8 @@ input[type="submit"].btn.btn-mini {
 .navbar .brand:hover {
   text-decoration: none;
 }
+
+
 .navbar .brand {
   float: left;
   display: block;
@@ -2867,6 +2869,7 @@ input[type="submit"].btn.btn-mini {
   font-weight: 200;
   line-height: 1;
   color: #ffffff;
+
 }
 .navbar .navbar-text {
   margin-bottom: 0;
