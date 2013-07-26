@@ -116,26 +116,26 @@ close(TMP);
 
 	$profile = decode_entities(decode_entities($profile));
 
-	my $jpegFile1 = "$PATHFULL/$username.jpg";
-	open(TMP, "+>$jpegFile1");
-	binmode(TMP);
-	$| = 1;
-	print TMP $photo;
-	close(TMP);
+	#my $jpegFile1 = "$PATHFULL/$username.jpg";
+	#open(TMP, "+>$jpegFile1");
+	#binmode(TMP);
+	#$| = 1;
+	#print TMP $photo;
+	#close(TMP);
 
-	my $jpegFile2 = "$PATHTHUMB/$username.thumbnail.jpg";
-        open(TMP, "+>$jpegFile2");
-        binmode(TMP);
-        $| = 1;
-        print TMP $photo;
-        close(TMP);
+	#my $jpegFile2 = "$PATHTHUMB/$username.thumbnail.jpg";
+        #open(TMP, "+>$jpegFile2");
+        #binmode(TMP);
+        #$| = 1;
+        #print TMP $photo;
+        #close(TMP);
 
 	# check file size - fill 0-images with placeholder
- 	my $filesize = -s $jpegFile2;
-	if ($filesize == 0) {
-		copy "/root/data.sgul.ac.uk/cron/vivo/sgulplus.jpg", $jpegFile1;
-		copy "/root/data.sgul.ac.uk/cron/vivo/sgulplus.jpg", $jpegFile2;
-	}
+ 	#my $filesize = -s $jpegFile2;
+	#if ($filesize == 0) {
+	#	copy "/root/data.sgul.ac.uk/cron/vivo/sgulplus.jpg", $jpegFile1;
+	#	copy "/root/data.sgul.ac.uk/cron/vivo/sgulplus.jpg", $jpegFile2;
+	#}
 
 	
 	# generatee rdf for researcher

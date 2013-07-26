@@ -152,6 +152,7 @@ def parsePublication(xmlFile):
     for entry in entries:
         link = entry.xpath('def:link[@rel="alternate"]',namespaces={'def':'http://www.w3.org/2005/Atom',})[0].get('href')
         out['link'] = link
+        out['id'] = entry.xpath('api:object[@category="publication"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('id')
         records = entry.xpath('api:object/api:records',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
 	type = entry.xpath('api:object[@category="publication"]',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0].get('type-id')
         relationships = entry.xpath('api:object/api:relationships',namespaces={'api':'http://www.symplectic.co.uk/publications/api'})[0]
