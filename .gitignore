@@ -1,6 +1,7 @@
 *.py[co]
 config.json
 foaf.rdf 
+*.rdf
 
 # Packages
 *.egg
