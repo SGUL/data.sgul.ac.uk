@@ -1,7 +1,7 @@
 import json
 from StringIO import StringIO
 
-import urllib2
+import urllib, urllib2
 from BeautifulSoup import BeautifulSoup
 
 import csv
@@ -10,7 +10,18 @@ import shutil
 import codecs
 
 def downloadJobDetails(url):
-    jobs_detail_url = settings["jobs"]["url"]  + "/" + url
+    url2 = url.replace(' ','%20')
+    jobs_detail_url = settings["jobs"]["url"]  + "/" + url2
+    print jobs_detail_url 
+
+    # test
+    #quoted_query = urllib.quote(query)
+    #    host = h
+    #req = urllib2.Request(host)
+    #req.add_header('User-Agent', User_Agent)
+    #response = urllib2.urlopen(req)
+    # end test
+
     job = (urllib2.urlopen(jobs_detail_url)).read()
     soup = BeautifulSoup(job)
     maincontent_element = soup.findAll(attrs={'id': 'leftpanel'})[0]
@@ -173,7 +184,7 @@ for job in all_jobs:
         f.write(rdf_output)
         f.close()
         shutil.copy(filename,'output/'+filename)
-        shutil.move(filename,'../static-site/output/'+filename)
+        shutil.move(filename,'../site/output/'+filename)
 
 
 
@@ -182,12 +193,12 @@ with codecs.open('jobs.csv', 'w', 'utf-8-sig') as f:
     f.write(csv_output)
     f.close()
     shutil.copy('jobs.csv','output/jobs.csv')
-    shutil.move('jobs.csv','../static-site/output/jobs.csv')
+    shutil.move('jobs.csv','../site/output/jobs.csv')
 
 with codecs.open('jobs.json', 'w', 'utf-8-sig') as f:
     f.write(json_output)
     f.close()
     shutil.copy('jobs.json','output/jobs.json')
-    shutil.move('jobs.json','../static-site/output/jobs.json')
+    shutil.move('jobs.json','../site/output/jobs.json')
 
 

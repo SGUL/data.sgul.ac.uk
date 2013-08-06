@@ -117,7 +117,6 @@ def do_inCites_publications(list,url):
         except Exception, err:
             year = ""
 
-	
 	if repo <> "NONE" and repo <> None and len(repo)>0:
 	    filename = "output/pub_" + id + ".rdf"
 	    f = open(filename, 'w')
@@ -144,13 +143,14 @@ def do_inCites_publications(list,url):
 		     </rdf:Description>"""
 
 
-	    # Closing 
+	    # Closing and writing RDF
             rdfprint = rdfprint + """</rdf:RDF>"""
 	    f.write(rdfprint)
 	    f.close()
 
-	   # Generate CSV TODO
-	   # Generate JSON TODO
+    # Generate CSV TODO
+    # URL,Title,Abstract,DOI,AuthorList,Year,RepositoryURL
+    # Generate JSON TODO
 
 
 #parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users",cris_url + ":" + cris_port)

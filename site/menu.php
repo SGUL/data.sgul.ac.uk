@@ -6,8 +6,13 @@
               <li><a href="http://data.sgul.ac.uk">Home</a></li> 
               <li><a href="about.php">About</a></li> 
               <li><a href="contact.php">Contact</a></li> 
-              <li class="nav-header">Data</li> 
-              <li><a href="sparql.php">SPARQL Endpoint</a></li> 
+              <li class="nav-header">Data catalogue</li> 
+	      <li><a href="listdatasets.php">List</a></li>
+	      <li><a href="vacancies.php">Vacancies</a></li>
+	      <li><a href="publications.php">Publications</a></li>
+	      <li class="nav-header">Data access</li>
+              <li><a href="sparql.php">API</a></li> 
+              <li><a href="sparql.php">SPARQL</a></li> 
               <li class="nav-header">Legal</li> 
               <li><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">OGL</a></li> 
             </ul> 
