@@ -134,8 +134,6 @@ rdf_init_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
   xmlns:dc='http://purl.org/dc/elements/1.1/'\n\
   xmlns:vacancy='http://purl.org/openorg/vacancy/'\n\
   xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n\
-  xmlns:dcterms='http://purl.org/dc/terms/'\n\
-  xmlns:skos='http://www.w3.org/2004/02/skos/core#'>\n\
     <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#comment\">\n\
         <rdfs:label>comment</rdfs:label>\n\
     </rdf:Description>\n\
@@ -162,6 +160,7 @@ for job in all_jobs:
     reference = job['reference']
     interview = job['interview_date']
     closing = job['closing_date']
+    # REDO according to https://data.ox.ac.uk/feeds/vacancies/31337175.rdf
     rdf_content_str =  '<foaf:Document rdf:about="http://jobs.sgul.ac.uk">\n\
         <foaf:primaryTopic>\n\
             <vacancy:Vacancy rdf:about="' + url + '">\n\

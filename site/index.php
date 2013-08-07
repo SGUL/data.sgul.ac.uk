@@ -42,15 +42,17 @@
           <div class="hero-unit">
             <h1>SGUL Open Data</h1>
             <p>St George's University of London's Administrative, Research, and Statistical Open Data.</p>
-            <p><a class="btn btn-primary btn-large" href="about.php">Learn more &raquo;</a></p>
+            <p>Welcome to SGUL's Open Data portal. We aim to collect the several sources of Open Data available within the institution, reprocess them and repackage them in machine-readable formats, and license them for reuse under licences such as the Open Government Licence.</p>
+            <p>Where possible, we intend to provide the data as Linked Data, providing a SPARQL endpoint and an API, together with examples and documentation.</p>
+            <p>This service is highly experimental, as we identify the data sources and work with them. Please get in touch if you have any query.</p>
 
           </div>
-          <div class="row-fluid">
+          <!--div class="row-fluid">
             <div class="span4">
               <h2>Vacancies</h2>
               <p><a href="http://jobs.sgul.ac.uk">Original</a> | <a href="output/jobs.csv">CSV</a> | <a href="output/jobs.json">JSON</a> | <a href="output/jobs.rdf">RDF-XML</a> | <a href="">SPARQL [Coming soon]</a></p>
               <p>License: <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">OGL</a></p>
-            </div><!--/span-->
+            </div>
             <div class="span4">
               <h2>Publications</h2>
               Expected release: August.
@@ -58,14 +60,17 @@
             <div class="span4">
               <h2>XCRI Data</h2>
               Expected release: September.
-            </div><!--/span-->
-                      </div><!--/row-->
+            </div>
+          </div--><!--/row-->
 
         </div><!--/span-->
       </div><!--/row-->
       <hr>
 
-	<?php include 'footer.php';?>
+    <?php
+    include 'footer.php';
+    ?>
+	
 
     </div><!--/.fluid-container-->
 
