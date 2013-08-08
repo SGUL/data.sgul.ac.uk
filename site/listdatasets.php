@@ -71,6 +71,13 @@
         <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
         <td><img src="./images/data-badge-5.png"/></td>
     </tr>
+    <tr>
+        <td><a href="#">Library catalogue</a> (available in winter 2013)</td>
+        <td>A list of the books available in the institutional Library</td>
+        <td>Library</td>
+        <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
+        <td><img src="./images/data-badge-3.png"/></td>
+    </tr>
   </table>
 </div>
 </div>

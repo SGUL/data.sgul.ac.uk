@@ -150,13 +150,13 @@ def do_inCites_publications(list,url):
     # Generate CSV
     csvname = "output/publications.csv"
     c = open(csvname, 'w')
-    #c.write(csvprint)
+    c.write(csvprint)
     c.close()
     
     # Generate JSON TODO
     jsonname = "output/publications.json"
     j = open(jsonname, 'w')
-    #j.write(jsonprint)
+    j.write(jsonprint)
     j.close()
 
     # Generate RDF-XML archive

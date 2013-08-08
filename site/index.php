@@ -41,10 +41,10 @@
         <div class="span9">
           <div class="hero-unit">
             <h1>SGUL Open Data</h1>
-            <p>St George's University of London's Administrative, Research, and Statistical Open Data.</p>
-            <p>Welcome to SGUL's Open Data portal. We aim to collect the several sources of Open Data available within the institution, reprocess them and repackage them in machine-readable formats, and license them for reuse under licences such as the Open Government Licence.</p>
-            <p>Where possible, we intend to provide the data as Linked Data, providing a SPARQL endpoint and an API, together with examples and documentation.</p>
-            <p>This service is highly experimental, as we identify the data sources and work with them. Please get in touch if you have any query.</p>
+            <p>St George's, University of London's Administrative, Research, and Statistical Open Data.</p>
+            <p>Welcome to <a href="http://www.sgul.ac.uk">SGUL</a>'s <a href="http://en.wikipedia.org/wiki/Open_Data">Open Data</a> portal. We aim to collect the several sources of Open Data available within the institution, reprocess them and repackage them in machine-readable formats, and license them for reuse under licences such as the <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">Open Government Licence</a>.</p>
+            <p>Where possible, we intend to provide the data as <a href="http://linkeddata.org/">Linked Data</a>, providing a <a href="sparql.php">SPARQL endpoint</a> and an <a href="api.php">API</a>, together with examples and documentation.</p>
+            <p>This service is highly experimental, as we identify the data sources and work with them. If you have any query, please have a look at the <a href="faq.php">FAQ</a>.</p>
 
           </div>
           <!--div class="row-fluid">

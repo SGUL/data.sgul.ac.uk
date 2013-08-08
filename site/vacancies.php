@@ -55,6 +55,10 @@
         <td>Weekly</td>
     </tr>
     <tr>
+        <th>Last update</th>
+        <td>08 Aug 2013</td>
+    </tr>
+    <tr>
         <th>Source</th>
         <td>Human Resources</td>
     </tr>

@@ -5,7 +5,7 @@
               <li class="nav-header">Menu</li> 
               <li><a href="http://data.sgul.ac.uk">Home</a></li> 
               <li><a href="faq.php">FAQ</a></li> 
-              <li class="nav-header">Data</li> 
+              <li class="nav-header">Data &amp; Metadata</li> 
 	            <li><a href="listdatasets.php">Datasets list</a></li>
 	            <li><a href="vacancies.php">Vacancies</a></li>
 	            <li><a href="publications.php">Publications</a></li>
