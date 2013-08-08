@@ -12,10 +12,10 @@
           <div class="nav-collapse"> 
             <ul class="nav"> 
               <li><a href="http://data.sgul.ac.uk">Home</a></li>
+              <li><a href="faq.php">FAQ</a></li>
               <li><a href="listdatasets.php">Datasets</a></li>
               <li><a href="sparql.php">API</a></li> 
               <li><a href="sparql.php">SPARQL</a></li> 
-              <li><a href="contact.php">Contact</a></li> 
             </ul> 
             <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>--> 
           </div><!--/.nav-collapse --> 

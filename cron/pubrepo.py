@@ -1,6 +1,7 @@
 import cris
 from lxml import etree
 import json
+import tarfile
 
 #read settings, load url, parse resulting text
 settings_text = open("config.json", "r").read()
@@ -59,13 +60,16 @@ def do_inCites_users(list):
 # takes a list of publications, prints incites extract
 def do_inCites_publications(list,url):
     #[employeeID,lastName,firstName,other-authors,title,source-title,starting-page]
+    members = []
+    jsonprint = ""
+    csvprint = "URLTitle,DOI,AuthorList,Year,RepositoryURL"
     for pub in list:
         item = pub['pub']
 
         # procedure to get the authors
         rel = pub['rel']
         users = rel['users']
-	type = item['type']
+        type = item['type']
         authors = []
 
 
@@ -95,8 +99,8 @@ def do_inCites_publications(list,url):
 
         records = item['records']
         puburl = item['puburl']
-	repo = item['repo']
-	id = item['id']
+        repo = item['repo']
+        id = item['id']
         # select best available record (manual, pubmed, wos, woslite)
         recordindex = 100
         winningrecord = dict()
@@ -105,53 +109,62 @@ def do_inCites_publications(list,url):
             if int(record['source-id']) < recordindex:
                 recordindex = int(record['source-id'])
                 winningrecord = record
-
-        #     pub contains the whole publication        
-        #     winningrecord contains the record we're meant to work on
-        #     rel contains the relationships
-        #     users contain user info from the relationships
-        #     authors contains all the authors
-        #print winningrecord
         try:
             year = winningrecord['date']['{http://www.symplectic.co.uk/publications/api}year']
         except Exception, err:
             year = ""
 
-	if repo <> "NONE" and repo <> None and len(repo)>0:
-	    filename = "output/pub_" + id + ".rdf"
-	    f = open(filename, 'w')
-	    rdfprint = ""
- 	    # Preamble
-	    rdfprint = rdfprint + """<?xml version="1.0" encoding="UTF-8"?>
-                     <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                              xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-                              xmlns:bibo="http://purl.org/ontology/bibo/"
-			      xmlns:sgul="http://sgul.ac.uk/ontology/lib/"
-                              xmlns:vivo="http://vivoweb.org/ontology/core#">"""
-	    # General info
-	    rdfprint = rdfprint +  """<rdf:Description rdf:about=\""""+puburl+"""\">
-      			<rdf:type rdf:resource="http://purl.org/ontology/bibo/AcademicArticle"/>
-		        <rdf:type rdf:resource="http://purl.org/ontology/bibo/Article"/>
-		        <rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
-		        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-		        <rdfs:label>"""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"""</rdfs:label>
-		        <bibo:abstract>"""+winningrecord['abstract'].encode('utf-8').replace('\n', '').replace('\r', '')+"""</bibo:abstract>
-		        <bibo:doi>"""+winningrecord['doi']+"""</bibo:doi>
-      			<bibo:authorList>"""+lastName+","+firstName+";"+otherAuthors+"""</bibo:authorList>
-         	        <vivo:dateTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">"""+year+"""</vivo:dateTime>
-			<sgul:repositoryLink rdf:resource=\""""+repo+"""\"/>
-		     </rdf:Description>"""
+        if repo <> "NONE" and repo <> None and len(repo)>0:
+            filename = "output/pub_" + id + ".rdf"
+            members.append(filename)
+            f = open(filename, 'w')
+    	    rdfprint = ""
+     	    # Preamble
+    	    rdfprint = rdfprint + """<?xml version="1.0" encoding="UTF-8"?>
+                         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                                  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+                                  xmlns:bibo="http://purl.org/ontology/bibo/"
+    			      xmlns:sgul="http://data.sgul.ac.uk/ontology/lib/"
+                                  xmlns:vivo="http://vivoweb.org/ontology/core#">"""
+    	    # General info
+    	    rdfprint = rdfprint +  """<rdf:Description rdf:about=\""""+puburl+"""\">
+          			<rdf:type rdf:resource="http://purl.org/ontology/bibo/AcademicArticle"/>
+    		        <rdf:type rdf:resource="http://purl.org/ontology/bibo/Article"/>
+    		        <rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
+    		        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    		        <rdfs:label>"""+winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')+"""</rdfs:label>
+    		        <bibo:abstract>"""+winningrecord['abstract'].encode('utf-8').replace('\n', '').replace('\r', '')+"""</bibo:abstract>
+    		        <bibo:doi>"""+winningrecord['doi']+"""</bibo:doi>
+          			<bibo:authorList>"""+lastName+","+firstName+";"+otherAuthors+"""</bibo:authorList>
+             	        <vivo:dateTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">"""+year+"""</vivo:dateTime>
+    			<sgul:repositoryLink rdf:resource=\""""+repo+"""\"/>
+    		     </rdf:Description>"""
 
-
-	    # Closing and writing RDF
+            csvprint = csvprint + "\n"+ puburl + "," + winningrecord['title'] + "," + winningrecord['doi'] + "," + lastName+","+firstName+";"+otherAuthors+ "," + year + "," + repo
+            jsonprint 
+    	    # Closing and writing RDF
             rdfprint = rdfprint + """</rdf:RDF>"""
-	    f.write(rdfprint)
-	    f.close()
+    	    f.write(rdfprint)
+    	    f.close()
 
-    # Generate CSV TODO
-    # URL,Title,Abstract,DOI,AuthorList,Year,RepositoryURL
+    # Generate CSV
+    csvname = "output/publications.csv"
+    c = open(csvname, 'w')
+    #c.write(csvprint)
+    c.close()
+    
     # Generate JSON TODO
+    jsonname = "output/publications.json"
+    j = open(jsonname, 'w')
+    #j.write(jsonprint)
+    j.close()
 
+    # Generate RDF-XML archive
+    tar = tarfile.open("output/publicationsrdf.tar", "w")
+    for name in members:
+        path = name
+        tar.add(path)
+    tar.close()
 
 #parseUserList(cris_url + ":" + cris_port +"/publications-api/objects?categories=users",cris_url + ":" + cris_port)
 parsePublicationList(cris_url + ":" + cris_port +"/publications-api/objects?categories=publications", cris_url + ":" + cris_port)

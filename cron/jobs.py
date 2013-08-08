@@ -8,6 +8,7 @@ import csv
 import shutil
 
 import codecs
+import tarfile
 
 def downloadJobDetails(url):
     url2 = url.replace(' ','%20')
@@ -151,6 +152,7 @@ rdf_init_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
     </rdf:Description>\n"
 
 i = 0
+members = []
 for job in all_jobs:
     url = job['url']
     title = job['title']
@@ -166,11 +168,11 @@ for job in all_jobs:
             <vacancy:Vacancy rdf:about="' + url + '">\n\
                 <rdfs:label>' + title + '</rdfs:label>\n\
                 <vacancy:employer>St. George\'s University of London</vacancy:employer>\n\
-                <vacancy:organizationalUnit rdf:resource="' + topic + '"/>\n\
+                <vacancy:organizationalUnit>' + topic + '</vacancy:organizationalUnit>\n\
                 <vacancy:availableOnline>' + url +  '</vacancy:availableOnline>\n\
                 <vacancy:applicationInterviewNotificationByDate>' + interview + '</vacancy:applicationInterviewNotificationByDate>\n\
                 <vacancy:applicationClosingDate>' + closing +' </vacancy:applicationClosingDate>\n\
-                <rdfs:comment>' + " " + '</rdfs:comment>\n\
+                <rdfs:comment>' + " None " + '</rdfs:comment>\n\
                 <vacancy:salary>'+ salary.decode("utf8")  +'</vacancy:salary>\n\
             </vacancy:Vacancy>\n\
         </foaf:primaryTopic>\n\
@@ -179,6 +181,7 @@ for job in all_jobs:
     rdf_output = rdf_init_str + rdf_content_str + '</rdf:RDF>'
     filename = "jobs_" + str(i) + ".rdf"
     i = i + 1
+    members.append(filename)
     with codecs.open(filename, 'w', 'utf-8-sig') as f:
         f.write(rdf_output)
         f.close()
@@ -200,4 +203,8 @@ with codecs.open('jobs.json', 'w', 'utf-8-sig') as f:
     shutil.copy('jobs.json','output/jobs.json')
     shutil.move('jobs.json','../site/output/jobs.json')
 
-
+tar = tarfile.open("output/jobsrdf.tar", "w")
+for name in members:
+    path = 'output/'+name
+    tar.add(path)
+tar.close()

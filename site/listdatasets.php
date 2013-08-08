@@ -34,49 +34,50 @@
 
   <body>
 
-    <?php include 'navbar.php';?>
-    <div class="container-fluid">
-      <div class="row-fluid">
+	<?php include 'navbar.php';?>
+  <div class="container-fluid"> 
+ <div class="row-fluid">
 	<?php include 'menu.php';?>
-        <div class="span9">
-            <h2>SPARQL Endpoint</h2>
-		<form method="post" action="http://data.sgul.ac.uk:8282/sparql/">
-	        	<p>
-	        	  <textarea name="query" cols="100" rows="20">
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX vacancy: <http://purl.org/openorg/vacancy/>
-                
 
-SELECT ?title ?employer ?ou ?salary ?url ?dateInterviewBy ?dateClosing WHERE {
-    ?s rdfs:label ?title.
-    ?s vacancy:employer ?employer.
-    ?s vacancy:salary ?salary.
-    ?s vacancy:availableOnline ?url.
-    ?s vacancy:organizationalUnit ?ou.
-    ?s vacancy:applicationInterviewNotificationByDate ?dateInterviewBy.
-    ?s vacancy:applicationClosingDate ?dateClosing.
-} LIMIT 20
-			  </textarea>
-        <br/>
-
-
-		      Output: <select name="output">
-<option>xml</option>
-<option>json</option>
-<option>text</option>
-</select>
-		      <br/>
-	         
-	              <input type="submit" value="Get Results" />
-	        </p>
-      	    </form>
-
-          
-        </div><!--/span-->
-      </div><!--/row-->
-
+	
+<div class="span9">
+  <h2>Datasets</h2>
+  <table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Source</th>
+        <th>Licence</th>
+        <th>Open Data</th>
+    </tr>
+    <tr>
+        <td><a href="vacancies.php">Job vacancies</a></td>
+        <td>Job vacancies advertised within SGUL, as presented on <a href="http://jobs.sgul.ac.uk">jobs.sgul.ac.uk</a></td>
+        <td>Human Resources</td>
+        <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
+        <td><img src="./images/data-badge-4.png"/></td>
+    </tr>
+    <tr>
+        <td><a href="publications.php">Publications</a></td>
+        <td>Academic publications from SGUL's institutional repository <a href="http://openaccess.sgul.ac.uk">SORA</a></td>
+        <td>Library</td>
+        <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
+        <td><img src="./images/data-badge-5.png"/></td>
+    </tr>
+    <tr>
+        <td><a href="#">XCRI</a> (available in winter 2013)</td>
+        <td><a href="http://www.xcri.co.uk/">XCRI</a> (eXchanging Course Related Information) information - XCRI Course Advertising Profile (<a href="http://www.xcri.co.uk/what-is-xcri-cap.html">XCRI-CAP</a>); it's made of information about courses in away that allow comparisons among UK education institutions and aggregators such as UCAS and other sites that advertise courses.</td>
+        <td>Registry</td>
+        <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
+        <td><img src="./images/data-badge-5.png"/></td>
+    </tr>
+  </table>
+</div>
+</div>
       <hr>
-	<?php include 'footer.php';?>
+    <?php
+    include 'footer.php';
+    ?>
 
     </div><!--/.fluid-container-->
 

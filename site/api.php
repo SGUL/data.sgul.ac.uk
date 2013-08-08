@@ -34,49 +34,21 @@
 
   <body>
 
-    <?php include 'navbar.php';?>
-    <div class="container-fluid">
-      <div class="row-fluid">
+	<?php include 'navbar.php';?>
+  <div class="container-fluid"> 
+ <div class="row-fluid">
 	<?php include 'menu.php';?>
-        <div class="span9">
-            <h2>SPARQL Endpoint</h2>
-		<form method="post" action="http://data.sgul.ac.uk:8282/sparql/">
-	        	<p>
-	        	  <textarea name="query" cols="100" rows="20">
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX vacancy: <http://purl.org/openorg/vacancy/>
-                
 
-SELECT ?title ?employer ?ou ?salary ?url ?dateInterviewBy ?dateClosing WHERE {
-    ?s rdfs:label ?title.
-    ?s vacancy:employer ?employer.
-    ?s vacancy:salary ?salary.
-    ?s vacancy:availableOnline ?url.
-    ?s vacancy:organizationalUnit ?ou.
-    ?s vacancy:applicationInterviewNotificationByDate ?dateInterviewBy.
-    ?s vacancy:applicationClosingDate ?dateClosing.
-} LIMIT 20
-			  </textarea>
-        <br/>
+	
+<div class="span9">
+  <h2>API</h2>
 
-
-		      Output: <select name="output">
-<option>xml</option>
-<option>json</option>
-<option>text</option>
-</select>
-		      <br/>
-	         
-	              <input type="submit" value="Get Results" />
-	        </p>
-      	    </form>
-
-          
-        </div><!--/span-->
-      </div><!--/row-->
-
+</div>
+</div>
       <hr>
-	<?php include 'footer.php';?>
+    <?php
+    include 'footer.php';
+    ?>
 
     </div><!--/.fluid-container-->
 
