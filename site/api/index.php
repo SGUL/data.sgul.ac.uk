@@ -8,7 +8,7 @@ function fixBadUnicodeForJson($str) {
     $str = preg_replace("/\\\\u00([0-9a-f]{2})\\\\u00([0-9a-f]{2})\\\\u00([0-9a-f]{2})/e", 'chr(hexdec("$1")).chr(hexdec("$2")).chr(hexdec("$3"))', $str);
     $str = preg_replace("/\\\\u00([0-9a-f]{2})\\\\u00([0-9a-f]{2})/e", 'chr(hexdec("$1")).chr(hexdec("$2"))', $str);
     $str = preg_replace("/\\\\u00([0-9a-f]{2})/e", 'chr(hexdec("$1"))', $str);
-    $str = htmlentities($str);
+    //$str = htmlentities($str);
     return $str;
 }
 
@@ -64,9 +64,11 @@ class PubListHandler {
     }
 }
 
-class PubGetHandler {
+class LibraryCatalogueHandler {
     function get() {
-      echo "PubGet";
+    	$json_output = array();
+      	$json_output = json_encode($json_output);
+      	print $json_output;
     }
 }
 
@@ -80,6 +82,7 @@ class PubSearchHandler {
 
 class JobListHandler {
     function get() {
+
       $data = sparql_get( 
 				"http://data.sgul.ac.uk:8282/sparql/",
 				"
@@ -99,6 +102,7 @@ class JobListHandler {
 				}
 
 				" );
+
 		if( !isset($data) )
 		{
 			print "<p>Error: ".sparql_errno().": ".sparql_error()."</p>";
@@ -122,37 +126,32 @@ class JobListHandler {
     }
 }
 
-class JobGetHandler {
-    function get() {
-      echo "JobGet";
-    }
-}
 
-class JobSearchHandler {
-    function get() {
-      echo "JobSearch";
-    }
-}
 
 class SparqlHandler {
-	function get() {
+	function post() {
+      	$query = $_POST['query'];
+      	
+
+    //   	"
+				// PREFIX vacancy: <http://purl.org/openorg/vacancy/>
+				// PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+				// SELECT ?title ?employer ?ou ?salary ?url ?dateInterviewBy ?dateClosing WHERE {
+				// 	?s rdfs:label ?title.
+				// 	?s vacancy:employer ?employer.
+				// 	?s vacancy:salary ?salary.
+				// 	?s vacancy:availableOnline ?url.
+				// 	?s vacancy:organizationalUnit ?ou.
+				// 	?s vacancy:applicationInterviewNotificationByDate ?dateInterviewBy.
+				// 	?s vacancy:applicationClosingDate ?dateClosing.
+				// }
+				// "
+      
 		$data = sparql_get( 
 				"http://data.sgul.ac.uk:8282/sparql/",
-				"
-				PREFIX bibo: <http://purl.org/ontology/bibo/>
-				PREFIX sgul: <http://sgul.ac.uk/ontology/lib/>
-                PREFIX vivo: <http://vivoweb.org/ontology/core#>
-				PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-				PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-
-				SELECT ?s ?title ?o WHERE {
-                                     ?s sgul:repositoryLink ?o.
-                                     ?s rdfs:label ?title.
-
-				} LIMIT 2000
-
-				" );
+				$query );
 		if( !isset($data) )
 		{
 			print "<p>Error: ".sparql_errno().": ".sparql_error()."</p>";
@@ -181,12 +180,9 @@ class SparqlHandler {
 
 Toro::serve(array(
 			"/" => "HelloHandler",
-			"/catalogue" => "HelloHandler",
+			"/catalogue" => "CatalogueHandler",
 			"/publications/list" => "PubListHandler",
-			"/publications/get/:number" => "PubGetHandler",
-			"/publications/search/:alpha" => "PubSearchHandler",
 			"/jobs/list" => "JobListHandler",
-			"/jobs/get/:alpha" => "JobGetHandler",
-			"/jobs/search/:alpha" => "JobSearchHandler",
-			"/sparql" => "SparqlHandler",
+			"/sparql2table" => "SparqlHandler",
+			"/library/catalogue" => "LibraryCatalogueHandler",
 		 ));

@@ -15,14 +15,6 @@ def downloadJobDetails(url):
     jobs_detail_url = settings["jobs"]["url"]  + "/" + url2
     print jobs_detail_url 
 
-    # test
-    #quoted_query = urllib.quote(query)
-    #    host = h
-    #req = urllib2.Request(host)
-    #req.add_header('User-Agent', User_Agent)
-    #response = urllib2.urlopen(req)
-    # end test
-
     job = (urllib2.urlopen(jobs_detail_url)).read()
     soup = BeautifulSoup(job)
     maincontent_element = soup.findAll(attrs={'id': 'leftpanel'})[0]

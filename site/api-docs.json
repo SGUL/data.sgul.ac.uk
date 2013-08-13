@@ -6,6 +6,22 @@
     {
       "path": "/catalogue",
       "description": "Data Catalogue"
+    },
+    {
+      "path": "/jobs",
+      "description": "Job vacancies"
+    },
+    {
+      "path": "/publications",
+      "description": "Academic publications"
+    },
+    {
+      "path": "/sparql2table",
+      "description": "Sparql query execution and formatting"
+    },
+    {
+      "path": "/library",
+      "description": "Data from the library"
     }
   ],
   "info": {
