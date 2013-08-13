@@ -181,7 +181,7 @@ class SparqlHandler {
 
 Toro::serve(array(
 			"/" => "HelloHandler",
-			"/abc" => "HelloHandler",
+			"/catalogue" => "HelloHandler",
 			"/publications/list" => "PubListHandler",
 			"/publications/get/:number" => "PubGetHandler",
 			"/publications/search/:alpha" => "PubSearchHandler",

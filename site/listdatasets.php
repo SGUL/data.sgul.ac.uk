@@ -51,6 +51,13 @@
         <th>Open Data</th>
     </tr>
     <tr>
+        <td><a href="#">Data catalogue</a></td>
+        <td>The data catalogue in a linked-data machine-readable format.</td>
+        <td>Computing Services</td>
+        <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
+        <td><img src="./images/data-badge-5.png"/></td>
+    </tr>
+    <tr>
         <td><a href="vacancies.php">Job vacancies</a></td>
         <td>Job vacancies advertised within SGUL, as presented on <a href="http://jobs.sgul.ac.uk">jobs.sgul.ac.uk</a></td>
         <td>Human Resources</td>
