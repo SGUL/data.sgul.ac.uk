@@ -171,9 +171,9 @@ SELECT ?s ?title ?authorList ?repositoryLink ?doi  WHERE {
     <tr>
         <th>API endpoints</th>
         <td>
-            <a href="api-docs.php#jobs">/api/publications/list/</a><br/>
-            <a href="api-docs.php#jobs">/api/publications/get/</a><br/>
-            <a href="api-docs.php#jobs">/api/publications/search/</a><br/>
+            <a href="api.php#pubs">/api/publications/list/</a><br/>
+            <a href="api.php#pubs">/api/publications/get/</a><br/>
+            <a href="api.php#pubs">/api/publications/search/</a><br/>
         </td>
     </tr>
   </table>

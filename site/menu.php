@@ -7,6 +7,7 @@
               <li><a href="faq.php">FAQ</a></li> 
               <li class="nav-header">Data &amp; Metadata</li> 
 	            <li><a href="listdatasets.php">Datasets list</a></li>
+              <li><a href="datacatalogue.php">Data catalogue</a></li>
 	            <li><a href="vacancies.php">Vacancies</a></li>
 	            <li><a href="publications.php">Publications</a></li>
               <li><a href="api.php">Academic API</a></li> 

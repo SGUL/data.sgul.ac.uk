@@ -11,5 +11,8 @@
         },
 "jobs": {
 	"url": ""
+	},
+"datadownload" : {
+	"url": "http://data.sgul.ac.uk/output/"
 	}
 }

@@ -171,9 +171,9 @@ SELECT ?title ?employer ?ou ?salary ?url ?dateInterviewBy ?dateClosing WHERE {
     <tr>
         <th>API endpoints</th>
         <td>
-            <a href="api-docs.php#jobs">/api/jobs/list/</a><br/>
-            <a href="api-docs.php#jobs">/api/jobs/get/</a><br/>
-            <a href="api-docs.php#jobs">/api/jobs/search/</a><br/>
+            <a href="api.php#jobs">/api/jobs/list/</a><br/>
+            <a href="api.php#jobs">/api/jobs/get/</a><br/>
+            <a href="api.php#jobs">/api/jobs/search/</a><br/>
         </td>
     </tr>
   </table>

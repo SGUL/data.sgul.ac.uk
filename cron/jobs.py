@@ -6,7 +6,7 @@ from BeautifulSoup import BeautifulSoup
 
 import csv
 import shutil
-
+import os
 import codecs
 import tarfile
 
@@ -63,9 +63,10 @@ def downloadJobDetails(url):
 
 
 #read settings, load url, parse resulting text
-settings_text = open("config.json", "r").read()
+settings_text = open(os.path.dirname(__file__) +"/config.json", "r").read()
 settings = json.loads(settings_text)
 jobs_url = settings["jobs"]["url"] + "/" + settings["jobs"]["list"]
+
 
 
 # get page and soupify
@@ -126,7 +127,7 @@ rdf_init_str = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
   xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'\n\
   xmlns:dc='http://purl.org/dc/elements/1.1/'\n\
   xmlns:vacancy='http://purl.org/openorg/vacancy/'\n\
-  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n\
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>\n\
     <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#comment\">\n\
         <rdfs:label>comment</rdfs:label>\n\
     </rdf:Description>\n\
@@ -177,26 +178,30 @@ for job in all_jobs:
     with codecs.open(filename, 'w', 'utf-8-sig') as f:
         f.write(rdf_output)
         f.close()
-        shutil.copy(filename,'output/'+filename)
-        shutil.move(filename,'../site/output/'+filename)
+        shutil.move(filename,os.path.dirname(__file__) +"/output/"+filename)
+        #up_one_folder = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'site/output'))
+        #shutil.move(filename,up_one_folder+"/"+filename)
 
 
 
 # File Write
-with codecs.open('jobs.csv', 'w', 'utf-8-sig') as f:
+with codecs.open(os.path.dirname(__file__) +'/jobs.csv', 'w', 'utf-8-sig') as f:
     f.write(csv_output)
     f.close()
-    shutil.copy('jobs.csv','output/jobs.csv')
-    shutil.move('jobs.csv','../site/output/jobs.csv')
+    shutil.move(os.path.dirname(__file__) +'/jobs.csv',os.path.dirname(__file__) +"/output/jobs.csv")
+    #up_one_folder = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'site/output'))
+    #shutil.move("jobs.csv",up_one_folder+"/jobs.csv")
+    
 
-with codecs.open('jobs.json', 'w', 'utf-8-sig') as f:
+with codecs.open(os.path.dirname(__file__) +'/jobs.json', 'w', 'utf-8-sig') as f:
     f.write(json_output)
     f.close()
-    shutil.copy('jobs.json','output/jobs.json')
-    shutil.move('jobs.json','../site/output/jobs.json')
+    shutil.copy(os.path.dirname(__file__) +'/jobs.json',os.path.dirname(__file__) +"/output/jobs.json")
+    #up_one_folder = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'site/output'))
+    #shutil.move("jobs.json",up_one_folder+"/jobs.json")
 
-tar = tarfile.open("output/jobsrdf.tar", "w")
+tar = tarfile.open(os.path.dirname(__file__) +"/output/jobsrdf.tar", "w")
 for name in members:
-    path = 'output/'+name
+    path = os.path.dirname(__file__) +'/output/'+name
     tar.add(path)
 tar.close()

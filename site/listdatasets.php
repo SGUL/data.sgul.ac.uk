@@ -51,11 +51,11 @@
         <th>Open Data</th>
     </tr>
     <tr>
-        <td><a href="#">Data catalogue</a></td>
+        <td><a href="datacatalogue.php">Data catalogue</a></td>
         <td>The data catalogue in a linked-data machine-readable format.</td>
         <td>Computing Services</td>
         <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
-        <td><img src="./images/data-badge-5.png"/></td>
+        <td><img src="./images/data-badge-4.png"/></td>
     </tr>
     <tr>
         <td><a href="vacancies.php">Job vacancies</a></td>

@@ -177,10 +177,24 @@ class SparqlHandler {
 	}
 }
 
+class CatalogueRdfHandler {
+    function get() {
+      echo "Catalogue";
+    }
+}
+
+
+class CatalogueJsonHandler {
+    function get() {
+    	$filecontents = file_get_contents("../output/catalogue.json");
+		print $filecontents;
+    }
+}
 
 Toro::serve(array(
 			"/" => "HelloHandler",
-			"/catalogue" => "CatalogueHandler",
+			"/catalogue/rdf" => "CatalogueRdfHandler",
+			"/catalogue/json" => "CatalogueJsonHandler",
 			"/publications/list" => "PubListHandler",
 			"/jobs/list" => "JobListHandler",
 			"/sparql2table" => "SparqlHandler",

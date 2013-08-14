@@ -2,16 +2,24 @@ import cris
 from lxml import etree
 import json
 import tarfile
+import os
 
 #read settings, load url, parse resulting text
-settings_text = open("config.json", "r").read()
+settings_text = open(os.path.dirname(__file__) +"/config.json", "r").read()
 settings = json.loads(settings_text)
 cris_url = settings["cris"]["url"]
 cris_port = settings["cris"]["port"]
-
+# Generate CSV
+csvname = os.path.dirname(__file__) + "/output/publications.csv"
+global c
+global pubdict
 
 # Publications management 
 def parsePublicationList(xmlFile,url): 
+    global c
+    global pubdict
+    pubdict = dict()
+    c = open(csvname, 'w')
     mynext = xmlFile 
     tree = etree.parse(xmlFile) 
     root = tree.getroot()
@@ -23,17 +31,21 @@ def parsePublicationList(xmlFile,url):
         do_inCites_publications(pub_return,url)
 
 
+    # Close CSV
+    c.close()
 
 # takes a list of publications, prints incites extract
 def do_inCites_publications(list,url):
     #[employeeID,lastName,firstName,other-authors,title,source-title,starting-page]
+    global c
+    global pubdict
     members = []
     jsonprint = ""
-    csvprint = "URLTitle,DOI,AuthorList,Year,RepositoryURL"
+    csvprint = "URLTitle,DOI,AuthorList,Year,RepositoryURL\n"
+    c.write(csvprint)
 
-    # Generate CSV
-    csvname = "output/publications.csv"
-    c = open(csvname, 'w')
+    
+    
     
     for pub in list:
         item = pub['pub']
@@ -87,7 +99,7 @@ def do_inCites_publications(list,url):
             year = ""
 
         if repo <> "NONE" and repo <> None and len(repo)>0:
-            filename = "output/pub_" + id + ".rdf"
+            filename = os.path.dirname(__file__) +"/output/pub_" + id + ".rdf"
             members.append(filename)
             f = open(filename, 'w')
     	    rdfprint = ""
@@ -99,21 +111,6 @@ def do_inCites_publications(list,url):
     			      xmlns:sgul="http://data.sgul.ac.uk/ontology/lib/"
                                   xmlns:vivo="http://vivoweb.org/ontology/core#">"""
 
-            #DEBUG
-            # print "puburl "
-            # print puburl
-            # print "title " 
-            # print winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')
-            # print "abstract "
-            # print winningrecord['abstract'].encode('utf-8').replace('\n', '').replace('\r', '')
-            # print "doi"
-            # print winningrecord['doi']
-            # print "authors"
-            # print lastName+","+firstName+";"+otherAuthors
-            # print "date" 
-            # print year
-            # print "repo"
-            # print repo
 
     	    # General info
     	    rdfprint = rdfprint +  """<rdf:Description rdf:about=\""""+puburl+"""\">
@@ -131,24 +128,32 @@ def do_inCites_publications(list,url):
 
             csvprint = puburl + "," + winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '') + "," + winningrecord['doi'] + "," + lastName+","+firstName+";"+otherAuthors+ "," + year + "," + repo + "\n"
             c.write(csvprint)
-            #jsonprint 
     	    # Closing and writing RDF
             rdfprint = rdfprint + """</rdf:RDF>"""
     	    f.write(rdfprint)
     	    f.close()
 
+            # For JSON
+            thisdict = dict()
+            thisdict["publication_url"] = puburl
+            thisdict["title"] = winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')
+            thisdict["abstract"] = winningrecord['abstract'].encode('utf-8').replace('\n', '').replace('\r', '')
+            thisdict["doi"] = winningrecord['doi']
+            thisdict["authorList"] = lastName+","+firstName+";"+otherAuthors
+            thisdict["repository"] = repo
     
-    # Close CSV
-    c.close()
+            pubdict[puburl] = thisdict
     
     # Generate JSON TODO
-    jsonname = "output/publications.json"
+    json_output = json.dumps(pubdict, encoding="utf8", indent=4, sort_keys=True, ensure_ascii=False)
+    jsonname = os.path.dirname(__file__) +"/output/publications.json"
     j = open(jsonname, 'w')
-    j.write(jsonprint)
+    j.write(json_output.encode('utf-8'))
     j.close()
 
+
     # Generate RDF-XML archive
-    tar = tarfile.open("output/publicationsrdf.tar", "w")
+    tar = tarfile.open(os.path.dirname(__file__) + "/output/publicationsrdf.tar", "w")
     for name in members:
         path = name
         tar.add(path)
