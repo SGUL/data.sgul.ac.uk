@@ -5,8 +5,8 @@
   "resourcePath":"/catalogue",
   "apis":[
     {
-      "path":"/catalogue",
-      "description":"Data catalogue",
+      "path":"/catalogue/json",
+      "description":"Data catalogue in JSON format",
       "operations":[
         {
           "httpMethod":"GET",

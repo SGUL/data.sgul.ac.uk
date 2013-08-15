@@ -110,7 +110,7 @@ def do_inCites_publications(list,url):
                          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                                   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
                                   xmlns:bibo="http://purl.org/ontology/bibo/"
-    			      xmlns:sgul="http://data.sgul.ac.uk/ontology/lib/"
+                                  xmlns:sgul="http://data.sgul.ac.uk/ontology/lib/"
                                   xmlns:vivo="http://vivoweb.org/ontology/core#">"""
 
 
@@ -125,7 +125,7 @@ def do_inCites_publications(list,url):
     		        <bibo:doi>"""+winningrecord['doi']+"""</bibo:doi>
           			<bibo:authorList>"""+lastName+","+firstName+";"+otherAuthors+"""</bibo:authorList>
              	        <vivo:dateTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">"""+year+"""</vivo:dateTime>
-    			<sgul:repositoryLink rdf:resource=\""""+repo+"""\"/>
+    			<sgul:repositoryLink>"""+repo+"""</sgul:repositoryLink>
     		     </rdf:Description>"""
 
             csvprint = puburl + "," + winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '') + "," + winningrecord['doi'] + "," + lastName+","+firstName+";"+otherAuthors+ "," + year + "," + repo + "\n"
@@ -139,7 +139,7 @@ def do_inCites_publications(list,url):
             thisdict = dict()
             thisdict["publication_url"] = puburl
             thisdict["title"] = winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')
-            thisdict["abstract"] = winningrecord['abstract'].encode('utf-8').replace('\n', '').replace('\r', '').replace('<','&lt;').replace('>','&gt;').replace('&','&amp')
+            thisdict["abstract"] = winningrecord['abstract'].encode('utf-8').replace('\n', '').replace('\r', '').replace('<','&lt;').replace('>','&gt;')
             thisdict["doi"] = winningrecord['doi']
             thisdict["authorList"] = lastName+","+firstName+";"+otherAuthors
             thisdict["repository"] = repo

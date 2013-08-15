@@ -27,17 +27,18 @@ class PubListHandler {
 				"
                 
   				PREFIX bibo: <http://purl.org/ontology/bibo/>
-				PREFIX sgul: <http://sgul.ac.uk/ontology/lib/>
+				PREFIX sgul: <http://data.sgul.ac.uk/ontology/lib/>
                 PREFIX vivo: <http://vivoweb.org/ontology/core#>
 				PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 				PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 
-				SELECT ?s ?title ?authorList ?repositoryLink ?doi  WHERE {
-                	?s sgul:repositoryLink ?repositoryLink.
-                	?s rdfs:label ?title.
-                	?s bibo:authorList ?authorList.
-                	?s bibo:doi ?doi.
+				SELECT ?id ?title ?authorList ?repositoryLink ?doi ?abstract WHERE {
+                	?id sgul:repositoryLink ?repositoryLink.
+                	?id rdfs:label ?title.
+                	?id bibo:authorList ?authorList.
+                	?id bibo:doi ?doi.
+                	?id bibo:abstract ?abstract.
 				} LIMIT 2000
 
 				" );
@@ -161,7 +162,7 @@ class SparqlHandler {
 		print "<tr>";
 		foreach( $data->fields() as $field )
 		{
-			print "<th>$field</th>";
+			print "<th class='description'>$field</th>";
 		}
 		print "</tr>";
 		foreach( $data as $row )
@@ -169,7 +170,7 @@ class SparqlHandler {
 			print "<tr>";
 			foreach( $data->fields() as $field )
 			{
-				print "<td>$row[$field]</td> ";
+				print "<td class='value'>$row[$field]</td> ";
 			}
 			print "</tr>";
 		}
@@ -186,7 +187,7 @@ class CatalogueRdfHandler {
 
 class CatalogueJsonHandler {
     function get() {
-    	$filecontents = file_get_contents("../output/catalogue.json");
+    	$filecontents = file_get_contents("../output/datacatalogue.json");
 		print $filecontents;
     }
 }

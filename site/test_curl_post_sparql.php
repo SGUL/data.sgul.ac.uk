@@ -6,15 +6,16 @@ $url = 'http://data.sgul.ac.uk/api/sparql2table';
 
 $sparql = "
 PREFIX bibo: <http://purl.org/ontology/bibo/>
-PREFIX sgul: <http://sgul.ac.uk/ontology/lib/>
+PREFIX sgul: <http://data.sgul.ac.uk/ontology/lib/>
 PREFIX vivo: <http://vivoweb.org/ontology/core#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT DISTINCT ?publication ?title ?doi ?authors WHERE {
+SELECT DISTINCT ?publication ?title ?doi ?authors ?link WHERE {
         ?publication bibo:doi ?doi.
         ?publication rdfs:label ?title.
         ?publication bibo:authorList ?authors.
+		?publication sgul:repositoryLink ?link.
 }";
 
 $fields = array(

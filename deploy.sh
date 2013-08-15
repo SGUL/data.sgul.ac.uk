@@ -17,7 +17,10 @@ rm -f cron/output/pub*
 python cron/pubrepo.py
 
 # CATALOGUE
-echo "Generating catalogue"
+echo "Generating Data Catalogue"
+rm -f site/output/datacatalogue*
+rm -f cron/output/datacatalogue*
+python cron/datacatalogue.py
 
 echo "Moving files to destination"
 mv cron/output/*.rdf site/output/
@@ -31,10 +34,18 @@ mv cron/output/*.tar site/output/
 echo "Killing 4s daemons"
 ssh $USER@$HOST pkill -f \'^4s-httpd -p 8282 data\$\'
 ssh $USER@$HOST pkill -f \'^4s-backend data$\'
-echo "Deleting 4s files"
-ssh $USER@$HOST rm -rf /var/lib/4store/data/
+
+echo "Destroying 4s backend"
+ssh $USER@$HOST 4s-backend-destroy data
+
+echo "[Paranoid] Deleting 4s files"
+ssh $USER@$HOST rm -rf /var/lib/4store/data/*
+
 echo "Deleting web files"
 ssh $USER@$HOST rm -rf /var/www/html/*
+
+sleep 3
+
 echo "Setting up 4s instance"
 ssh $USER@$HOST 4s-backend-setup data
 echo "Starting 4s instance"
@@ -42,6 +53,8 @@ ssh $USER@$HOST 4s-backend data
 
 echo "Deploying web site"
 scp -r site/* root@data:/var/www/html/
+
+sleep 3
 
 echo "Importing data into 4s"
 ssh $USER@$HOST 4s-import data /var/www/html/output/*.rdf

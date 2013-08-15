@@ -47,14 +47,8 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX vacancy: <http://purl.org/openorg/vacancy/>
                 
 
-SELECT ?title ?employer ?ou ?salary ?url ?dateInterviewBy ?dateClosing WHERE {
-    ?s rdfs:label ?title.
-    ?s vacancy:employer ?employer.
-    ?s vacancy:salary ?salary.
-    ?s vacancy:availableOnline ?url.
-    ?s vacancy:organizationalUnit ?ou.
-    ?s vacancy:applicationInterviewNotificationByDate ?dateInterviewBy.
-    ?s vacancy:applicationClosingDate ?dateClosing.
+SELECT ?s ?p ?o WHERE {
+    ?s ?p ?o.
 } LIMIT 20
 			  </textarea>
         <br/>

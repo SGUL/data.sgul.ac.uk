@@ -12,5 +12,8 @@ scripts to harvest data from the sources
 ### site
 tools to generate and deploy the portal
 
+How to
+------
+TODO
 
 More information to follow. For info: gsollazz@sgul.ac.uk.

@@ -128,7 +128,7 @@
          
 <input type="hidden" name="query" id="query" value="
 PREFIX bibo: &lt;http://purl.org/ontology/bibo/&gt;
-                PREFIX sgul: &lt;http://sgul.ac.uk/ontology/lib/&gt;
+                PREFIX sgul: &lt;http://data.sgul.ac.uk/ontology/lib/&gt;
                 PREFIX vivo: &lt;http://vivoweb.org/ontology/core#&gt;
                 PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
                 PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
@@ -143,7 +143,7 @@ PREFIX bibo: &lt;http://purl.org/ontology/bibo/&gt;
 </input>
 <pre>
 PREFIX bibo: &lt;http://purl.org/ontology/bibo/&gt;
-PREFIX sgul: &lt;http://sgul.ac.uk/ontology/lib/&gt;
+PREFIX sgul: &lt;http://data.sgul.ac.uk/ontology/lib/&gt;
 PREFIX vivo: &lt;http://vivoweb.org/ontology/core#&gt;
 PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
 PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
