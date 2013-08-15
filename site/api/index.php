@@ -157,7 +157,7 @@ class SparqlHandler {
 			print "<p>Error: ".sparql_errno().": ".sparql_error()."</p>";
 		}
 
-		print "<table class='example_table'>";
+		print "<table border=1>";
 		print "<tr>";
 		foreach( $data->fields() as $field )
 		{
@@ -169,7 +169,7 @@ class SparqlHandler {
 			print "<tr>";
 			foreach( $data->fields() as $field )
 			{
-				print "<td>$row[$field] |</td> ";
+				print "<td>$row[$field]</td> ";
 			}
 			print "</tr>";
 		}

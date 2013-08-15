@@ -3,6 +3,8 @@ from lxml import etree
 import json
 import tarfile
 import os
+import urllib
+import cgi
 
 #read settings, load url, parse resulting text
 settings_text = open(os.path.dirname(__file__) +"/config.json", "r").read()
@@ -137,7 +139,7 @@ def do_inCites_publications(list,url):
             thisdict = dict()
             thisdict["publication_url"] = puburl
             thisdict["title"] = winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '')
-            thisdict["abstract"] = winningrecord['abstract'].encode('utf-8').replace('\n', '').replace('\r', '')
+            thisdict["abstract"] = winningrecord['abstract'].encode('utf-8').replace('\n', '').replace('\r', '').replace('<','&lt;').replace('>','&gt;').replace('&','&amp')
             thisdict["doi"] = winningrecord['doi']
             thisdict["authorList"] = lastName+","+firstName+";"+otherAuthors
             thisdict["repository"] = repo
