@@ -69,77 +69,205 @@ with codecs.open(os.path.dirname(__file__) +'/datacatalogue.csv', 'w', 'utf-8-si
 rdf_init_str = "\
 <?xml version=\"1.0\" encoding=\"utf-8\"?>\n\
 <rdf:RDF\n\
+  xmlns:dcat='http://www.w3.org/ns/dcat#'\n\
+  xmlns:dct='http://purl.org/dc/terms/'\n\
+  xmlns:dctype='http://purl.org/dc/dcmitype/'\n\
+  xmlns:skos='http://www.w3.org/2004/02/skos/core#'\n\
+  xmlns:vcard='http://www.w3.org/2006/vcard/ns#'\n\
+  xmlns:dcterms='http://purl.org/dc/terms/'\n\
+  xmlns:xsd='http://www.w3.org/2001/XMLSchema#'\n\
   xmlns:foaf='http://xmlns.com/foaf/0.1/'\n\
+  xmlns:void='http://rdfs.org/ns/void#'\n\
   xmlns:oo='http://purl.org/openorg/'\n\
   xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'\n\
   xmlns:dc='http://purl.org/dc/elements/1.1/'\n\
   xmlns:vacancy='http://purl.org/openorg/vacancy/'\n\
   xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>\n\
-  xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'\n\
   xmlns:bibo='http://purl.org/ontology/bibo/'\n\
   xmlns:sgul='http://data.sgul.ac.uk/ontology/lib/'\n\
-  xmlns:vivo='http://vivoweb.org/ontology/core#'\n\
-    <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#comment\">\n\
-        <rdfs:label>comment</rdfs:label>\n\
+  xmlns:vivo='http://vivoweb.org/ontology/core#'>\n\
+"
+
+# DATA CATALOGUE PREAMBLE
+rdf_catalogue = "\n\
+    <rdf:Description rdf:about='https://data.ox.ac.uk/id/dataset/catalogue'>\n\
+        <dcterms:license rdf:resource='http://creativecommons.org/publicdomain/zero/1.0/'/>\n\
+        <dcterms:title>Dataset catalogue for SGUL</dcterms:title>\n\
+        <oo:contact rdf:resource='https://data.sgul.ac.uk/contact.php'/>\n\
+        <oo:corrections rdf:resource='https://data.sgul.ac.uk/contact.php'/>\n\
+        <void:dataDump rdf:resource='https://data.sgul.ac.uk/output/datacatalogue.rdf'/>\n\
+        <rdf:type rdf:resource='http://www.w3.org/ns/dcat#Catalog'/>\n\
+        <rdf:type rdf:resource='http://www.w3.org/ns/dcat#Dataset'/>\n\
+        <dcat:dataset rdf:resource='https://data.sgul.ac.uk/ontology/datacatalogue'/>\n\
+        <dcat:dataset rdf:resource='https://data.sgul.ac.uk/ontology/vacancies'/>\n\
+        <dcat:dataset rdf:resource='https://data.sgul.ac.uk/ontology/publications'/>\n\
+        <foaf:homepage rdf:resource='http://data.sgul.ac.uk/listdatasets.php'/>\n\
     </rdf:Description>\n\
-    <rdf:Description rdf:about=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\">\n\
-        <rdfs:label>type</rdfs:label>\n\
+"
+
+# JOB VACANCIES
+rdf_jobs = "\n\
+<dcat:Dataset rdf:about='http://data.sgul.ac.uk/ontology/vacancies'>\n\
+  <dct:description>Job vacancies at SGUL</dct:description>\n\
+  <dcat:keyword>sgul</dcat:keyword>\n\
+  <dcat:keyword>jobs</dcat:keyword>\n\
+  <dcat:keyword>vacancies</dcat:keyword>\n\
+  <foaf:homepage rdf:resource='http://data.sgul.ac.uk/vacancies.php'></foaf:homepage>\n\
+  <rdfs:label>Job vacancies at SGUL</rdfs:label>\n\
+  <dct:identifier>sgul-job-vacancies</dct:identifier>\n\
+  <dct:title>Job Vacancies at SGUL</dct:title>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/jobs.json'></dcat:accessURL>\n\
+          <rdfs:label>JSON</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/jobs.csv'></dcat:accessURL>\n\
+          <rdfs:label>CSV</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/jobsrdf.tar'></dcat:accessURL>\n\
+          <rdfs:label>RDF Dump</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/sparql'></dcat:accessURL>\n\
+          <rdfs:label>SPARQL Endpoint</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dct:creator>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
     </rdf:Description>\n\
-    <rdf:Description rdf:about=\"http://xmlns.com/foaf/0.1/page\">\n\
-        <rdfs:label>page</rdfs:label>\n\
+  </dct:creator>\n\
+  <dct:contributor>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
     </rdf:Description>\n\
-    <rdf:Description rdf:about=\"http://xmlns.com/foaf/0.1/homepage\">\n\
-        <rdfs:label>homepage</rdfs:label>\n\
+  </dct:contributor>\n\
+  <dct:rights rdf:resource='http://www.nationalarchives.gov.uk/doc/open-government-licence/'></dct:rights>\n\
+  </dcat:Dataset>\n\
+    "
+
+# PUBLICATIONS
+rdf_pubs ="\n\
+<dcat:Dataset rdf:about='http://data.sgul.ac.uk/ontology/publications'>\n\
+  <dct:description>Publications at SGUL</dct:description>\n\
+  <dcat:keyword>sgul</dcat:keyword>\n\
+  <dcat:keyword>academic</dcat:keyword>\n\
+  <dcat:keyword>publications</dcat:keyword>\n\
+  <foaf:homepage rdf:resource='http://data.sgul.ac.uk/publications.php'></foaf:homepage>\n\
+  <rdfs:label>Publications at SGUL</rdfs:label>\n\
+  <dct:identifier>sgul-academic-publications</dct:identifier>\n\
+  <dct:title>Publications at SGUL</dct:title>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/publications.json'></dcat:accessURL>\n\
+          <rdfs:label>JSON</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/publications.csv'></dcat:accessURL>\n\
+          <rdfs:label>CSV</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/publicationsrdf.tar'></dcat:accessURL>\n\
+          <rdfs:label>RDF Dump</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/sparql'></dcat:accessURL>\n\
+          <rdfs:label>SPARQL Endpoint</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dct:creator>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
     </rdf:Description>\n\
-    <rdf:Description rdf:about=\"http://www.w3.org/2000/01/rdf-schema#label\">\n\
-        <rdfs:label>label</rdfs:label>\n\
-    </rdf:Description>\n"
+  </dct:creator>\n\
+  <dct:contributor>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
+    </rdf:Description>\n\
+  </dct:contributor>\n\
+  <dct:rights rdf:resource='http://www.nationalarchives.gov.uk/doc/open-government-licence/'></dct:rights>\n\
+  </dcat:Dataset>\n\
+    "
+# CATALOGUE
+rdf_catalogue_data ="\n\
+<dcat:Dataset rdf:about='http://data.sgul.ac.uk/ontology/datacatalogue'>\n\
+  <dct:description>Data Catalogue at SGUL</dct:description>\n\
+  <dcat:keyword>sgul</dcat:keyword>\n\
+  <dcat:keyword>data</dcat:keyword>\n\
+  <dcat:keyword>catalogue</dcat:keyword>\n\
+  <foaf:homepage rdf:resource='http://data.sgul.ac.uk/datacatalogue.php'></foaf:homepage>\n\
+  <rdfs:label>Data Catalogue at SGUL</rdfs:label>\n\
+  <dct:identifier>sgul-data-catalogue</dct:identifier>\n\
+  <dct:title>Data Catalogue at SGUL</dct:title>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/datacatalogue.json'></dcat:accessURL>\n\
+          <rdfs:label>JSON</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/datacatalogue.csv'></dcat:accessURL>\n\
+          <rdfs:label>CSV</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/datacataloguerdf.tar'></dcat:accessURL>\n\
+          <rdfs:label>RDF Dump</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/sparql'></dcat:accessURL>\n\
+          <rdfs:label>SPARQL Endpoint</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dct:creator>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
+    </rdf:Description>\n\
+  </dct:creator>\n\
+  <dct:contributor>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
+    </rdf:Description>\n\
+  </dct:contributor>\n\
+  <dct:rights rdf:resource='http://www.nationalarchives.gov.uk/doc/open-government-licence/'></dct:rights>\n\
+  </dcat:Dataset>\n\
+    "
 
-# i = 0
-# members = []
-# for job in all_jobs:
-#     url = job['url']
-#     title = job['title']
-#     type = job['type']
-#     topic = job['topic']
-#     salary = job['salary']
-#     reference = job['reference']
-#     interview = job['interview_date']
-#     closing = job['closing_date']
-#     # REDO according to https://data.ox.ac.uk/feeds/vacancies/31337175.rdf
-#     rdf_content_str =  '<foaf:Document rdf:about="http://jobs.sgul.ac.uk">\n\
-#         <foaf:primaryTopic>\n\
-#             <vacancy:Vacancy rdf:about="' + url + '">\n\
-#                 <rdfs:label>' + title + '</rdfs:label>\n\
-#                 <vacancy:employer>St. George\'s University of London</vacancy:employer>\n\
-#                 <vacancy:organizationalUnit>' + topic + '</vacancy:organizationalUnit>\n\
-#                 <vacancy:availableOnline>' + url +  '</vacancy:availableOnline>\n\
-#                 <vacancy:applicationInterviewNotificationByDate>' + interview + '</vacancy:applicationInterviewNotificationByDate>\n\
-#                 <vacancy:applicationClosingDate>' + closing +' </vacancy:applicationClosingDate>\n\
-#                 <rdfs:comment>' + " None " + '</rdfs:comment>\n\
-#                 <vacancy:salary>'+ salary.decode("utf8")  +'</vacancy:salary>\n\
-#             </vacancy:Vacancy>\n\
-#         </foaf:primaryTopic>\n\
-#     </foaf:Document>\n'
-
-#     rdf_output = rdf_init_str + rdf_content_str + '</rdf:RDF>'
-#     filename = "jobs_" + str(i) + ".rdf"
-#     i = i + 1
-#     members.append(filename)
-#     with codecs.open(filename, 'w', 'utf-8-sig') as f:
-#         f.write(rdf_output)
-#         f.close()
-#         shutil.move(filename,os.path.dirname(__file__) +"/output/"+filename)
-#         #up_one_folder = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'site/output'))
-#         #shutil.move(filename,up_one_folder+"/"+filename)
+filename = "datacatalogue.rdf"
+rdf_output = rdf_init_str + rdf_catalogue + rdf_catalogue_data + rdf_jobs + rdf_pubs + "\n</rdf:RDF>"
+with codecs.open(filename, 'w', 'utf-8-sig') as f:
+    f.write(rdf_output)
+    f.close()
+    shutil.move(filename,os.path.dirname(__file__) +"/output/"+filename)
 
 
-
-# File Write
-
-
-# tar = tarfile.open(os.path.dirname(__file__) +"/output/jobsrdf.tar", "w")
-# for name in members:
-#     path = os.path.dirname(__file__) +'/output/'+name
-#     tar.add(path)
-# tar.close()
+members = ['datacatalogue.rdf']
+tar = tarfile.open(os.path.dirname(__file__) +"/output/datacataloguerdf.tar", "w")
+for name in members:
+    path = os.path.dirname(__file__) +'/output/'+name
+    tar.add(path)
+tar.close()

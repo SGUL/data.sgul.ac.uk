@@ -1,0 +1,62 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> . 
+@prefix foaf: <http://xmlns.com/foaf/0.1/> . 
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> . 
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix dir: <http://dir.w3.org/directory/schema#> . 
+@prefix directory: <http://dir.w3.org/directory/orgtypes/> . 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . 
+@prefix gr: <http://purl.org/goodrelations/v1#> . 
+@prefix org: <http://www.w3.org/ns/org#> . 
+
+<> foaf:primaryTopic <#org> . 
+<#org> a org:Organization, dir:Organization, gr:BusinessEntity, vcard:Organization 
+  ; rdfs:label "St. George's, University of London" 
+  ; gr:legalName "St. George's, University of London" 
+  ; vcard:organization-name "St. George's, University of London" 
+  ; skos:prefLabel "St. George's, University of London" 
+  ; dir:isOrganizationType directory:research-academic 
+  ; vcard:url <http://www.sgul.ac.uk> 
+  ; vcard:logo <http://www.sgul.ac.uk/sys/images/st_georges_logo.gif> 
+. 
+
+<#org> org:siteAddress <#address-CranmerTerrace+London+UnitedKingdom> . 
+<#address-CranmerTerrace+London+UnitedKingdom> a vcard:VCard, vcard:Address 
+  ; vcard:street-address "Cranmer Terrace SW17 0RE" 
+  ; vcard:locality "London" 
+  ; vcard:country-name "United Kingdom" 
+. 
+
+<#org> gr:offers <#services-OpenDataSparqlEndpoint> . 
+<#services-OpenDataSparqlEndpoint> a dir:Service, gr:Offering 
+  ; rdfs:label "Open Data Sparql Endpoint" 
+  ; vcard:url "http://data.sgul.ac.uk/sparql" 
+. 
+
+<#org> gr:offers <#services-OpenDataRepository> . 
+<#services-OpenDataRepository> a dir:Service, gr:Offering 
+  ; rdfs:label "Open Data Repository" 
+  ; vcard:url "http://data.sgul.ac.uk" 
+. 
+
+<#org> org:hasUnit <#unit-ComputingServices> . 
+<#unit-ComputingServices> a org:OrganizationalUnit 
+  ; skos:prefLabel "Computing Services" 
+  ; org:unitOf <#org> 
+  ; vcard:url "http://twitter.com/sgulit" 
+. 
+
+<#org> org:hasMember <#contacts-GiuseppeSollazzo> . 
+<#contacts-GiuseppeSollazzo> a foaf:Agent, dir:Person 
+  ; foaf:name "Giuseppe Sollazzo" 
+  ; vcard:fn "Giuseppe Sollazzo" 
+  ; org:memberOf <#org> 
+  ; vcard:workEmail "opendata@sgul.ac.uk" 
+. 
+
+<#org> org:hasMember <#contacts-GiuseppeSollazzo> . 
+<#contacts-GiuseppeSollazzo> a foaf:Agent, dir:Person 
+  ; foaf:name "Giuseppe Sollazzo" 
+  ; vcard:fn "Giuseppe Sollazzo" 
+  ; org:memberOf <#org> 
+  ; vcard:workEmail "gsollazz@sgul.ac.uk" 
+. 

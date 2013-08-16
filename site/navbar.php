@@ -16,6 +16,7 @@
               <li><a href="listdatasets.php">Datasets</a></li>
               <li><a href="api.php">API</a></li> 
               <li><a href="sparql.php">SPARQL</a></li> 
+              <li><a href="contact.php">Contact</a></li>
             </ul> 
             <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>--> 
           </div><!--/.nav-collapse --> 

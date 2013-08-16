@@ -12,7 +12,7 @@
 	            <li><a href="publications.php">Publications</a></li>
               <li><a href="api.php">Academic API</a></li> 
               <li><a href="sparql.php">SPARQL</a></li> 
-              <li class="nav-header">Legal</li> 
+              <li class="nav-header">Legal &amp; Info</li> 
               <li><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/">OGL</a></li> 
             </ul> 
           </div><!--/.well --> 
