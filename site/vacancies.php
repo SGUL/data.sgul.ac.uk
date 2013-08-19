@@ -123,7 +123,7 @@
         <th>SPARQL examples</th>
         <td>
             <b>Get job title, employer, organisational unit, salary, url, date interview, and date of application closing</b>
-            <form method="post" action="http://data.sgul.ac.uk:8282/sparql/">
+            <form method="post" action="http://data.sgul.ac.uk/sparql/">
          
 <input type="hidden" name="query" id="query" value="
 PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;

@@ -124,7 +124,7 @@
         <th>SPARQL examples</th>
         <td>
             <b>Get id, title, authors, link to open access repository and DOI of up to 20 publications</b>
-            <form method="post" action="http://data.sgul.ac.uk:8282/sparql/">
+            <form method="post" action="http://data.sgul.ac.uk/sparql/">
          
 <input type="hidden" name="query" id="query" value="
 PREFIX bibo: &lt;http://purl.org/ontology/bibo/&gt;

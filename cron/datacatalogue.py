@@ -15,9 +15,9 @@ all_entries = dict()
 
 # one dictionary for each dataset
 catalogue = dict()
-catalogue['csv'] = output_url + "catalogue.csv"
-catalogue['json'] = output_url + "catalogue.json"
-catalogue['rdfdump'] = output_url + "cataloguerdf.tar"
+catalogue['csv'] = output_url + "datacatalogue.csv"
+catalogue['json'] = output_url + "datacatalogue.json"
+catalogue['rdfdump'] = output_url + "datacataloguerdf.tar"
 catalogue['humanurl'] = output_url + "datacatalogue.php"
 all_entries['catalogue'] = catalogue
 
@@ -82,7 +82,7 @@ rdf_init_str = "\
   xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'\n\
   xmlns:dc='http://purl.org/dc/elements/1.1/'\n\
   xmlns:vacancy='http://purl.org/openorg/vacancy/'\n\
-  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>\n\
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n\
   xmlns:bibo='http://purl.org/ontology/bibo/'\n\
   xmlns:sgul='http://data.sgul.ac.uk/ontology/lib/'\n\
   xmlns:vivo='http://vivoweb.org/ontology/core#'>\n\
