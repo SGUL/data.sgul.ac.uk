@@ -52,7 +52,7 @@ echo "Starting 4s instance"
 ssh $USER@$HOST 4s-backend data
 
 echo "Deploying web site"
-scp -r site/* root@data:/var/www/html/
+scp -r site/* $USER@$HOST:/var/www/html/
 
 sleep 3
 

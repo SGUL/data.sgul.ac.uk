@@ -100,6 +100,8 @@ def do_inCites_publications(list,url):
         except Exception, err:
             year = ""
 
+        
+        
         if repo <> "NONE" and repo <> None and len(repo)>0:
             filename = os.path.dirname(__file__) +"/output/pub_" + id + ".rdf"
             members.append(filename)
@@ -130,6 +132,8 @@ def do_inCites_publications(list,url):
 
             csvprint = puburl + "," + winningrecord['title'].encode('utf-8').replace('\n', '').replace('\r', '') + "," + winningrecord['doi'] + "," + lastName+","+firstName+";"+otherAuthors+ "," + year + "," + repo + "\n"
             c.write(csvprint)
+
+
     	    # Closing and writing RDF
             rdfprint = rdfprint + """</rdf:RDF>"""
     	    f.write(rdfprint)
