@@ -33,7 +33,7 @@
   </head>
 
   <body>
-
+<?php include_once("analyticstracking.php"); ?>
     <?php include 'navbar.php';?>
     <div class="container-fluid">
       <div class="row-fluid">

@@ -49,6 +49,7 @@
 
 </head>
 </body>
+<?php include_once("analyticstracking.php"); ?>
 <div id="message-bar" class="swagger-ui-wrap">
     &nbsp;
 </div>
