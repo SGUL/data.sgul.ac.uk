@@ -3,14 +3,18 @@
 	"host": "myldap.host.co.uk",
 	"port": "389",
 	"binduser": "cn=Service Account",
-	"bindpass": "you might not need it"
+	"bindpass": "you might not need it",
+	"searchbase": "o=blabla"
 	},
 "cris": {
-        "url": "http://abcd",
-	"port": "8090"
+    "url": "http://abcd",
+	"port": "8090",
+	"user": "user",
+	"pass": "pass"
         },
 "jobs": {
-	"url": ""
+	"url": "",
+	"list": ""
 	},
 "datadownload" : {
 	"url": "http://data.sgul.ac.uk/output/"

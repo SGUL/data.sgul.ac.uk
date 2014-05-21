@@ -9,12 +9,15 @@ rm -f site/output/jobs*
 rm -f cron/output/jobs*
 python cron/jobs.py
 
-
 # PUBLICATIONS
 echo "Elaborating Publications"
 rm -f site/output/pub*
 rm -f cron/output/pub*
-python cron/pubrepo.py
+php cron/pubrepo.php
+
+# COURSE MODULES
+
+# SIRSI
 
 # CATALOGUE
 echo "Generating Data Catalogue"
