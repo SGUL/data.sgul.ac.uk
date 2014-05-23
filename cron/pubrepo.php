@@ -18,32 +18,39 @@ $cris_pass = $json_a['cris']['pass'];
 
 
 	
-	$pub_list_page_1 = "$cris_url:$cris_port/publications-api/publications?detail=full&page=1";
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL,$pub_list_page_1);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-	curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-	curl_setopt($ch, CURLOPT_USERPWD, "$cris_user:$cris_pass");
-	$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);   //get status code
-	$result=curl_exec ($ch);
-	curl_close ($ch);
-	
+$pub_list_page_1 = "$cris_url:$cris_port/publications-api/publications?detail=full&page=1";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL,$pub_list_page_1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
+curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+curl_setopt($ch, CURLOPT_USERPWD, "$cris_user:$cris_pass");
+$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);   //get status code
+$result=curl_exec ($ch);
+curl_close ($ch);
 
-	$dom = new DOMDocument();
-	$dom->loadXML($result);
-	
-	$xpath = new DOMXpath($dom);
-	$last = $xpath->query('//api:page[@position="last"]')->item(0)->getAttribute('href');
-	$next = $xpath->query('//api:page[@position="next"]')->item(0)->getAttribute('href');
-	$thispage = $xpath->query('//api:page[@position="this"]')->item(0)->getAttribute('href');
-	
 
+$dom = new DOMDocument();
+$dom->loadXML($result);
+
+$xpath = new DOMXpath($dom);
+$last = $xpath->query('//api:page[@position="last"]')->item(0)->getAttribute('href');
+$next = $xpath->query('//api:page[@position="next"]')->item(0)->getAttribute('href');
+$thispage = $xpath->query('//api:page[@position="this"]')->item(0)->getAttribute('href');
+
+$json_output = array();
+$csvfile = "./cron/output/publications.csv";
+$jsonfile = "./cron/output/publications.json";
+
+$f_csv = fopen($csvfile, 'w') or die("can't open file");
+$f_json = fopen($jsonfile, 'w') or die("can't open file");
 $page=0;
 do
 {
 	$page++;
-	echo $page."\n";
+    $parsed=parse_url($last);
+    $lastpage=explode("=",$parsed['query']) ;
+	echo $page." of ".$lastpage[2]."\n";
 	$pub_list_page = "$cris_url:$cris_port/publications-api/publications?detail=full&page=$page";
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL,$pub_list_page);
@@ -70,17 +77,10 @@ do
 
 
 
-	// one publication at a time
-	//echo $thispage."\n";
 	$entries = $xpath->query('//atom:entry');
 	
 	
-	$json_output = array();
-    $csvfile = "./cron/output/publications.csv";
-    $jsonfile = "./cron/output/publications.json";
-    
-    $f_csv = fopen($csvfile, 'w') or die("can't open file");
-    $f_json = fopen($jsonfile, 'w') or die("can't open file");
+	
 
 	for ($i = 0; $i < $entries->length; $i++) {
 		$entry = $entries->item($i);
@@ -89,7 +89,7 @@ do
 
 		if ($pubdict['repository'] <> "none") {
 			$rdf = printRDF($pubdict);
-            $rdffile = "./cron/output/$pub_id.rdf";
+            $rdffile = "./cron/output/pub_$pub_id.rdf";
             $f_rdf = fopen($rdffile, 'w') or die("can't open file");
             fwrite($f_rdf, $rdf);
             fclose($f_rdf);
@@ -102,14 +102,14 @@ do
 		}
 
 	}
-
-    fclose($f_csv);
-    fwrite($f_json, json_encode($json_output));
-    fclose($f_json);
+   
 
  
 } while ($thispage <> $last);
-
+var_dump($json_output);
+fclose($f_csv);
+fwrite($f_json, json_encode($json_output));
+fclose($f_json);
 
 function getPublicationDetails($pub_id) {
 	global $cris_url, $cris_port, $cris_user, $cris_pass;
@@ -174,7 +174,7 @@ function getPublicationDetails($pub_id) {
 	if ($abstract->length > 0) {
 		$abstract = $abstract->item(0)->nodeValue;
 		//$pubdet['abstract'] = htmlentities($abstract, ENT_QUOTES, 'utf-8', FALSE); // TODO for XML
-        $pubdet['abstract'] = xmlentities($abstract);
+        $pubdet['abstract'] = $abstract;
 	} else {
 		$pubdet['abstract'] = "";	
 	}
@@ -214,21 +214,36 @@ function getPublicationDetails($pub_id) {
 	} 
 	
 
-	$repositoryitem = $xpath->query('//api:object/api:repository-items/api:repository-item');
-	$pubdet['repository'] = "";
-	if ($repositoryitem->length > 0) {
-		$repositoryitem = $repositoryitem->item(0);
-
-		$repositoryitem = $xpath->query('api:public-url', $repositoryitem);
-        if ($repositoryitem->length > 0) {
-            $repositoryitem=$repositoryitem->item(0)->nodeValue;
-            $pubdet['repository'] = $repositoryitem;
-        } else {
-            $pubdet['repository'] = "none";
-        }
+	$repositoryitem_list = $xpath->query('//api:object/api:repository-items/api:repository-item');
+    
+	
+    $pubdet['repository'] = "none";
+    
+	if ($repositoryitem_list->length > 0) {
+		$repositoryitem = $repositoryitem_list->item(0);
 
 		
-	}
+        $repositorycount = $xpath->query('api:licence-file-count', $repositoryitem)->item(0)->nodeValue;
+
+        if ($repositorycount > 0) {
+            
+            $repositoryurl = $xpath->query('api:public-url', $repositoryitem);
+            if ($repositoryurl->length > 0) {
+
+                $repositoryurl = $repositoryurl->item(0)->nodeValue;
+                echo "$pub_id : $repositoryurl\n";
+                $repositorypdflist = $xpath->query('api:repository-files',$repositoryitem);
+                if ($repositorypdflist ->length > 0) {
+                    // $repositorypdf = $repositorypdflist->item(0);
+                    // $repositorypdfurl = $xpath->query('api:repository-file',$repositorypdf)->item(0)->nodeValue;
+                    $pubdet['repository']=$repositoryurl;
+                    
+                }
+            }
+            
+        } 
+    } 	
+	
 	
 
 
@@ -266,8 +281,8 @@ function printRDF($pubdic) {
     <rdf:type rdf:resource="http://purl.org/ontology/bibo/Article"/>
     <rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-    <rdfs:label>'.$title.'</rdfs:label>
-    <bibo:abstract>'.$abstract.'</bibo:abstract>
+    <rdfs:label>'.xmlentities($title).'</rdfs:label>
+    <bibo:abstract>'.xmlentities($abstract).'</bibo:abstract>
     <bibo:doi>'.$doi.'</bibo:doi>
     <bibo:authorList>'.$authorsList.'</bibo:authorList>
     <vivo:dateTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">'.$year.'</vivo:dateTime>

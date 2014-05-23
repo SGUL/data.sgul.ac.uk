@@ -131,7 +131,7 @@
       <div class="accordion-inner">
         Although we download and elaborate data directly from the authoritative sources, the datasets available on this portal should always be considered non-authoritative sources, at least while the service stays in beta. <br/>
         That said, we aim at providing data with maximum accuracy and to mirror any update in the original sources.<br/>
-        Please also note that there is a separate FOI (Freedom Of Information) structure which offers direct answers for
+        Please also note that there is a separate FOI (Freedom Of Information) structure which offers direct answers.
       </div>
     </div>
   </div>
