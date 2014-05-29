@@ -35,6 +35,14 @@ publications['rdfdump'] = output_url + "publicationsrdf.tar"
 publications['humanurl'] = output_url + "publications.php"
 all_entries['publications'] = publications
 
+
+coursemodules = dict()
+coursemodules['csv'] = output_url + "coursemodules.csv"
+coursemodules['json'] = output_url + "coursemodules.json"
+coursemodules['rdfdump'] = output_url + "coursemodules.tar"
+coursemodules['humanurl'] = output_url + "coursemodules.php"
+all_entries['coursemodules'] = coursemodules
+
 # JSON
 json_output = json.dumps(all_entries, encoding="utf8", indent=4, sort_keys=True, ensure_ascii=False)
 
@@ -206,6 +214,58 @@ rdf_pubs ="\n\
   <dct:rights rdf:resource='http://www.nationalarchives.gov.uk/doc/open-government-licence/'></dct:rights>\n\
   </dcat:Dataset>\n\
     "
+
+# COURSEMODULES
+rdf_pubs ="\n\
+<dcat:Dataset rdf:about='http://data.sgul.ac.uk/ontology/coursemodules'>\n\
+  <dct:description>Course Modules at SGUL</dct:description>\n\
+  <dcat:keyword>sgul</dcat:keyword>\n\
+  <dcat:keyword>academic</dcat:keyword>\n\
+  <dcat:keyword>coursemodules</dcat:keyword>\n\
+  <foaf:homepage rdf:resource='http://data.sgul.ac.uk/coursemodules.php'></foaf:homepage>\n\
+  <rdfs:label>Course Modules at SGUL</rdfs:label>\n\
+  <dct:identifier>sgul-coursemodules</dct:identifier>\n\
+  <dct:title>Course Modules at SGUL</dct:title>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/coursemodules.json'></dcat:accessURL>\n\
+          <rdfs:label>JSON</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/coursemodules.csv'></dcat:accessURL>\n\
+          <rdfs:label>CSV</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/coursemodulesrdf.tar'></dcat:accessURL>\n\
+          <rdfs:label>RDF Dump</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/sparql'></dcat:accessURL>\n\
+          <rdfs:label>SPARQL Endpoint</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dct:creator>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
+    </rdf:Description>\n\
+  </dct:creator>\n\
+  <dct:contributor>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
+    </rdf:Description>\n\
+  </dct:contributor>\n\
+  <dct:rights rdf:resource='http://www.nationalarchives.gov.uk/doc/open-government-licence/'></dct:rights>\n\
+  </dcat:Dataset>\n\
+    "
+
 # CATALOGUE
 rdf_catalogue_data ="\n\
 <dcat:Dataset rdf:about='http://data.sgul.ac.uk/ontology/datacatalogue'>\n\

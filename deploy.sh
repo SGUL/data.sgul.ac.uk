@@ -3,21 +3,36 @@
 HOST="data.sgul.ac.uk"
 USER="root"
 
+DATE=`date`
+
+echo $DATE > site/.datefile.txt
+
 # JOBS
 echo "Elaborating Job Vacancies"
 rm -f site/output/jobs*
 rm -f cron/output/jobs*
 python cron/jobs.py
+tar -cvf cron//output/jobsrdf.tar cron/output/jobs*.rdf 
 
 # PUBLICATIONS
 echo "Elaborating Publications"
 rm -f site/output/pub*
 rm -f cron/output/pub*
 php cron/pubrepo.php
+tar -cvf cron/output/publicationsrdf.tar cron/output/pub*.rdf  
+
+
 
 # COURSE MODULES
+echo "Elaborating Course Modules"
+rm -f site/output/course*
+rm -f cron/output/course*
+cp datasets_local/coursemodules.csv cron/output/
+php cron/localdatasets.php
+tar -cvf cron/output/coursemodulesrdf.tar cron/output/course*.rdf 
 
 # SIRSI
+# TODO
 
 # CATALOGUE
 echo "Generating Data Catalogue"
@@ -56,6 +71,7 @@ ssh $USER@$HOST 4s-backend data
 
 echo "Deploying web site"
 scp -r site/* $USER@$HOST:/var/www/html/
+scp -r site/.datefile.txt $USER@$HOST:/var/www/html/
 
 sleep 3
 

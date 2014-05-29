@@ -10,6 +10,7 @@
               <li><a href="datacatalogue.php">Data catalogue</a></li>
 	            <li><a href="vacancies.php">Vacancies</a></li>
 	            <li><a href="publications.php">Publications</a></li>
+              <li><a href="coursemodules.php">Course Modules</a></li>
               <li><a href="api.php">Academic API</a></li> 
               <li><a href="sparql.php">SPARQL</a></li> 
               <li class="nav-header">Legal &amp; Info</li> 

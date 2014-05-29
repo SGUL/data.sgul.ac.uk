@@ -200,8 +200,8 @@ with codecs.open(os.path.dirname(__file__) +'/jobs.json', 'w', 'utf-8-sig') as f
     #up_one_folder = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'site/output'))
     #shutil.move("jobs.json",up_one_folder+"/jobs.json")
 
-tar = tarfile.open(os.path.dirname(__file__) +"/output/jobsrdf.tar", "w")
-for name in members:
-    path = os.path.dirname(__file__) +'/output/'+name
-    tar.add(path)
-tar.close()
+# tar = tarfile.open(os.path.dirname(__file__) +"/output/jobsrdf.tar", "w")
+# for name in members:
+#     path = os.path.dirname(__file__) +'/output/'+name
+#     tar.add(path)
+# tar.close()

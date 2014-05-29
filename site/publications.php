@@ -56,7 +56,7 @@
     </tr>
     <tr>
         <th>Last update</th>
-        <td>08 Aug 2013</td>
+        <td><?php $file = file_get_contents('./.datefile.txt', true); echo $file;?></td>
     </tr>
     <tr>
         <th>Source</th>
