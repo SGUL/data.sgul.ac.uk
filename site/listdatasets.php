@@ -73,11 +73,11 @@
         <td><img src="./images/data-badge-5.png"/></td>
     </tr>
     <tr>
-        <td><a href="#">XCRI</a> (available in winter 2013)</td>
-        <td><a href="http://www.xcri.co.uk/">XCRI</a> (eXchanging Course Related Information) information - XCRI Course Advertising Profile (<a href="http://www.xcri.co.uk/what-is-xcri-cap.html">XCRI-CAP</a>); it's made of information about courses in away that allow comparisons among UK education institutions and aggregators such as UCAS and other sites that advertise courses.</td>
-        <td>Registry</td>
+        <td><a href="#">Course Modules</a></td>
+        <td>List of Course Modules</td>
+        <td>FOI (Registry)</td>
         <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
-        <td><img src="./images/data-badge-5.png"/></td>
+        <td><img src="./images/data-badge-3.png"/></td>
     </tr>
     <tr>
         <td><a href="#">Library catalogue</a> (available in winter 2013)</td>
