@@ -22,6 +22,10 @@
     {
       "path": "/library",
       "description": "Data from the library"
+    },
+    {
+      "path": "/courses",
+      "description": "List of course modules"
     }
   ],
   "info": {

@@ -129,6 +129,47 @@ class JobListHandler {
 
 
 
+class CoursesModulesHandler {
+    function get() {
+
+      $data = sparql_get( 
+				"http://data.sgul.ac.uk:8282/sparql/",
+				"
+                
+  				
+				PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+				SELECT ?title WHERE {
+					?s rdfs:label ?title.
+				}
+
+				" );
+
+		if( !isset($data) )
+		{
+			print "<p>Error: ".sparql_errno().": ".sparql_error()."</p>";
+		}
+
+		
+		$json_output = array();
+		
+		foreach( $data as $row )
+		{
+			$this_row = array();
+			foreach( $data->fields() as $field )
+			{
+				$this_row[$field] = fixBadUnicodeForJson($row[$field]);
+			}
+			$json_output[] = $this_row;
+		}
+
+
+		print json_encode($json_output);
+    }
+}
+
+
 class SparqlHandler {
 	function post() {
       	$query = $_POST['query'];
@@ -200,4 +241,5 @@ Toro::serve(array(
 			"/jobs/list" => "JobListHandler",
 			"/sparql2table" => "SparqlHandler",
 			"/library/catalogue" => "LibraryCatalogueHandler",
+			"/courses/modules" => "CoursesModulesHandler",
 		 ));
