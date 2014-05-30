@@ -115,35 +115,44 @@
             <b>Get up to 20 modules</b>
             <form method="post" action="http://data.sgul.ac.uk/sparql/">
          
-<!--input type="hidden" name="query" id="query" value="
-PREFIX bibo: &lt;http://purl.org/ontology/bibo/&gt;
-                PREFIX sgul: &lt;http://data.sgul.ac.uk/ontology/lib/&gt;
-                PREFIX vivo: &lt;http://vivoweb.org/ontology/core#&gt;
-                PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
-                PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+<input type="hidden" name="query" id="query" value="
 
 
-                SELECT ?s ?title ?authorList ?repositoryLink ?doi  WHERE {
-                    ?s sgul:repositoryLink ?repositoryLink.
-                    ?s rdfs:label ?title.
-                    ?s bibo:authorList ?authorList.
-                    ?s bibo:doi ?doi.
-                } LIMIT 20"
-</input-->
-<!--pre>
-PREFIX bibo: &lt;http://purl.org/ontology/bibo/&gt;
-PREFIX sgul: &lt;http://data.sgul.ac.uk/ontology/lib/&gt;
-PREFIX vivo: &lt;http://vivoweb.org/ontology/core#&gt;
-PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
-PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+        PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+        PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
 
-SELECT ?s ?title ?authorList ?repositoryLink ?doi  WHERE {
-    ?s sgul:repositoryLink ?repositoryLink.
-    ?s rdfs:label ?title.
-    ?s bibo:authorList ?authorList.
-    ?s bibo:doi ?doi.
-} LIMIT 20
-</pre-->
+
+            SELECT ?s ?title ?type WHERE {
+            ?s rdfs:label ?title .
+            ?s rdf:type ?type .
+            FILTER (?type != &quot;http://www.w3.org/ns/dcat#Distribution&quot;)
+            FILTER (?type != &quot;http://purl.org/ontology/bibo/AcademicArticle&quot;)
+            FILTER (?type != &quot;http://purl.org/ontology/bibo/Document&quot;)
+            FILTER (?type != &quot;http://www.w3.org/2002/07/owl#Thing&quot;)
+            FILTER (?type != &quot;http://purl.org/ontology/bibo/Article&quot;)
+            FILTER (?type != &quot;http://purl.org/openorg/vacancy/Vacancy&quot;)
+        
+                                }
+"
+
+</input>
+<pre>
+        PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+        PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+
+
+            SELECT ?s ?title ?type WHERE {
+            ?s rdfs:label ?title .
+            ?s rdf:type ?type .
+            FILTER (?type != &quot;http://www.w3.org/ns/dcat#Distribution&quot;)
+            FILTER (?type != &quot;http://purl.org/ontology/bibo/AcademicArticle&quot;)
+            FILTER (?type != &quot;http://purl.org/ontology/bibo/Document&quot;)
+            FILTER (?type != &quot;http://www.w3.org/2002/07/owl#Thing&quot;)
+            FILTER (?type != &quot;http://purl.org/ontology/bibo/Article&quot;)
+            FILTER (?type != &quot;http://purl.org/openorg/vacancy/Vacancy&quot;)
+        
+                                }
+</pre>
 <br/>
             
             <em>Soft limit</em> <input type="text" name="soft-limit">

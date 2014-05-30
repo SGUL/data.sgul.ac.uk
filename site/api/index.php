@@ -140,12 +140,18 @@ class CoursesModulesHandler {
                   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
-
-                                SELECT ?s ?title ?type WHERE {
+						SELECT ?s ?title ?type WHERE {
                                         ?s rdfs:label ?title .
                                         ?s rdf:type ?type .
-                                        FILTER (?type a "http://xcri.org/profiles/1.2/course")
+                                        FILTER (?type != "http://www.w3.org/ns/dcat#Distribution")
+                                        FILTER (?type != "http://purl.org/ontology/bibo/AcademicArticle")
+                                        FILTER (?type != "http://purl.org/ontology/bibo/Document")
+                                        FILTER (?type != "http://www.w3.org/2002/07/owl#Thing")
+                                        FILTER (?type != "http://purl.org/ontology/bibo/Article")
+                                        FILTER (?type != "http://purl.org/openorg/vacancy/Vacancy")
+        
                                 }
+
 
                                 '  );
 
