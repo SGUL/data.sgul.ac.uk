@@ -133,18 +133,21 @@ class CoursesModulesHandler {
     function get() {
 
       $data = sparql_get( 
-				"http://data.sgul.ac.uk:8282/sparql/",
-				"
+				 'http://data.sgul.ac.uk:8282/sparql/',
+                                '
                 
-  				
-				PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                                
+                  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 
-				SELECT ?title WHERE {
-					?s rdfs:label ?title.
-				}
+                                SELECT ?s ?title ?type WHERE {
+                                        ?s rdfs:label ?title .
+                                        ?s rdf:type ?type .
+                                        FILTER (?type a "http://xcri.org/profiles/1.2/course")
+                                }
 
-				" );
+                                '  );
 
 		if( !isset($data) )
 		{
