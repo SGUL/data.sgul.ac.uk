@@ -284,7 +284,7 @@ function printRDF($pubdic) {
     <rdfs:label>'.xmlentities($title).'</rdfs:label>
     <bibo:abstract>'.xmlentities($abstract).'</bibo:abstract>
     <bibo:doi>'.$doi.'</bibo:doi>
-    <bibo:authorList>'.$authorsList.'</bibo:authorList>
+    <bibo:authorList>'.xmlentities($authorsList).'</bibo:authorList>
     <vivo:dateTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">'.$year.'</vivo:dateTime>
     <sgul:repositoryLink>'.$repository.'</sgul:repositoryLink>
 </rdf:Description>

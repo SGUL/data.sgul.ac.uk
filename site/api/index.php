@@ -140,9 +140,9 @@ class CoursesModulesHandler {
                   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
-						SELECT ?s ?title ?type WHERE {
-                                        ?s rdfs:label ?title .
-                                        ?s rdf:type ?type .
+						SELECT ?code ?title ?type WHERE {
+                                        ?code rdfs:label ?title .
+                                        ?code rdf:type ?type .
                                         FILTER (?type != "http://www.w3.org/ns/dcat#Distribution")
                                         FILTER (?type != "http://purl.org/ontology/bibo/AcademicArticle")
                                         FILTER (?type != "http://purl.org/ontology/bibo/Document")

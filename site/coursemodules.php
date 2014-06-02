@@ -141,9 +141,9 @@
         PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
 
 
-            SELECT ?s ?title ?type WHERE {
-            ?s rdfs:label ?title .
-            ?s rdf:type ?type .
+            SELECT ?code ?title ?type WHERE {
+            ?code rdfs:label ?title .
+            ?code rdf:type ?type .
             FILTER (?type != &quot;http://www.w3.org/ns/dcat#Distribution&quot;)
             FILTER (?type != &quot;http://purl.org/ontology/bibo/AcademicArticle&quot;)
             FILTER (?type != &quot;http://purl.org/ontology/bibo/Document&quot;)

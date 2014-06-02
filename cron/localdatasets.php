@@ -41,7 +41,7 @@ function printCoursesRDF($code, $name) {
  	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:sgul="http://data.sgul.ac.uk/ontology/courses/">
     
-<rdf:Description rdf:about="'.$code.'">
+<rdf:Description rdf:about="sgulmodule:'.$code.'">
      <rdf:type rdf:resource="http://xcri.org/profiles/1.2/course"/>
      <rdfs:label>'.xmlentities($name).'</rdfs:label>
  </rdf:Description>
