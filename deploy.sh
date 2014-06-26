@@ -4,7 +4,7 @@ HOST="data.sgul.ac.uk"
 USER="root"
 
 DATE=`date`
-#test
+
 echo $DATE > site/.datefile.txt
 
 # JOBS
