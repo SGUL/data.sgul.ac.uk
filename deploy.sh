@@ -2,6 +2,7 @@
 
 HOST="data.sgul.ac.uk"
 USER="root"
+SIRSI="unicorn.sgul.ac.uk"
 
 DATE=`date`
 
@@ -32,7 +33,10 @@ php cron/localdatasets.php
 tar -cvf cron/output/coursemodulesrdf.tar cron/output/course*.rdf 
 
 # SIRSI
-# TODO
+echo "Elaborating Library Catalogue"
+scp root@$SIRSI/s/sirsi/Unicorn/Xfer/full_stg_primo.mrc cron/sirsi.mrc
+python cron/sirsi.py
+rm -f cron/sirsi.mrc
 
 # CATALOGUE
 echo "Generating Data Catalogue"
