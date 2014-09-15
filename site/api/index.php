@@ -73,6 +73,22 @@ class LibraryCatalogueHandler {
     }
 }
 
+class LibraryGetHandler {
+    function get() {
+    	$json_output = array();
+      	$json_output = json_encode($json_output);
+      	print $json_output;
+    }
+}
+
+class LibrarySearchHandler {
+    function get() {
+    	$json_output = array();
+      	$json_output = json_encode($json_output);
+      	print $json_output;
+    }
+}
+
 class PubSearchHandler {
     function get() {
       echo "PubSearch";
@@ -250,5 +266,7 @@ Toro::serve(array(
 			"/jobs/list" => "JobListHandler",
 			"/sparql2table" => "SparqlHandler",
 			"/library/catalogue" => "LibraryCatalogueHandler",
+			"/library/get" => "LibraryGetHandler",
+			"/library/search" => "LibrarySearchHandler",
 			"/courses/modules" => "CoursesModulesHandler",
 		 ));

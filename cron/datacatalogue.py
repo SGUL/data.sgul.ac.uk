@@ -43,6 +43,14 @@ coursemodules['rdfdump'] = output_url + "coursemodules.tar"
 coursemodules['humanurl'] = output_url + "coursemodules.php"
 all_entries['coursemodules'] = coursemodules
 
+
+library = dict()
+library['csv'] = output_url + "library.csv"
+library['json'] = output_url + "library.json"
+library['rdfdump'] = output_url + "library.tar"
+library['humanurl'] = output_url + "library.php"
+all_entries['library'] = library
+
 # JSON
 json_output = json.dumps(all_entries, encoding="utf8", indent=4, sort_keys=True, ensure_ascii=False)
 
@@ -64,6 +72,8 @@ entry = j["publications"]
 f.writerow(["publications",entry["csv"], entry["json"], entry["rdfdump"], entry["humanurl"]])
 entry = j["jobs"]
 f.writerow(["jobs",entry["csv"], entry["json"], entry["rdfdump"], entry["humanurl"]])
+entry = j["library"]
+f.writerow(["library",entry["csv"], entry["json"], entry["rdfdump"], entry["humanurl"]])
 
 
 # File Write
@@ -241,6 +251,58 @@ rdf_pubs ="\n\
   <dcat:distribution>\n\
       <dcat:Distribution>\n\
           <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/coursemodulesrdf.tar'></dcat:accessURL>\n\
+          <rdfs:label>RDF Dump</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/sparql'></dcat:accessURL>\n\
+          <rdfs:label>SPARQL Endpoint</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dct:creator>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
+    </rdf:Description>\n\
+  </dct:creator>\n\
+  <dct:contributor>\n\
+    <rdf:Description>\n\
+      <foaf:name>Giuseppe Sollazzo</foaf:name>\n\
+      <foaf:mbox rdf:resource='mailto:opendata@sgul.ac.uk'></foaf:mbox>\n\
+    </rdf:Description>\n\
+  </dct:contributor>\n\
+  <dct:rights rdf:resource='http://www.nationalarchives.gov.uk/doc/open-government-licence/'></dct:rights>\n\
+  </dcat:Dataset>\n\
+    "
+
+
+# PUBLICATIONS
+rdf_lib ="\n\
+<dcat:Dataset rdf:about='http://data.sgul.ac.uk/ontology/publications'>\n\
+  <dct:description>Library SGUL</dct:description>\n\
+  <dcat:keyword>sgul</dcat:keyword>\n\
+  <dcat:keyword>academic</dcat:keyword>\n\
+  <dcat:keyword>library</dcat:keyword>\n\
+  <foaf:homepage rdf:resource='http://data.sgul.ac.uk/library.php'></foaf:homepage>\n\
+  <rdfs:label>Library SGUL</rdfs:label>\n\
+  <dct:identifier>sgul-library</dct:identifier>\n\
+  <dct:title>Library SGUL</dct:title>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/library.json'></dcat:accessURL>\n\
+          <rdfs:label>JSON</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/library.csv'></dcat:accessURL>\n\
+          <rdfs:label>CSV</rdfs:label>\n\
+      </dcat:Distribution>\n\
+  </dcat:distribution>\n\
+  <dcat:distribution>\n\
+      <dcat:Distribution>\n\
+          <dcat:accessURL rdf:resource='http://data.sgul.ac.uk/output/libraryrdf.tar'></dcat:accessURL>\n\
           <rdfs:label>RDF Dump</rdfs:label>\n\
       </dcat:Distribution>\n\
   </dcat:distribution>\n\

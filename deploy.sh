@@ -34,9 +34,12 @@ tar -cvf cron/output/coursemodulesrdf.tar cron/output/course*.rdf
 
 # SIRSI
 echo "Elaborating Library Catalogue"
-scp root@$SIRSI/s/sirsi/Unicorn/Xfer/full_stg_primo.mrc cron/sirsi.mrc
+rm -f site/output/lib*
+rm -f cron/output/lib*
+scp root@$SIRSI:/s/sirsi/Unicorn/Xfer/full_stg_primo.mrc cron/sirsi.mrc
 python cron/sirsi.py
 rm -f cron/sirsi.mrc
+tar -cvf cron/output/libraryrdf.tar cron/output/lib*.rdf
 
 # CATALOGUE
 echo "Generating Data Catalogue"

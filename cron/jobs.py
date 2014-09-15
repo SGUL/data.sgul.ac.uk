@@ -10,6 +10,7 @@ import os
 import codecs
 import tarfile
 
+
 def downloadJobDetails(url):
     url2 = url.replace(' ','%20')
     jobs_detail_url = settings["jobs"]["url"]  + "/" + url2

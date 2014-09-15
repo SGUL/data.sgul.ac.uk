@@ -41,7 +41,7 @@
 
 	
 <div class="span9">
-    <h2>Publications</h2>
+    <h2>Library Catalogue</h2>
   <table class="table">
     <tr >
         <th colspan="2">Metadata</th>
@@ -64,7 +64,7 @@
     </tr>
     <tr>
         <th>External URL</th>
-        <td><a href="http://openaccess.sgul.ac.uk">openaccess.sgul.ac.uk</a></td>
+        <td><a href="http://library.sgul.ac.uk">http://library.sgul.ac.uk/</a></td>
     </tr>
     <tr >
         <th colspan="2">Linked Data Info</th>
@@ -97,11 +97,11 @@
             <ul>
                 <li><a href="">rdf:type</a></li>
                 <li><a href="">rdfs:label</a></li>
-                <li><a href="">bibo:abstract</a></li>
-                <li><a href="">bibo:doi</a></li>
+                <li><a href="">bibo:isbn</a></li>
                 <li><a href="">dc:author</a></li>
                 <li><a href="">bibo:dateTime</a></li>
-                <li><a href="">sgul:repositoryLink</a></li>
+                <li><a href="">dc:publisher</a></li>
+                <li><a href="">sgul:libraryItem<a></li>
             </ul>
         </td>
     </tr>
@@ -110,20 +110,20 @@
     </tr>
     <tr>
         <th>JSON</th>
-        <td><a href="output/publications.json">publications.json</a></td>
+        <td><a href="output/library.json">library.json</a></td>
     </tr>
     <tr>
         <th>CSV</th>
-        <td><a href="output/publications.csv">publications.csv</a></td>
+        <td><a href="output/library.csv">library.csv</a></td>
     </tr>
     <tr>
         <th>RDF-XML dump</th>
-        <td><a href="output/publicationsrdf.tar">publicationsrdf.tar</a></td>
+        <td><a href="output/libraryrdf.tar">libraryrdf.tar</a></td>
     </tr>
     <tr>
         <th>SPARQL examples</th>
         <td>
-            <b>Get id, title, authors, link to open access repository and DOI of up to 20 publications</b>
+            <b>Get id, title, authors, and isbn of up to 20 publications</b>
             <form method="post" action="http://data.sgul.ac.uk/sparql/">
          
 <input type="hidden" name="query" id="query" value="
@@ -132,12 +132,13 @@ PREFIX bibo: &lt;http://purl.org/ontology/bibo/&gt;
                 PREFIX vivo: &lt;http://vivoweb.org/ontology/core#&gt;
                 PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
                 PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+                PREFIX dc: &lt;http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=elements#&gt;
 
-
-                SELECT ?s ?title ?repositoryLink ?doi  WHERE {
-                    ?s sgul:repositoryLink ?repositoryLink.
+                SELECT ?s ?title ?author ?libraryItem ?isbn  WHERE {
+                    ?s sgul:libraryItem ?libraryItem.
                     ?s rdfs:label ?title.
-                    ?s bibo:doi ?doi.
+                    ?s dc:author ?author.
+                    ?s bibo:isbn ?isbn.
                 } LIMIT 20"
 </input>
 <pre>
@@ -146,11 +147,13 @@ PREFIX sgul: &lt;http://data.sgul.ac.uk/ontology/lib/&gt;
 PREFIX vivo: &lt;http://vivoweb.org/ontology/core#&gt;
 PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
 PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+PREFIX dc: &lt;http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=elements#&gt;
 
-SELECT ?s ?title ?repositoryLink ?doi  WHERE {
-    ?s sgul:repositoryLink ?repositoryLink.
+SELECT ?s ?title ?author ?libraryItem ?isbn  WHERE {
+    ?s sgul:repositoryLink ?libraryItem.
     ?s rdfs:label ?title.
-    ?s bibo:doi ?doi.
+    ?s dc:author ?author.
+    ?s bibo:isbn ?isbn.
 } LIMIT 20
 </pre>
 <br/>
@@ -169,9 +172,9 @@ SELECT ?s ?title ?repositoryLink ?doi  WHERE {
     <tr>
         <th>API endpoints</th>
         <td>
-            <a href="api.php#pubs">/api/publications/list/</a><br/>
-            <a href="api.php#pubs">/api/publications/get/</a><br/>
-            <a href="api.php#pubs">/api/publications/search/</a><br/>
+            <a href="api.php#library">/api/library/catalogue/</a><br/>
+            <a href="api.php#library">/api/library/get/</a><br/>
+            <a href="api.php#library">/api/library/search/</a><br/>
         </td>
     </tr>
   </table>

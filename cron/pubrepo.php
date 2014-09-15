@@ -260,9 +260,11 @@ function printRDF($pubdic) {
     $puburl = $pubdic['url'];
     $authorsList = "";
     foreach ($pubdic['authors'] as $author) {
-        $authorsList = "$authorsList;$author";
+        $thisauthor = "<dc:author>".xmlentities($author)."</dc:author>";
+        $authorsList = "$authorsList;$thisauthor";
     }
-    $authorsList = substr($authorsList, 1);
+    //$authorsList = substr($authorsList, 1);
+    $authorsList = str_replace(";", "\n", $authorsList);
     $title = $pubdic['title'];
     $abstract = $pubdic['abstract'];
     $doi = $pubdic['doi'];
@@ -283,8 +285,7 @@ function printRDF($pubdic) {
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
     <rdfs:label>'.xmlentities($title).'</rdfs:label>
     <bibo:abstract>'.xmlentities($abstract).'</bibo:abstract>
-    <bibo:doi>'.$doi.'</bibo:doi>
-    <bibo:authorList>'.xmlentities($authorsList).'</bibo:authorList>
+    <bibo:doi>'.$doi.'</bibo:doi>'.$authorsList.'
     <vivo:dateTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">'.$year.'</vivo:dateTime>
     <sgul:repositoryLink>'.$repository.'</sgul:repositoryLink>
 </rdf:Description>
