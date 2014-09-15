@@ -261,10 +261,10 @@ function printRDF($pubdic) {
     $authorsList = "";
     foreach ($pubdic['authors'] as $author) {
         $thisauthor = "<dc:author>".xmlentities($author)."</dc:author>";
-        $authorsList = "$authorsList;$thisauthor";
+        $authorsList = $authorsList.$thisauthor;
     }
-    //$authorsList = substr($authorsList, 1);
-    $authorsList = str_replace(";", "\n", $authorsList);
+    
+    
     $title = $pubdic['title'];
     $abstract = $pubdic['abstract'];
     $doi = $pubdic['doi'];
@@ -275,7 +275,7 @@ function printRDF($pubdic) {
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:bibo="http://purl.org/ontology/bibo/"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"\n\
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:sgul="http://data.sgul.ac.uk/ontology/lib/"
     xmlns:vivo="http://vivoweb.org/ontology/core#">
 
