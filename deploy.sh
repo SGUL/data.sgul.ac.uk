@@ -47,21 +47,31 @@ rm -f site/output/datacatalogue*
 rm -f cron/output/datacatalogue*
 python cron/datacatalogue.py
 
+# MYSQL
+echo "Executing export into Mysql"
+dos2unix site/output/jobs.json
+dos2unix site/output/library.json
+dos2unix site/output/datacatalogue.json
+dos2unix site/output/coursemodules.json
+dos2unix site/output/publications.json
+php cron/sql.php
+
+# OPD
+echo "Writing OPD file"
+rm -f cron/opd.ttl
+rm -f site/opd.ttl
+php cron/opd.php
+
+
+# Moving files
 echo "Moving files to destination"
 mv cron/output/*.rdf site/output/
 mv cron/output/*.json site/output/
 mv cron/output/*.csv site/output/
 mv cron/output/*.tar site/output/
+mv cron/output/*.ttl site/output/
 
 
-
-# MYSQL
-# dos2unix site/output/jobs.json
-# dos2unix site/output/library.json
-# dos2unix site/output/datacatalogue.json
-# dos2unix site/output/coursemodules.json
-
-# php cron/sql.php
 
 
 
@@ -99,8 +109,7 @@ ssh $USER@$HOST 4s-httpd -p 8282 data
 
 
 
-# OPD
-# php cron/opd.php
+
 
 
 echo "Open Data portal ready"
