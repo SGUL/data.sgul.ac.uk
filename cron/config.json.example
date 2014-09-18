@@ -18,5 +18,11 @@
 	},
 "datadownload" : {
 	"url": "http://data.sgul.ac.uk/output/"
+	},
+"mysql" : {
+	"host": "localhost",
+	"user": "",
+	"pass": "",
+	"db": ""
 	}
 }

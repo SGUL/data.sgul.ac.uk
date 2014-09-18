@@ -55,6 +55,16 @@ mv cron/output/*.tar site/output/
 
 
 
+# MYSQL
+# dos2unix site/output/jobs.json
+# dos2unix site/output/library.json
+# dos2unix site/output/datacatalogue.json
+# dos2unix site/output/coursemodules.json
+
+# php cron/sql.php
+
+
+
 # RDF Data store
 echo "Killing 4s daemons"
 ssh $USER@$HOST pkill -f \'^4s-httpd -p 8282 data\$\'
@@ -86,6 +96,13 @@ echo "Importing data into 4s"
 ssh $USER@$HOST 4s-import data /var/www/html/output/*.rdf
 echo "Starting SPARQL http endpoint"
 ssh $USER@$HOST 4s-httpd -p 8282 data
+
+
+
+# OPD
+# php cron/opd.php
+
+
 echo "Open Data portal ready"
 
 
