@@ -3,7 +3,8 @@
 HOST="data.sgul.ac.uk"
 USER="root"
 SIRSI="unicorn.sgul.ac.uk"
-
+OPDHOST="cluster-node2.sgul.ac.uk"
+OPDUSER="root"
 DATE=`date`
 
 echo $DATE > site/.datefile.txt
@@ -47,21 +48,19 @@ rm -f site/output/datacatalogue*
 rm -f cron/output/datacatalogue*
 python cron/datacatalogue.py
 
-# MYSQL
-echo "Executing export into Mysql"
-dos2unix site/output/jobs.json
-dos2unix site/output/library.json
-dos2unix site/output/datacatalogue.json
-dos2unix site/output/coursemodules.json
-dos2unix site/output/publications.json
-php cron/sql.php
+
+
+# FACILITIES
+echo "Writing Equipment file"
+rm -f cron/equipment.csv
+rm -f site/equipment.csv
+php cron/equipment.php
 
 # OPD
 echo "Writing OPD file"
 rm -f cron/opd.ttl
 rm -f site/opd.ttl
 php cron/opd.php
-
 
 # Moving files
 echo "Moving files to destination"
@@ -71,7 +70,14 @@ mv cron/output/*.csv site/output/
 mv cron/output/*.tar site/output/
 mv cron/output/*.ttl site/output/
 
-
+# MYSQL
+echo "Executing export into Mysql"
+dos2unix site/output/jobs.json
+dos2unix site/output/library.json
+dos2unix site/output/datacatalogue.json
+dos2unix site/output/coursemodules.json
+dos2unix site/output/publications.json
+php cron/sql.php
 
 
 
@@ -96,9 +102,14 @@ ssh $USER@$HOST 4s-backend-setup data
 echo "Starting 4s instance"
 ssh $USER@$HOST 4s-backend data
 
+
+
 echo "Deploying web site"
 scp -r site/* $USER@$HOST:/var/www/html/
 scp -r site/.datefile.txt $USER@$HOST:/var/www/html/
+
+echo "Deploying OPD"
+scp output/opd.ttl $OPDUSER@$OPDHOST:/wwwdata/cluster/www/html/.well-known/openorg
 
 sleep 3
 

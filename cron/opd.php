@@ -10,6 +10,7 @@ $opd = <<<OPD
 @prefix xtypes:  <http://purl.org/xtypes/>.
 @prefix lyou:    <http://purl.org/linkingyou/>.
 @prefix vcard:   <http://www.w3.org/2006/vcard/ns#>.
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 
 <> a oo:OrganizationProfileDocument ;
@@ -20,7 +21,8 @@ $opd = <<<OPD
         a org:FormalOrganization ;
         skos:prefLabel "St George's, University of London" ;
         foaf:homepage <http://www.sgul.ac.uk/> ;
-		foaf:account <https://twitter.com/StGeorgesUni> .
+		foaf:account <https://twitter.com/StGeorgesUni> ;
+        <http://purl.org/linkingyou/open-data> <http://data.sgul.ac.uk/> ;
 		foaf:account <https://twitter.com/sgulit> .
 
 
@@ -34,19 +36,20 @@ $opd = <<<OPD
 	foaf:accountServiceHomepage <https://twitter.com/> .
 
 
-
-# Open data service 
-<http://id.learning-provider.data.ac.uk/ukprn/10007782#ods>
-     a oo:Service ;
-     foaf:homepage <http://data.sgul.ac.uk/> ;
-     oo:contact 
-	<http://id.learning-provider.data.ac.uk/ukprn/10007782#ods-contact> .
-
 # Contact for open data service
-<http://id.learning-provider.data.ac.uk/ukprn/10007782#ods-contact>
+<http://id.sgul.ac.uk/ukprn/10007782#ods-contact>
      a foaf:Person ;
      foaf:name "Giuseppe Sollazzo" ;
-     foaf:mbox <mailto:[gsollazz@sgul.ac.uk]> .
+     foaf:mbox <mailto:gsollazz@sgul.ac.uk> .
+
+# Equipment
+<http://data.sgul.ac.uk/output/equipment.csv>
+    <http://purl.org/dc/terms/conformsTo> <http://equipment.data.ac.uk/uniquip> ;
+    <http://purl.org/dc/terms/license> <http://www.nationalarchives.gov.uk/doc/open-government-licence/> ;
+    <http://purl.org/dc/terms/subject> <http://purl.org/openorg/theme/equipment>, <http://purl.org/openorg/theme/facilities> ;
+    <http://purl.org/openorg/contact> <mailto:gsollazz@sgul.ac.uk> ;
+    <http://purl.org/openorg/corrections> <mailto:gsollazz@sgul.ac.uk> ;
+    <http://purl.org/openorg/organization> <http://id.sgul.ac.uk/> .
 OPD;
 
 $opdfile = "./cron/output/opd.ttl";
