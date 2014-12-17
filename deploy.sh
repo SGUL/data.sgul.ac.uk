@@ -109,7 +109,7 @@ scp -r site/* $USER@$HOST:/var/www/html/
 scp -r site/.datefile.txt $USER@$HOST:/var/www/html/
 
 echo "Deploying OPD"
-scp output/opd.ttl $OPDUSER@$OPDHOST:/wwwdata/cluster/www/html/.well-known/openorg
+scp site/output/opd.ttl $OPDUSER@$OPDHOST:/wwwdata/cluster/www/html/.well-known/openorg
 
 sleep 3
 

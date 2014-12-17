@@ -50,6 +50,7 @@
         <th>Source</th>
         <th>Licence</th>
         <th>Open Data</th>
+        <th>ODI Certificates</th>
     </tr>
     <tr>
         <td><a href="datacatalogue.php">Data catalogue</a></td>
@@ -57,6 +58,7 @@
         <td>Computing Services</td>
         <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
         <td><img src="./images/data-badge-4.png"/></td>
+	<td>&nbsp;</td>
     </tr>
     <tr>
         <td><a href="vacancies.php">Job vacancies</a></td>
@@ -64,6 +66,7 @@
         <td>Human Resources</td>
         <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
         <td><img src="./images/data-badge-4.png"/></td>
+	<td><script src='https://certificates.theodi.org/datasets/544/certificate/badge.js'></script></td>
     </tr>
     <tr>
         <td><a href="publications.php">Publications</a></td>
@@ -71,6 +74,7 @@
         <td>Library</td>
         <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
         <td><img src="./images/data-badge-5.png"/></td>
+	<td>&nbsp;</td>
     </tr>
     <tr>
         <td><a href="coursemodules.php">Course Modules</a></td>
@@ -78,6 +82,7 @@
         <td>FOI (Registry)</td>
         <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
         <td><img src="./images/data-badge-3.png"/></td>
+	<td><script src='https://certificates.theodi.org/datasets/23771/certificate/badge.js'></script></td>
     </tr>
     <tr>
         <td><a href="#">Library catalogue</a> (available in September 2014)</td>
@@ -85,6 +90,7 @@
         <td>Library</td>
         <td><a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/1/open-government-licence.htm">Open Government Licence</a></td>
         <td><img src="./images/data-badge-3.png"/></td>
+	<td>&nbsp;</td>
     </tr>
   </table>
 </div>

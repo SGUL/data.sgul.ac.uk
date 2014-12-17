@@ -11,7 +11,7 @@ $opd = <<<OPD
 @prefix lyou:    <http://purl.org/linkingyou/>.
 @prefix vcard:   <http://www.w3.org/2006/vcard/ns#>.
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 
 <> a oo:OrganizationProfileDocument ;
         dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
@@ -21,7 +21,9 @@ $opd = <<<OPD
         a org:FormalOrganization ;
         skos:prefLabel "St George's, University of London" ;
         foaf:homepage <http://www.sgul.ac.uk/> ;
-		foaf:account <https://twitter.com/StGeorgesUni> ;
+	foaf:account <https://twitter.com/StGeorgesUni> ;
+	foaf:logo <http://www.sgul.ac.uk/sys/images/st_georges_logo.gif> ;
+ 	owl:sameAs <http://id.sgul.data.ac.uk/ukprn/10007782> ;
         <http://purl.org/linkingyou/open-data> <http://data.sgul.ac.uk/> ;
 		foaf:account <https://twitter.com/sgulit> .
 
